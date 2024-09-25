@@ -7,7 +7,7 @@ from scipy.sparse import hstack
 from sklearn.manifold import TSNE
 
 # Step 1: Load the data from the CSV file
-df = pd.read_csv('ML/swe_train.csv')
+df = pd.read_csv('C:/Users/danie/OneDrive/Desktop/Things/5. PLUGG/D7017E/swe_qaqc_train.csv')
 
 # Step 2: Preprocess the free-text column ('text') using TF-IDF
 tfidf = TfidfVectorizer(stop_words='english', max_features=100)

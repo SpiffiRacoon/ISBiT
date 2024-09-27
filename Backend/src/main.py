@@ -8,7 +8,7 @@ import uvicorn
 
 
 app = FastAPI(
-    title="Te-centralen Inventory System",
+    title="Isbit API",
     version="0.1.0",
     redoc_url=None,
 )

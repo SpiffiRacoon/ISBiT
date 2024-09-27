@@ -1,0 +1,547 @@
+text,verbose label
+Var börjar kvalitetsdrycker?,LOC:other
+Hur många webbservrar finns det?,NUM:count
+Vem är Samuel F. Pickering?,HUM:desc
+Hur länge håller en grisorgasm?,NUM:period
+Vilken bergig region i världen är Lhasa Apso-hunden infödd till?,LOC:other
+Ungefär hur många soldater dog under andra världskriget?,NUM:count
+Vilka är de fem mest populära Usenet-grupperna?,HUM:gr
+Vilken sport var den första som sändes i USA?,ENTY:sport
+Vem hävdade att han dödade 4280 bufflar som mat för besättningen som byggde Kansas Pacific Railway?,HUM:ind
+Hur krullar håret sig?,DESC:manner
+När ägde Bounty-myteriet rum?,NUM:date
+Vad var Marilyn Monroes riktiga namn?,HUM:ind
+Vem säljer Viagra?,HUM:ind
+Namnge fartyget som Beany och Cecil seglade.,ENTY:veh
+Hur djup är en vattengrav?,NUM:dist
+Vad är historian om läsken herr Pibb?,DESC:desc
+Vad ska temperaturen ställas in på vid bakning av Peachy Oat Muffins?,NUM:temp
+Hur skriver man en bokrapport?,DESC:manner
+Vem var den äldsta amerikanska presidenten?,HUM:ind
+Vilken hörselskadad konstnär målade solrosor?,HUM:ind
+Vilken rysk roman som omfattar mer än 5 karaktärer utspelas under Napoleonskriget?,ENTY:cremat
+Hur kan jag ta reda på hur mycket inkomstskatt som betalas av socialförsäkringsinkomster på 1998 års inkomstskatt?,DESC:manner
+Vilket namn antog fotbollens New York Titans 1963?,HUM:gr
+Vilken amerikansk stat har den näst längsta kusten?,LOC:state
+Vem bodde vid stranden av Gitchee Gumee River?,HUM:ind
+Hur många bails finns det i en cricket-grind?,NUM:count
+Vilken arkitekt gav upphov till glashuset\, designade Chicago Federal Center\, hade en filosofi om less is more\, och producerade planer som var föregångaren till ranchhuset i Kalifornien?,HUM:ind
+När gifte sig prinsessan Diana och prins Charles?,NUM:date
+Hur vet den långsträckta mannen att ett mysterium uppstår?,DESC:manner
+Vad är behandlingen för depression?,ENTY:techmeth
+Vad var den amerikanska folkhjälten John Chapmans smeknamn?,HUM:ind
+Vad är en rädsla för att synda?,ENTY:dismed
+Vad är en Devo-hatt?,DESC:def
+Vem uppfann Astroturf?,HUM:ind
+Vilket politiskt parti är Sinn Fein en del av?,HUM:gr
+Vad var Eduard Shevardnadzes jobb i Sovjetunionen?,HUM:title
+Vad är federal inkomstskatt?,DESC:def
+Vad är en spetälsk?,DESC:def
+Vilket hav omger Caymanöarna?,LOC:other
+Vem spelade Al Jolson i Jolson Story?,HUM:ind
+Vilket är rätt sätt att använda möjligt gentemot kanske?,ENTY:techmeth
+Vilka fordon körs i Tour de France?,ENTY:veh
+Vem var den andra mannen som gick på månen?,HUM:ind
+Vilken karibisk ö kallas ibland Little England?,LOC:other
+Vem har mer DNA - en man eller en kvinna?,HUM:ind
+Vilken släkting till Leo Tolstoj översatte krig och fred åtta gånger?,HUM:ind
+Vad står Hazmat för?,DESC:def
+Vad är ursprunget av ordet katt?,DESC:desc
+Vilken är den enda körteln hos människor som kan regenerera sig själv?,ENTY:body
+Hur många människor mördade Randy Craft?,NUM:count
+Vem försöker alltid få hyran från Andy Capp?,HUM:ind
+Vem ställde den musikaliska frågan: Har du någonsin varit i elektriska damlandet?,HUM:ind
+Hur sprids rabies?,DESC:manner
+Vilken kultur utvecklade idén om potlatch?,HUM:gr
+Varför har vissa jetplan ett ångspår och andra inte?,DESC:reason
+Vad används S&P 500 till?,DESC:reason
+Vilka är ingredienserna i Coca-Cola?,ENTY:substance
+Hur många astronauter bemannade varje Project Mercury-flyg?,NUM:count
+Vad är ursprunget till grill?,DESC:desc
+Var ägde slaget vid utbuktningen rum?,LOC:other
+Vad betyder de 12 juldagarna?,DESC:def
+Vilken glamorös skådespelerska är en nära vän till Dick Tracy?,HUM:ind
+Hur gör man en paintball?,DESC:manner
+Vilken temperatur ska ugnen va på för att laga lax?,NUM:temp
+Hur länge lever flugor?,NUM:period
+Var skulle jag kunna åka på ett ånglok?,LOC:other
+Vad betyder Elysium?,DESC:def
+När ratificerades kvinnors rösträtt?,NUM:date
+Hur gammal var Gene Siskel?,NUM:period
+Vilken stads teaterdistrikt har fått namnet The Roaring Forties?,LOC:city
+Vilken funktion har ett samhälles vattentorn?,DESC:reason
+Vilken tragedi drabbade staden Dogtown 1899?,ENTY:event
+Vad kallas pricken på bokstaven i?,ENTY:termeq
+Vad är en rädsla för sjukdom?,ENTY:dismed
+Vilka är några av Australiens inhemska flora?,ENTY:plant
+Vilka buskar kan planteras som är säkra från rådjur?,ENTY:plant
+Vilken argentinsk revolutionär kämpade med Castro och dog i Bolivia i maj 1979?,HUM:ind
+Vilken är Dr Seuss mest populära bok?,ENTY:cremat
+Vad är dextropropoxifen-napsylat?,DESC:def
+Var är de mest trafikerade hamnarna i världen?,LOC:other
+Vad är skillnaden mellan Koranen och Bibeln?,DESC:desc
+Vad fick Titanic att sjunka?,DESC:reason
+Vilken film markerade Robert Redfords regiedebut?,ENTY:cremat
+Vilken är whiskeyn för människor som vet skillnaden?,ENTY:termeq
+Vilket år uppfördes Berlinmuren?,NUM:date
+Var är Orinoco?,LOC:other
+Vad kallas rädslan för datorn?,ENTY:dismed
+Var styrde Honecker?,LOC:other
+Vem slogs av Chicago Bulls i mästerskapet 1993?,HUM:gr
+Vilka länder har de största skogsområdena?,LOC:country
+Vem uppfann volleyboll?,HUM:ind
+Hur länge varade rättegången mot Charles Manson?,NUM:period
+Vilken komiker skapade en punch-drunk pugilist vid namn Cauliflower McPugg?,HUM:ind
+Hur hittar du arean av en cirkel?,DESC:manner
+Vad är skillnaden mellan kärlek och förälskelse?,DESC:desc
+På vilken flod är Rom byggd?,LOC:other
+Vad är namnet på ett hotell i Indianapolis?,LOC:other
+Vad skapar salt?,DESC:reason
+Vilken liten pojke och hund bor i en sko?,HUM:ind
+Vem gav kung Arthur rundabordet?,HUM:ind
+Vad är det rekommenderade dagliga behovet av folsyra för gravida kvinnor?,DESC:desc
+Vad heter invånarna på ön Lesbos?,HUM:gr
+Vem sa om Super Bowl III 1969: Vi vinner - jag garanterar det?,HUM:ind
+Hur stort är Australien?,NUM:volsize
+Vem bor Herb och Tootsie bredvid?,HUM:ind
+Vilket företag har byggt mer än 2\,5 miljarder små växthus sedan 1935?,HUM:gr
+Hur många mil är det från London\, England till Plymouth\, England?,NUM:count
+När bröt superkontinenten Pangea upp?,NUM:date
+Vilken film från 1950 vann sju Oscars\, inklusive bästa film?,ENTY:cremat
+Vilket kontinentnamn visas i det övre vänstra hörnet av en Budweiser-etikett?,LOC:other
+Vad är det äldsta etnologiska museet i världen?,LOC:other
+Vad vet du om flerkulturella och flerspråkiga skolor?,DESC:desc
+Vilken vik skiljer Marylands östra och västra stränder?,LOC:other
+Vilken president hade aldrig haft en vald tjänst förrän han valdes till Vita huset?,HUM:ind
+Vilka är de fyra naturliga hjälpmedel som används vid ridning?,ENTY:techmeth
+Vem säger Om du inte ser bra ut ser vi inte bra ut?,HUM:ind
+Vem var den första läkaren som framgångsrikt transplanterade en lever?,HUM:ind
+Vad är ett Kanada två-öre?,DESC:def
+Vilket år gjorde Spielberg Jaws?,NUM:date
+Vilket ogenomträngligt system med franska befästningar byggdes längs den tyska gränsen före andra världskriget?,ENTY:other
+Vad är den enda cigaretten tillverkad utan rester?,DESC:desc
+Vilket företag annonserar Madonna för?,HUM:gr
+Vad hette Little Rascals hunden?,ENTY:animal
+Vilka ord på engelska har två u's efter varandra?,ENTY:word
+Vem uppfann tv?,HUM:ind
+Vad är amezaiku?,DESC:def
+Vad måste produceras i en skrift av habeas corpus?,ENTY:other
+Var hittar man Venus flytfälla?,LOC:other
+Vilket centrum i Nevada har kallats The Biggest Little City in the World?,LOC:city
+Vem målade Mjukt självporträtt med grillat bacon?,HUM:ind
+I vilken högriskföretagssatsning satsade och förlorade Jimmy the Greek?,HUM:gr
+Vad är stjärntecknet för 14 augusti?,ENTY:symbol
+Vilken är den mest radioaktiva maten?,ENTY:food
+Vad är gulasch?,DESC:def
+Vilken av de sju ursprungliga Astronauterna i Mercury-programmet flög inte på någon av Mercury-flygningarna?,HUM:ind
+Hur många idrottare deltog Puerto Rico med under vinter-OS 1984?,NUM:count
+Vad använde folk för att fräscha upp andan före tandkräm?,ENTY:other
+Vad är lärandets natur?,DESC:def
+Vem är Bolivias president?,HUM:ind
+Namnge Marvel-laget som är löst baserat på DC: s Justice League of America?,HUM:gr
+Vilken välkänd skådespelare är fadern till stjärnan Alan Alda?,HUM:ind
+Vilken stat bor Martha Stewart i?,LOC:state
+Vilken läsk annonserar Madonna för?,ENTY:food
+Hur bildas moln?,DESC:manner
+Hur mycket koffein är i en 16 oz kopp kaffe?,NUM:count
+Vad kostar biljettpriset för tur och retur mellan New York och London på Concorde?,NUM:money
+Vilken öken har kallats Allahs trädgård?,LOC:other
+Vad dödade Bob Marley?,ENTY:other
+Vem lärde Matt Murdock att använda sina extraordinära förmågor i Marvel-serier?,HUM:ind
+Varför finns det oliver i martini?,DESC:reason
+Shea och Gould hade ett kontor i Los Angeles hur länge innan de stängde det?,NUM:period
+Vad är sionism?,DESC:def
+Vilket är det mest kända tyska ordet på engelska?,ENTY:word
+Vilket landmärke i Metropolis introducerades först i Superman-teckningarna på 1940-talet?,LOC:other
+Vilken nationalitet var de 123 människor som dog i Black Hole of Calcutta?,LOC:country
+Vem sköt Billy the Kid?,HUM:ind
+Hur många frihetsklockor har det funnits?,NUM:count
+Mississippi har vilket namn för ett statligt smeknamn?,LOC:state
+Vilken Leon Uris-roman handlade om den ryska erövringen av Berlin?,ENTY:cremat
+Vilket spel är Garry Kasparov riktigt bra på?,ENTY:sport
+Vad är tvillingstäderna?,DESC:def
+Vad är viskositet?,DESC:def
+Aspartam är känt under vilket annat namn?,ENTY:termeq
+Vad är en transistor?,DESC:def
+Vad är en rädsla för att tala?,ENTY:dismed
+Vad är en nanometer?,DESC:def
+Vad var Jackson Pollocks nationalitet?,LOC:country
+Vad hette advokaten som representerade Randy Craft?,HUM:ind
+Var kan jag få information om cystisk fibros?,LOC:other
+Vad var datumet för Iraks invasion av Kuwait?,NUM:date
+Vilka är de största öknarna i världen?,LOC:other
+När var den stora depressionen?,NUM:date
+I vilken sport är följande siffror relevanta: 118\, 126\, 134\, 142\, 15\, 158\, 167\, 177 och 19?,ENTY:sport
+Vilken komiker var The Perfect Fool?,HUM:ind
+Vilket japanskt elektronikföretag fick sitt namn från en kuststad nordost om Tokyo?,HUM:gr
+Vad är en rädsla för att röra vid?,ENTY:dismed
+Vilket leksaksföretag är världens främsta tillverkare av kvinnliga kläder?,HUM:gr
+Hur vet jag om jag är gravid?,DESC:manner
+Vilka fyra turneringar utgör tennis 'Grand Slam?,ENTY:sport
+Vilken fiktiv karaktär kallas den melankoliska danskens?,HUM:ind
+Vilken är den äldsta byggnaden i USA?,LOC:other
+Vilka av följande fick inte 1983 ”Outstanding Mother Award” från National Mother's Day Committee?,HUM:ind
+Vilken typ av frukt är en gul genomskinlig?,ENTY:food
+Vilken Sinatra hit gjorde han dooby dooby do i?,ENTY:cremat
+Vilken är den längsta floden i Kanada?,LOC:other
+Vad är hemmalag?,DESC:def
+Vem var Thucydides?,HUM:desc
+Vad mäter en stegräknare?,ENTY:other
+Vad går med vitt vin för att lägga spritz i en Spritzer?,ENTY:food
+När byggdes Londons Docklands Light Railway?,NUM:date
+Vilket olyckligt fartyg var anförd av Ernst Lehmann?,ENTY:veh
+Vilket är det största museet i världen?,LOC:other
+Namnge On Stage-karaktären vars ansikte aldrig sågs.,HUM:ind
+Vilket college upplivar Hanover\, New Hampshire?,HUM:gr
+Vilken är den högsta kontinenten?,LOC:other
+Vilken amerikansk stat har sagebrush som sin statsblomma?,LOC:state
+Vilket företag är den största japanska skeppsbyggaren?,HUM:gr
+Vilken typ av djur är Babar?,ENTY:animal
+Hur fungerar väderkvarnar?,DESC:manner
+Vem spelade titelrollen i The Romantic Englishwoman?,HUM:ind
+Vad åt brontosaurus?,ENTY:food
+Vad står pH för?,ABBR:exp
+När Superman behöver komma bort från allt\, vart går han?,LOC:other
+Vilket öls namn översätts som lejonbrygga?,ENTY:food
+Hur många gånger om dagen ska du ta ett receptläkemedel märkt qid?,NUM:count
+När uppfördes Berlins Brandenburggrind?,NUM:date
+Vilka är böjningarna av vakna och vaknade?,ENTY:word
+Vem vann två guldmedaljer i skidåkning vid de olympiska spelen i Calgary?,HUM:ind
+Vilken är den längsta tv-serien?,ENTY:cremat
+Vilken tidning betalade 5 000 dollar för en åtta millimeter film av John F. Kennedys mördande?,ENTY:cremat
+Var kom världen ifrån?,LOC:other
+Vilken film dramatiserade Scopes monkey trial?,ENTY:cremat
+Vad är den största staden på de stora sjöarna?,LOC:city
+Vilket land omger San Marino\, världens minsta republik?,LOC:country
+Namnge ett konstgalleri i New York.,LOC:other
+Vad satte det framåtblickande Simon Brothers Bakery i Chicago i sina bagels för att öka affären?,ENTY:other
+Hur kan jag spåra mina familjerötter?,DESC:manner
+Var kom äktenskapsceremonin ifrån?,DESC:desc
+Hur mycket vägde en riddares rustning?,NUM:weight
+Vad orsakar blå bollar?,DESC:reason
+På vilket TV-program kunde Tom Terrific hittas?,ENTY:cremat
+Vem regisserade den första Woody Woodpecker-tecknade filmen?,HUM:ind
+Vad är ursprunget till ordet nevermind?,DESC:desc
+Vilket album satte Beatles på omslaget till Time 1967?,ENTY:cremat
+Vilket är det vanligaste efternamnet i Amerika?,HUM:ind
+Varför avbröts röda M&Ms och togs sedan tillbaka?,DESC:reason
+Vem är kung i Alley Oops hem för Moo?,HUM:ind
+Vilket är det hårdaste ämnet i människokroppen?,ENTY:substance
+Vad betyder subaru?,DESC:def
+Vem är svärson till senator Everett Dirkson som också var senator på 70-talet?,HUM:ind
+Vad var bakgrundssånggruppen för Roy Rogers?,HUM:gr
+Vilken produkt är för barn och inte för dumma kaniner?,ENTY:product
+Vilket lands huvudstad är Lagos?,LOC:country
+Hur vet jag om jag är avundsjuk på någon?,DESC:manner
+Vilka två djur nämns specifikt att vara på Noahs Ark?,ENTY:animal
+Vad är binomialkoefficienter?,DESC:def
+Vilken typ av vin är Spumante?,ENTY:food
+Var är den officiella nollan på havsnivån?,LOC:other
+Hur leder marijuana till andra droger?,DESC:manner
+Vilken radio-\, TV- och filmkaraktär spelade Jackie Gleason och William Bendix?,HUM:ind
+Hur fick Asien sitt namn?,DESC:manner
+Nalle Puh är vilken typ av djur?,ENTY:animal
+Vad är saltpeter?,DESC:def
+Vad är skillnaden mellan ninjitsu och kung fu?,DESC:desc
+Vilken blodsport har en rörelse som kallas veronica?,ENTY:sport
+Hur lång tid skulle det ta att ta sig från jorden till Mars?,NUM:period
+Vad heter den rundade delen på toppen av en tändsticksbok?,ENTY:termeq
+Hur många barn under 18 år är offer för någon form av fysiskt missbruk varje år?,NUM:count
+Vilken skådespelare\, som hade störst berömmelse på TV\, blev far till trillingar?,HUM:ind
+Vad heter Beethovens 9:e symfoni?,ENTY:cremat
+Vad är ursprunget till termen soda jerk?,DESC:desc
+Vilken berömd straffdomstol i London var en gång ett feodalt slott?,LOC:other
+Vad bär Frihetsgudinnan på fötterna?,ENTY:other
+Vad är skillnaden mellan en styrelse och en rådgivande styrelse?,DESC:desc
+Hur mycket kan en person böta för att ha en hund på en strand?,NUM:money
+Vad orsakar rullande åska?,DESC:reason
+Vad är Amish-religionen?,DESC:def
+Var dog Dylan Thomas?,LOC:other
+Vilka är de tio vanligaste flicknamnen i USA?,HUM:ind
+Vilket spel spelar Garry Kasparov?,ENTY:sport
+Vad är Grenadas huvudsakliga råvaruexport?,ENTY:other
+Vilka är de vanligaste dödsorsakerna i USA?,DESC:reason
+Namnge ett gaeliskt språk.,ENTY:lang
+Vilket land var Mikhail Gorbatsjov ledare för?,LOC:country
+Hur mycket kan du hyra en Volkswagen-bugg för år 1966?,NUM:money
+Hur mycket kommer den statliga gasskatten i Kalifornien att öka år 2000?,NUM:money
+Vem äger rättigheterna i ett TV-program?,HUM:ind
+Vilken är världens längsta hängbro?,LOC:other
+Vilka katter förföljde Tweety Pie i hans första tecknade framträdande?,ENTY:animal
+Vad anses ofta vara den femte sinnet?,DESC:def
+Var föddes George Washington?,LOC:other
+Vad är Mississippiflodens hastighet?,NUM:speed
+När är tulpanfestivalen i Michigan?,NUM:date
+Vad kan man göra angående snarkning?,DESC:desc
+Vad är Cabarnet Sauvignon?,DESC:def
+Vem är den profet som är mest kopplad till Döda havet?,HUM:ind
+Hur många månader tar det månen att kretsa runt jorden?,NUM:count
+Varför är dina händer ibland kalla\, men resten av dig är inte?,DESC:reason
+Vilka är de nordiska länderna?,LOC:country
+Definiera Pheonix Club?,DESC:def
+Hur många kolonier fick Tyskland behålla efter första världskriget?,NUM:count
+Vad är receptet på Eggs Benedict?,ENTY:food
+På vilken aveny ligger det ursprungliga varuhuset Saks?,LOC:other
+Vilka tre europeiska länder börjar med bokstaven A?,LOC:country
+Vilka upptäcktsresande följde Columbus till Amerika?,HUM:ind
+Vad är ursprunget till ordet pallbärare?,DESC:desc
+Hur många bor i Tokyo?,NUM:count
+Vilket djurs svans kallas en borste?,ENTY:animal
+Var föddes George Washington?,LOC:other
+Var ligger Logan flygplats?,LOC:other
+Var har namnet Daniel sitt ursprung?,LOC:other
+Madonna annonserar för vilken läsk?,ENTY:food
+När bildades G7-gruppen av nationer?,NUM:date
+Vilken stor amerikansk stad hade den högsta mordprocenten år 1988?,LOC:city
+Vem var den första taiwanesiska presidenten?,HUM:ind
+Hur lång är promenaden på Coney Island?,NUM:dist
+Vad orsakade Harry Houdinis död?,DESC:reason
+Vilka prestationer fick Richard Nixon?,ENTY:other
+Vad är varumärket på en kemikalie som används för att kontrollera mogning?,ENTY:product
+Vems video heter Shape Up with Arnold?,HUM:ind
+Vad händer med kvinnokroppen med brist på sömn och mat?,DESC:desc
+Var på internet kan jag hitta information om tvättmedel?,LOC:other
+Var i ett träd förekommer fotosyntes?,LOC:other
+Vad är det vanligaste namnet?,HUM:ind
+Advokaten som representerade Randy Craft\, vad hette han?,HUM:ind
+Vilka är Star Wars -satelliterna?,DESC:def
+Vilken mexikansk ledare dödades 1923?,HUM:ind
+Vad indikerar dubbel-O i 007?,DESC:def
+Hur många frågor är det här?,NUM:count
+Vilka är de sju principerna för lärande från Institute for Research on Learning\, IRL?,ENTY:techmeth
+Vilka två länder innehåller Sierra Nevada-bergen?,LOC:country
+Hur ser en echidna ut?,DESC:desc
+Hur mycket folsyra ska en gravid kvinna få varje dag?,NUM:count
+Vilken månad på året finns det ingen tv på Island?,NUM:date
+Vad är George Lucas e-postadress?,LOC:other
+Jackson Pollock var en infödd i vilket land?,LOC:country
+Vad betyder det latinska stridsropet: Ad arma\, ad arma?,DESC:def
+Vad hette den populära låten Creeps sjöng?,ENTY:cremat
+Vad är den dominerande färgen på Tab-etiketten?,ENTY:color
+Vem var stjärnan i Leave It to Beaver?,HUM:ind
+Vilket bergskedja sträcker sig från St.Lawrencebukten till Alabama?,LOC:mount
+Hur kan jag hitta stavning online?,DESC:manner
+Hur gammal är Jeremy Piven?,NUM:period
+Vad är den snabbast växande staten i USA 1998?,LOC:state
+Vad är alveolerna?,DESC:def
+Vilken är den högsta byggnaden i Japan?,LOC:other
+Vilken sydamerikansk huvudstad är världens högsta?,LOC:city
+Vilket fenomen kan du förvänta dig att läsa om i den månatliga publikationen The Bigfoot News?,ENTY:event
+Vem är den mest sexiga kändisen?,HUM:ind
+Vilken tidning betjänar Salt Lake City?,ENTY:cremat
+Vilken planet upptäckte Percival Lovell?,LOC:other
+Vad är Taj Majal gjort av?,ENTY:substance
+Vems självbiografi har titeln Yes I Can?,HUM:ind
+Hur stor är Missouris befolkning?,NUM:other
+Rotationsmotorer tillverkades av vilket företag?,HUM:gr
+Vad står kanalen ESPN för?,ABBR:exp
+Vad betyder förkortningen HLR?,ABBR:exp
+Hur många soldater var inblandade i USA:s senaste Panama-invasion?,NUM:count
+Vilken målare populariserade soppburkar och Brillo tvålkuddar?,HUM:ind
+Vem var USA:s första president?,HUM:ind
+Vilken är den nordligaste USA-staten förutom Alaska?,LOC:state
+Hitler kom till makten i Tyskland under vilket år?,NUM:date
+Vilken brittisk premiärminister och USA:s president var sjunde kusiner?,HUM:ind
+Vilket djur kommer buffelvingar från?,ENTY:animal
+Vad är en benmärgstransplantation?,DESC:def
+Vilket land är stolt över att göra anspråk på Volcano National Park?,LOC:country
+Namnge advokaten för Randy Craft.,HUM:ind
+I vilken del av Afrika ligger Moçambique?,LOC:other
+Vad är Mrs. Bridges jobb på TV:ns Upstairs\, Downstairs?,HUM:title
+Vilken stat i USA inkluderar San Juan Islands?,LOC:state
+Vad är Bill Gross e-postadress?,LOC:other
+Vad är det fullständiga namnet på mannen som uppfann den mångfärgade spelkuben som har 42\,3 kvintillioner potentiella kombinationer?,HUM:ind
+Vilket djur har bäst hörsel?,ENTY:animal
+Vad är Olestra?,DESC:def
+Att ringa\, 900\, 740-TREE för att få ett träd planterat kostar hur mycket?,NUM:money
+Hur många e-handelsföretag startas varje dag?,NUM:count
+Vilken skådespelare har en tatuering på sin högra handled med texten Scotland Forever?,HUM:ind
+Vilken organisation är säkerhetsrådet en del av?,HUM:gr
+Vilka tillverkare finns det i Texas?,HUM:gr
+Hur definieras talassemi?,DESC:def
+Hur länge praktiserade Shea och Gould juridik i Los Angeles?,NUM:period
+Var är gruppen M People från?,LOC:other
+Vad får du genom att lägga till Lactobacillus bulgaricus i mjölk?,ENTY:food
+Stuart Hamblen anses vara den första sjungande cowboyen i vilket medium?,ENTY:cremat
+Vad är värt att se i Reims?,LOC:other
+Vilka är de nuvarande invandringslagarna i USA?,DESC:desc
+Var kan jag hitta de bästa singlarna?,LOC:other
+Vilken bok har undertexten Bevarandet av favoriserade raser i kampen om livet?,ENTY:cremat
+Hur många tvillingsorter finns det?,NUM:count
+Vem samlar in data inom turism?,HUM:ind
+Vem var Monet?,HUM:desc
+Vilka är miljöpåverkan på växtgenetik?,DESC:desc
+När publicerades den första Wall Street Journal?,NUM:date
+Hur lång är prins Charles?,NUM:dist
+Vad heter stjärnan i matlagningsshowen Galloping Gourmet?,HUM:ind
+Vem blev presidenten för USA 1789?,HUM:ind
+Hur många städer finns det i Utah?,NUM:count
+Vilken CBS-såpopera avbröts av bulletinen om John F. Kennedys mördande?,ENTY:cremat
+Vem var Costa Rica president 1994?,HUM:ind
+Hur håller jag katter ur min blommträdgård för gott?,DESC:manner
+Vilken serietidning förvandlades aldrig till en Broadway-musikal?,ENTY:cremat
+Vad betyder ordet opera?,DESC:def
+Vilket är det vanligaste ordet med 1 bokstav i engelskan?,ENTY:word
+Vad var översten Edwin L. Drake den första att borra efter?,ENTY:other
+Vilka företag eller byråer skulle göra en verifieringsanställning?,HUM:gr
+Hur många år utövade Shea & Gould juridik i Los Angeles?,NUM:count
+Vad producerar spermier?,DESC:reason
+Vilken stad i Colorado äger sin egen glaciär?,LOC:city
+Vad är huvudstaden i Taiwan?,LOC:city
+Vad är en kaldera?,DESC:def
+Benämn engångshyveln som kostar cirka 19 cent.,ENTY:product
+När byggdes Brandenburger Tor i Berlin?,NUM:date
+Vilken asiatisk andlig och politisk ledare gifte sig vid 13 års ålder?,HUM:ind
+Var ligger Microsofts huvudkontor?,LOC:other
+Hur var Teddy Roosevelt relaterad till FDR?,DESC:manner
+Vem ska jag ringa för att få en rundtur på New York Stock Exchange?,HUM:ind
+Vad krävs för att bli en advokat?,ENTY:other
+Hur får man bubblegum ur mattan?,DESC:manner
+Vad är novembers födelsesten?,ENTY:other
+Vilken amerikansk general togs till domstol för att ha kritiserat amerikansk luftmakt?,HUM:ind
+Vem var Shakespeares moriska general?,HUM:ind
+Vilken valuta används i Australien?,ENTY:currency
+Vad är Boston Kreme?,DESC:def
+Hur många postnummer finns det i USA?,NUM:count
+Vad är fuktighet?,DESC:def
+Vem var Jinnah?,HUM:desc
+Vilken är planeten längst bort från solen?,LOC:other
+Vilken asiatisk stad har världens största bowlinghall?,LOC:city
+Vad heter Tokyo Stock Exchange?,ENTY:termeq
+Vilket är det mest kraftfulla kortet i Euchre?,ENTY:other
+När grundades Microsoft?,NUM:date
+Vad är en sackarid?,DESC:def
+Vem var skådespelaren som spelade Sam i filmen Casablanca?,HUM:ind
+Vilket vanligt boskap har det största utbudet av raser?,ENTY:animal
+Vad är inkomsten per capita i Colombia\, Sydamerika?,NUM:money
+Hur stor är befolkningen i Mississippi?,NUM:other
+Vad är ursprunget till uttrycket tout de suite?,DESC:desc
+Hur stor andel av alla världstornados landar i USA?,NUM:perc
+Vem skapade Maudie Frickett?,HUM:ind
+Vad är beredd senap?,DESC:def
+Vilken information kan du berätta om skådespelaren James Cromwell?,HUM:desc
+Namnge den franska historiska perioden under Napoleon IIIs regering.,ENTY:event
+Vad betyder Janelle?,DESC:def
+Vad är smeknamnet på Jimmy Snyder?,HUM:ind
+Hur får du en dejt med Hooters -tjejerna?,DESC:manner
+Vem är mannen bakom grisen - mannen som drar i trådarna och talar för Miss Piggy?,HUM:ind
+Varför kallas Rush's 2112 för 2112?,DESC:reason
+Vad är innebörden av WB Yeats dikt\, The Three Hermits?,DESC:def
+Vem är nebbishen som är Marvels officiella maskot?,HUM:ind
+Vilken Erica Jong-roman handlar om Isadora Wings rädsla?,ENTY:cremat
+Vem skådespelade i Singing in the Rain och The Singing Nun?,HUM:ind
+När fick Fraze sitt första patent på dragfliken?,NUM:date
+Vilket hav omger Madeiraöarna?,LOC:other
+Vilken flod är Pocahontas begravd längs?,LOC:other
+Vilket år spelades de olympiska spelen där Nadia Comaneci blev populär?,NUM:date
+Vilken skola går Tom på i Tom Browns skoldagar?,HUM:gr
+Vilket land är den största tillverkaren av volfram?,LOC:country
+Vilken vattenmassa mynner Yukon River ut i?,LOC:other
+Vad fossiliseras för att bilda koprolit?,ENTY:other
+Vilken ny mellanstadium byggdes i Philadelphia\, Pennsylvania\, förra året?,HUM:gr
+Vilken roman från HG Wells från 1895 skrevs under titeln The Chronic Argonauts?,ENTY:cremat
+Namnge de två mystiska korparna som Odin har kommandot på.\,ENTY:animal\,3\,6\\
+Vilken art var Winnie the Pooh?,ENTY:animal
+Vilken är den högsta romerska siffran?,DESC:def
+Vad är Italiens huvudstad?,LOC:city
+Vilket land var Hitler kansler för?,LOC:country
+Italien är den största producenten av vad?,ENTY:product
+Vad är huvudstaden i Iowa?,LOC:city
+Vad är Gay Science?,DESC:def
+Vad är den viktigaste nationen i världen\, historiskt sett?,LOC:country
+Vad är termen för summan av allt genetiskt material i en viss organism?,ENTY:termeq
+Vilken domare kallade sig The Law West of the Pecos?,HUM:ind
+Vilken fågel kan simma men inte flyga?,ENTY:animal
+Vem skrev Bibeln?,HUM:ind
+Vad är ursprunget till ordet mördare?,DESC:desc
+Vem är Mia Farrows mamma?,HUM:ind
+Vem skrev The Ugly Duckling?,HUM:ind
+Vilket år antog US Marine Corps mottot Semper Fidelis?,NUM:date
+Hur många kontinenter finns det?,NUM:count
+Vad orsakar huvudvärk?,DESC:reason
+Varför håller vattkopporna så länge?,DESC:reason
+Hur många människor har varit Captain America?,NUM:count
+Vilken Vladimir Nabokov-roman innefattar professor Humbert som är kär i en 12-årig flicka?,ENTY:cremat
+Vilken berömd tränare sa om du inte kan slå dem i gränden\, kan du inte slå dem på isen?,HUM:ind
+Var är din corpus callosum?,LOC:other
+Vad förstörs i 1 Mos 19:24?,ENTY:other
+Vad betyder intractable plantar keratoma?,DESC:def
+Corpus callosum finns i vilken del av kroppen?,ENTY:body
+Vad gjorde Andy Hardys far för pengar?,HUM:title
+Hur stor andel av silverproduktionen är från oberoende silversmeder?,NUM:perc
+Vad står RCA för?,ABBR:exp
+Hur uttalas ordet 'qigong'?,DESC:manner
+Vilken påve invigde Vatikanens internationella radio?,HUM:ind
+Vem valdes till att vara den första svarta ordföranden för de militära gemensamma stabscheferna?,HUM:ind
+Vad betyder siffran 1\, 2 och 4 på Dr. Pepper-flaskor?,DESC:def
+Vad kallar du en pokerhand med fem kort av samma färg?,ENTY:termeq
+Var kom Indian Pudding ifrån?,DESC:desc
+Vem ledde Hitlers ökända Gestapo?,HUM:ind
+Vilket skivbolag bildades av Herb Alpert och Jerry Moss?,HUM:gr
+Vad är statistiken för berusade förare i Maryland?,NUM:other
+Vad är en rädsla för svaghet?,ENTY:dismed
+Vad hette Krim-mötet mellan Roosevelt\, Churchill och Stalin?,ENTY:event
+Vilka två färger är du blind för om du lider av protanopi?,ENTY:color
+Vad är ursprunget till ordet Nallebjörn?,DESC:desc
+Vad menar Robert?,DESC:def
+Hur kan uttagsautomater veta om din dollar är en 1 eller 5?,DESC:manner
+Vilket oljebolag valde nästan ett ord som innebar stoppad bil på japanska som sitt nya internationella namn?,HUM:gr
+Vad tog första priset i tidningen Omni för att hitta den ultimata obesvarbara frågan?,ENTY:other
+Nämn de fyra berättelserna i Edith Whartons Old New York&.,ENTY:cremat
+Under de senaste åtta åren vilka har MVP-spelarna för NHL varit?,HUM:ind
+Vad hände under Blackhawks indiska krig år 1832?,DESC:desc
+Vilken var den första TV-apparaten som innehöll en fjärrkontroll?,ENTY:other
+Vad är befolkningen i Ohio?,NUM:other
+Var hittar jag information om Alexander Mackenzie?,LOC:other
+Vad är naglar gjorda av?,ENTY:substance
+Namnge jättarnas land tolv gånger människans storlek i Gullivers resor.,LOC:country
+Vilken dag gifte sig John F och Jackie Kennedy?,NUM:date
+Vad var utbildningssystemet på 1960-talet?,ENTY:other
+Vilka färger är de fyra ränderna på en burk Pepsi uppifrån?,ENTY:color
+Vad är den mer kända identiteten hos John Merrick\, det ädla trollet i det viktorianska England?,HUM:ind
+Vem är Pia Zadoras miljonär make och mentor?,HUM:ind
+Vilka tjänar sina pengar på det hårda sättet?,HUM:ind
+Hur många olika typer av skunkar finns det?,NUM:count
+Vilken basebollägare och sjöman är känd som The Mouth of the South?,HUM:ind
+Hur kan jag få ett CCT-diagram?,DESC:manner
+Var är den förstenade skogen?,LOC:other
+Vad var födelseplatsen för Edgar Allen Poe?,LOC:other
+Var finns zebror mest troligt?,LOC:other
+Vilken roman har Big Brother vakandes?,ENTY:cremat
+Vilka företag i Alaska påverkades av Exxon Valdez oljeutsläpp?,HUM:gr
+Vilka näringsämnen är för friska ben och tänder?,ENTY:food
+Vem rapporterar vädret i TV-programmet Good Morning America?,HUM:ind
+Var finns ens corpus callosum?,LOC:other
+Vad hette den protestantiska revolten mot påvens överlägsenhet?,ENTY:event
+Vilket land har den sydligaste punkten på kontinentaleuropa?,LOC:country
+Hur många par ben har en hummer?,NUM:count
+Hur många människor besöker påven varje månad?,NUM:count
+Vilka spelade de ursprungliga Charlie's Angels?,HUM:ind
+Hur många människor på marken dödades från bombningen av Pan Am Flight 103 över Lockerbie\, Skottland\, 21 december?,NUM:count
+Vilka är biverkningarna av mevacor?,DESC:desc
+Vilken bedövningsmedel tillät drottning Victoria att användas för födseln av sitt sjunde barn 1853?,ENTY:dismed
+Vilket språk talas mest i Brasilien?,ENTY:lang
+Vilken provins ligger Edmonton i?,LOC:state
+Vad är den gyllene regeln?,DESC:def
+Hur mäter man solens värme?,DESC:manner
+Vilka är andra sätt att få bristningar förutom graviditet\, viktminskning\, och tyngdlyftning?,ENTY:techmeth
+Vad är förkortningen för trinitrotoluen?,ABBR:abb
+När publicerades den första amerikanska uppslagsverket?,NUM:date
+Vilken är världens högsta topp?,LOC:mount
+Vilket företag annonserar Madonna för?,HUM:gr
+Vad är huvudstaden i Kalifornien?,LOC:city
+Vilken president mördades av Charles J. Guiteau?,HUM:ind
+Vilken då nedsättande term användes för målarna Monet\, Sisley\, Pissarro\, Renoir och Degas?,ENTY:termeq
+Hur mycket betalas Clara Peller av Wendy's för att säga Where's the beef?,NUM:money
+Vad heter barnshowen från Canadian Public TV med den sjungande ananasen?,ENTY:cremat
+Vad är ljud?,DESC:def
+Vem är den rikaste personen i världen utan att äga ett företag?,HUM:ind
+När föddes Beethoven?,NUM:date
+Varför spred sig inte europeiskt kolonialstyre förrän efter den första och andra industriella revolutionen?,DESC:reason
+Vem svarade Jag vet på prinsessan Leias bekännelse Jag älskar dig i The Empire Strikes Back?,HUM:ind
+Hur flyter båtar?,DESC:manner
+Vilken byggnad krönns brittiska monarker i?,LOC:other
+Vad är leukemi?,DESC:def
+Vilken komiker kallar sin svägerska kapten Bligh och hennes svärmor Moby Dick?,HUM:ind
+Hur många stavelser finns det i en rad med hendekasyllabisk poesi?,NUM:count
+Vilka länder har de största väpnade styrkorna i världen?,LOC:country

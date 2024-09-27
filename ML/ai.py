@@ -15,14 +15,19 @@ print(df.head())
 model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 
 # List of sentences to encode
-sentences = ["This is a test sentence.", "SBERT is really useful for sentence embeddings!"]
+sentences = df['text'].tolist()
 
 # Get sentence embeddings
-embeddings = model.encode(sentences)
+embeddings = model.encode(sentences, show_progress_bar=True)
 
 # Print the embeddings
-for sentence, embedding in zip(sentences, embeddings):
-    print(f"Sentence: {sentence}")
-    print(f"Embedding: {embedding[:5]}...")  # Print the first 5 dimensions of the embedding for brevity
-    print()
-print(f"Embedding dimensions: {len(embeddings[0])}")
+#for sentence, embedding in zip(sentences, embeddings):
+#    print(f"Sentence: {sentence}")
+#    print(f"Embedding: {embedding[:1]}...")  # Print the first 5 dimensions of the embedding for brevity
+#    print()
+#print(f"Embedding dimensions: {len(embeddings[0])}")
+for i, (sentence, embedding) in enumerate(zip(sentences, embeddings)):
+    if i >= 10:
+        break  # Stop after printing 10 sentences
+    print(f"Sentence {i + 1}: {sentence}")
+    print(f"Embedding {i + 1} (first 5 dimensions): {embedding[:5]}\n")

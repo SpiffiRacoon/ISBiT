@@ -1,11 +1,22 @@
 import pymongo
 
+
 class MongoConnection:
     """
-    Context manager for MongoDB connection
+    Context manager for MongoDB connection. This way the connection is always the same and
+    closed after usage.
+
+    Example usage:
+    ```python
+    with MongoConnection() as (_, db):
+        db["test"].insert_one({"test": "first"})
+    ```
+
     """
+
     def __init__(self):
-        self.client = pymongo.MongoClient("localhost", port=27017)
+        mongodb_url = "mongo"  # Container name in docker-compose
+        self.client = pymongo.MongoClient(mongodb_url, port=27017)
         self.db = self.client.isbit
 
     def __enter__(self):

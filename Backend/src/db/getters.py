@@ -1,6 +1,7 @@
 from .connection import MongoConnection
 from ..types import Node
 
+
 def get_all_nodes_from(collection: str) -> list[Node]:
     """
     Get all nodes from a collection

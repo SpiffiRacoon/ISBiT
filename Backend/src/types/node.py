@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 
+
 class Node(BaseModel):
     """
     Datamodel for a node
     """
+
     id: int
     cluster: str
     text: str

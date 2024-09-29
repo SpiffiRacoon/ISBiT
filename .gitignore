@@ -161,13 +161,17 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# ignore data files but not sub dirs
+# Ignore all files in ML/data/ directory
 ML/data/*
+
+# do note ignore the data exampels
+!ML/data/data_examples/*
+
+# But do not ignore subdirectories
 !ML/data/**/
-data/QAQC_v1/splits/local_test.csv
-data/QAQC_v1/splits/local_train.csv
-data/QAQC_v1/splits/remote_test.csv
-data/QAQC_v1/swe_qaqc_train.csv
-data/QAQC_v1/swe_qaqc_prep_train.csv
-data/QAQC_v1/Swedish_EAT_v1.0.tsv
+
+# ignore csv and tsv
+data/**/*.csv
+data/**/*.tsv
+
 

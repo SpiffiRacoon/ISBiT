@@ -1,9 +1,12 @@
 # own
-from ..db import get_all_nodes_from, add_one_node_to
+from ..db import (
+    get_all_nodes_from as db_get_all_nodes_from,
+    add_one_node_to as db_add_one_node_to,
+)
 from ..types import Node
 
 # pip
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 
 router = APIRouter(
     prefix="/data",
@@ -17,7 +20,7 @@ def get_all_nodes(collection: str) -> list[Node]:
     Get all nodes in one collection
     """
 
-    nodes = get_all_nodes_from(collection)
+    nodes = db_get_all_nodes_from(collection=collection)
     return nodes
 
 
@@ -28,15 +31,15 @@ def add_one_node(node: Node, collection: str) -> None:
     """
 
     try:
-        add_one_node_to(node, collection)
+        db_add_one_node_to(node=node, collection=collection)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
     return None
 
 
-@router.post("/", status_code=204)
-def categorize_node(node_id: str, colletion: str) -> None:
+@router.post("/categorize", status_code=204)
+def categorize_node(node_id: str, category: str, colletion: str) -> None:
     """
     Categorize a node
     """

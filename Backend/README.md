@@ -30,3 +30,9 @@ python start.py
 
 ## Using the API
 To read the docs and learn how to use the API go to: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+## Running unit tests
+To run the unit tests, use the following command:
+```
+pytest
+```

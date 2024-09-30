@@ -163,5 +163,6 @@ cython_debug/
 
 ML/data/QAQC_v1/*.csv
 ML/data/QAQC_v2/*.csv
-!.gitkeep
+!ML/data/QAQC_v1/.gitkeep
+!ML/data/QAQC_v2/.gitkeep
 

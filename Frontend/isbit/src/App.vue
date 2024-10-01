@@ -19,6 +19,16 @@ export default {
   </div>
 </template>
 
+<style>
+.main-color {
+  background-color: #246a3c;;
+}
+
+.highlight-color {
+  background-color: #4954B0;
+}
+</style>
+
 <style scoped>
 main {
   margin-top: 60px; /* Adjust based on navbar height */

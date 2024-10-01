@@ -31,7 +31,7 @@ export default {
 
 <style scoped>
 main {
-  margin-top: 60px; /* Adjust based on navbar height */
+  margin-top: 60px;
   padding: 20px;
 }
 </style>

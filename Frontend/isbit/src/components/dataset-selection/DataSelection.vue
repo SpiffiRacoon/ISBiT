@@ -36,7 +36,7 @@
   .container {
     font-family: Arial, sans-serif;
     padding: 20px;
-    max-width: 1100px; /* Increased max-width for a wider layout */
+    max-width: 1100px;
     margin: 0 auto;
     background-color: #f9f9f9;
   }
@@ -53,12 +53,12 @@
   .card {
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 0; /* 90-degree corners */
+    border-radius: 0; 
     margin: 20px 0;
-    padding: 25px 40px; /* Increased padding for a more spacious look */
+    padding: 25px 40px; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
-    width: 100%; /* Ensures the card takes full width of the container */
+    width: 100%; 
   }
   
   .card:hover {
@@ -69,7 +69,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 60px; /* Increased gap between dataset name and details */
+    gap: 60px;
   }
   
   /* Heading inside card */
@@ -82,7 +82,7 @@
   /* Card details arranged horizontally */
   .card-details {
     display: flex;
-    gap: 40px; /* Spacing between assignment and datatype */
+    gap: 40px; 
   }
   
   .card-details p {
@@ -100,7 +100,7 @@
   
     .card-details {
       flex-direction: column;
-      gap: 10px; /* Reduced gap for small screens */
+      gap: 10px; 
     }
   
     .card h2 {

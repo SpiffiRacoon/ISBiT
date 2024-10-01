@@ -1,0 +1,9 @@
+text,verbose label,coarse label,fine label
+"Vilka två produkter använder en tiger som symbol?",ENTY:product,3,19
+"Hur tillkännages världen till valet av en ny påve?",DESC:manner,2,4
+"Vad är ursprunget till namnet "Scarlett"?",DESC:desc,2,3
+"Vad är "Nine Inch Nails"?",DESC:def,2,2
+"Vad är ursprunget till ordet "vinden"?",DESC:desc,2,3
+"Vad är definitionen av termen "vapensystem"?",DESC:def,2,2
+"Hur mycket skulle det kosta att köpa ett partytält på 2 meter, med sidor?",NUM:money,5,41
+

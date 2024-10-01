@@ -1,0 +1,11 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+
+  backend:
+    build: ./Backend
+    ports:
+      - 8000:8000

@@ -28,6 +28,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f "Backend/requirements.txt" ]; then pip install -r "Backend/requirements.txt"; fi
+        if [ -f "ML/requirements.txt" ]; then pip install -r "ML/requirements.txt"; fi
+        if [ -f "Frontend/requirements.txt" ]; then pip install -r "Frontend/requirements.txt"; fi
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names

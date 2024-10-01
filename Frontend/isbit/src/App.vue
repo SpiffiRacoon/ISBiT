@@ -1,5 +1,5 @@
 <script>
-import Navbar from './components/navbar/Navbar.vue'; // Adjust the path as necessary
+import Navbar from './components/navbar/NavBar.vue'; // Adjust the path as necessary
 
 export default {
   components: {

@@ -1,35 +1,49 @@
 <template>
-    <div class="container">
+  <div class="container">
       <h1>Dataset Information</h1>
+      <div v-if="error" class="error">{{ error }}</div> <!-- Error handling -->
       <div class="card" v-for="(item, index) in dataList" :key="index">
-        <div class="card-content">
-          <h2>{{ item.dataset }}</h2>
-          <div class="card-details">
-            <p><strong>Assignment:</strong> {{ item.assignment }}</p>
-            <p><strong>Datatype:</strong> {{ item.datatype }}</p>
+          <div class="card-content">
+              <h2>{{ item.dataset }}</h2>
+              <div class="card-details">
+                  <p><strong>Assignment:</strong> {{ item.assignment }}</p>
+                  <p><strong>Datatype:</strong> {{ item.datatype }}</p>
+              </div>
           </div>
-        </div>
       </div>
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from "vue";
-  
-  export default defineComponent({
-    name: "DataDisplay",
-    data() {
-      return {
-        dataList: [
-          { dataset: "Dataset 1", assignment: "Assignment 1", datatype: "Type A" },
-          { dataset: "Dataset 2", assignment: "Assignment 2", datatype: "Type B" },
-          { dataset: "Dataset 3", assignment: "Assignment 3", datatype: "Type C" },
-          { dataset: "Dataset 4", assignment: "Assignment 4", datatype: "Type D" },
-        ],
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
+import axios from 'axios';
+
+export default defineComponent({
+  name: 'DataDisplay',
+  setup() {
+      const dataList = ref<any[]>([]);
+      const error = ref<string | null>(null);
+
+      const fetchData = async () => {
+          try {
+              const response = await axios.get('http://localhost:8000/V1/dataset');
+              console.log("Data fetched:", response.data);
+              dataList.value = response.data; 
+          } catch (err) {
+              error.value = 'Error fetching data';
+              console.error(err);
+          }
       };
-    },
-  });
-  </script>
+
+      onMounted(fetchData);
+
+      return {
+          dataList,
+          error,
+      };
+  },
+});
+</script>
   
   <style scoped>
   /* Container styling */

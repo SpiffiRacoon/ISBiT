@@ -9,3 +9,10 @@ services:
     build: ./Backend
     ports:
       - 8000:8000
+
+  frontend:
+    build: ./Frontend/isbit
+    ports:
+      - 3000:8080
+    depends_on:
+      - backend

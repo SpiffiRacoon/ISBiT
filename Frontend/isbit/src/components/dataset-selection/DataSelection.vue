@@ -28,7 +28,7 @@ export default defineComponent({
           try {
               const response = await axios.get('http://localhost:8000/V1/dataset');
               console.log("Data fetched:", response.data);
-              dataList.value = response.data; 
+              dataList.value = response.data.dataList; 
           } catch (err) {
               error.value = 'Error fetching data';
               console.error(err);

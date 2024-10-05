@@ -21,6 +21,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Ensure the height takes up the full viewport */
+  height: 100vh; 
 }
 </style>

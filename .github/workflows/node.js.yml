@@ -27,7 +27,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache-dependency-path: Frontend/isbit/package-lock.json
+        cache-dependency-path: /Frontend/isbit/package-lock.json
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present

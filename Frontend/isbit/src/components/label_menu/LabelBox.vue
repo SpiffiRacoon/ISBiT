@@ -37,9 +37,6 @@ export default defineComponent({
         }, 
         save() {
             console.log("selected: ", this.selectedItem)
-            axios
-            .get('http://localhost:8000/V1/ping')
-            .then(response => (console.log(response.data)))
         }
     }
 })

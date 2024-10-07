@@ -4,18 +4,19 @@
         v-for="alternative in alternatives">
             {{ alternative }}
         </button>
-        <button type="button" id="save-data" class="isbit-button" @click="save">
+    </div>
+        <button type="button" id="save-data" class="isbit-button highlight-color" @click="save">
             Spara datapunkt
         </button>
         <p>
             {{ selectedItem }}
-            {{ alternatives }}
         </p>
-    </div>
+
 </template>
 
 
 <script lang="ts">
+import axios from 'axios';
 import { defineComponent, type PropType } from 'vue'
 export default defineComponent({
     props: {
@@ -24,6 +25,7 @@ export default defineComponent({
     data() {
         return {
             selectedItem: "",
+            info: null
         }
     }, methods: {
         select(alternative: string) {
@@ -35,6 +37,9 @@ export default defineComponent({
         }, 
         save() {
             console.log("selected: ", this.selectedItem)
+            axios
+            .get('http://localhost:8000/V1/ping')
+            .then(response => (console.log(response.data)))
         }
     }
 })
@@ -54,7 +59,16 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: blueviolet;
+    border: 2px solid #ccc;  /* Set the border */
+    border-radius: 4px;      /* Rounded corners */
+    background-color: white;
+}
+
+#save-data {
+    float: right;
+    border-radius: 10px;
+    border-color: rgb(230, 230, 230);
+    border-style: solid;
 }
 
 </style>

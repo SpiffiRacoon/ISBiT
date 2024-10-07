@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import LabelBox from '../components/label_menu/LabelBox.vue'
+import Menu from '../components/label_menu/Menu.vue'
 </script>
 
 <template>
   <main>
-    <LabelBox :alternatives="['a', 'b', 'c']" />
+    <Menu />
   </main>
 </template>
+
+
+<style scoped>
+</style>

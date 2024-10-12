@@ -19,8 +19,9 @@ def get_all_datasets() -> dict:
     Get all datasets in database.
     """
 
-    # collections = db_get_all_collections()
-    # return collections
+    collections = db_get_all_collections()
+    return collections
+
     info = {
         "dataList": [
             {"dataset": "Dataset 1", "assignment": "labling", "datatype": "Type A", "id": "123"},

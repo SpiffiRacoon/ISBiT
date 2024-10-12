@@ -1,3 +1,4 @@
+# own
 from .connection import MongoConnection
 from ..types import Node
 from ..validators import validate_endpoint_args
@@ -15,3 +16,8 @@ def add_one_node_to(node: Node, collection: str, ConnectionClass = MongoConnecti
             raise Exception(f"Node with id: {node.id} already exists")
 
         db[collection].insert_one(node.dict())
+
+
+def add_clustered_data(nodes: list[Node], collection: str, ConnectionClass = MongoConnection) -> None:
+    with ConnectionClass() as (_, db):
+        db[collection].insert_many(nodes)

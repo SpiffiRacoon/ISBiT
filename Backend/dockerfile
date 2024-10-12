@@ -2,6 +2,8 @@ FROM python:3.12-alpine
 
 WORKDIR /backend
 
+RUN apk add build-base
+
 COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt

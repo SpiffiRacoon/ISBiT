@@ -6,12 +6,12 @@ class Node(BaseModel):
     Datamodel for a node
     """
 
-    id: int
-    cluster: str
+    _id: int | None = None
+    cluster: int
     text: str
-    coordinates: tuple[float, float]
-    is_categorized: bool = False
-    category: str | None = None
+    x: float
+    y: float
+    truth: str
 
     def __init__(self, **data):
         super().__init__(**data)

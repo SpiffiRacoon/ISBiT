@@ -1,3 +1,3 @@
-from .sub_models import QaqcTestModel
+from .factory import get_instance as get_model_instance
 
-__all__ = ["QaqcTestModel"]
+__all__ = ["get_model_instance"]

@@ -25,7 +25,7 @@ class QaqcTestModel(IsbitClassifierModel):
         questions = temp_data["text"].tolist()
         no_comma_questions = [self.strip_outer_quotationmarks(q) for q in questions]
 
-        coarse_labels = list(map(lambda x: x.split(":")[0], temp_data["verbose label"].tolist()))  
+        coarse_labels = list(map(lambda x: x.split(":")[0], temp_data["verbose label"].tolist()))
         zipped = list(zip(no_comma_questions, coarse_labels))
 
         os.makedirs(os.path.dirname(output_data_path), exist_ok=True)
@@ -35,13 +35,13 @@ class QaqcTestModel(IsbitClassifierModel):
             writer.writerows(zipped)
 
     # helper to remove outer quotation marks, specific for qaqc data set
-    def strip_outer_quotationmarks(q):
+    def strip_outer_quotationmarks(self, q):
         if q.startswith('"') and q.endswith('"'):
-            q = q[1:-1]  
+            q = q[1:-1]
         return q.strip()
-    
+
     # helper to remove commas in the question text, specific for qaqc data set
-    def replace_commas(line):
+    def replace_commas(self, line):
         pattern = r'"([^"]*?)"'
         def replace_commas(match):
             return '"' + match.group(1).replace(',', '|') + '"'
@@ -62,4 +62,7 @@ class QaqcTestModel(IsbitClassifierModel):
         point_data_df["cluster"] = clusters
         df = df.reset_index(drop=True)
         combined_df = pd.concat([df, point_data_df], axis=1)
+
+        combined_df = combined_df.rename(columns={"coarse label": "truth"})
+
         return combined_df

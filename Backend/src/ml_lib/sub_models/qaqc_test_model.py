@@ -3,6 +3,10 @@ import csv
 import re
 import os
 
+from sentence_transformers import SentenceTransformer
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
 from ..shared import IsbitClassifierModel
 
 class QaqcTestModel(IsbitClassifierModel):
@@ -43,6 +47,19 @@ class QaqcTestModel(IsbitClassifierModel):
             return '"' + match.group(1).replace(',', '|') + '"'
         return re.sub(pattern, replace_commas, line)
 
+    # combines the input qeustion data with the calculated 2D point data
     def first_run(self, df: pd.DataFrame):
-        self._format_data(df)
-        # more stuff to come, needs to set the self.df as a panda dataFrame with question data and point data (x,y)
+        questions = df["text"].tolist()
+        model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+        embeddings = model.encode(questions, convert_to_tensor=True)
+        num_clusters = 6 # coarse lables: [LOC, HUM, DESC, ENTY, ABBR, NUM]
+        kmeans = KMeans(n_clusters=num_clusters, random_state=42)
+        kmeans.fit(embeddings.cpu().numpy())
+        clusters = kmeans.labels_
+        pca = PCA(n_components=2)
+        reduced_embeddings = pca.fit_transform(embeddings.cpu().numpy())
+        point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
+        point_data_df["cluster"] = clusters
+        df = df.reset_index(drop=True)
+        combined_df = pd.concat([df, point_data_df], axis=1)
+        return combined_df

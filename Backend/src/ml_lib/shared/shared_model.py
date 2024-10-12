@@ -4,10 +4,9 @@ class IsbitClassifierModel:
 
     def __init__(self, source_data_path: str | None = None, df: pd.DataFrame | None = None) -> None:
         self.df = df
-        self.source_data_path = source_data_path
 
     def _read_data_frame(file_name: str) -> pd.DataFrame:
-        source_path = f"src/data/{file_name}"
+        source_path = f"src/data/{file_name}.csv"
         data = pd.read_csv(source_path)
         return data
 
@@ -19,7 +18,7 @@ class IsbitClassifierModel:
 
     def run(self, file_name: str,is_first:bool) -> None:
         """ 
-        Generic run frunction, shou
+        Run declared in super class, initializes
         """
         self._format_data(self, file_name=file_name)
         data = self._read_data_frame(file_name)
@@ -39,7 +38,7 @@ class IsbitClassifierModel:
     
     def latter_run(self, df: pd.DataFrame) -> pd.DataFrame:
         """ 
-        (mby not needed, bu run after feedback) Latter clustering run logic, overridden by child classes. 
+        (mby not needed, but run after feedback loop) Latter clustering run logic, overridden by child classes. 
         """
         raise Exception("Not implemented.")
     

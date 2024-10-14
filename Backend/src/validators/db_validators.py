@@ -6,6 +6,7 @@ def validate_endpoint_args(func):
     For this validator to work as expected, the function arguments needs to be given as kwargs:
         e.g. func(collection=collection)
     """
+
     def wrapper_func(*args, **kwargs):
         not_allowed_collection_names = ["About", "about"]
         if "collection" in kwargs:

@@ -6,6 +6,7 @@ router = APIRouter(
     tags=["Clustering"],
 )
 
+
 @router.post("/", status_code=204)
 def run_clustering(colletion: str) -> None:
     """

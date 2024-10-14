@@ -1,12 +1,15 @@
 import pandas as pd
 
+
 class IsbitClassifierModel:
 
-    def __init__(self, source_data_path: str | None = None, df: pd.DataFrame | None = None) -> None:
+    def __init__(
+        self, source_data_path: str | None = None, df: pd.DataFrame | None = None
+    ) -> None:
         self._df = df
 
     def _read_data_frame(self, file_name: str) -> pd.DataFrame:
-        source_path= f"src/data/output/{file_name}_prep.csv"
+        source_path = f"src/data/output/{file_name}_prep.csv"
         data = pd.read_csv(source_path)
         return data
 
@@ -16,7 +19,7 @@ class IsbitClassifierModel:
         """
         pass
 
-    def run(self, file_name: str,is_first:bool) -> None:
+    def run(self, file_name: str, is_first: bool) -> None:
         """
         Run declared in super class, initializes
         """

@@ -16,7 +16,14 @@ class Node(BaseModel):
     model_config = {
         "json_schema_extra": {
             "examples": [
-                    {"id": "123", "cluster": 1, "text": "This is a text", "x": 0.1, "y": 0.2, "truth": "true"},
+                {
+                    "id": "123",
+                    "cluster": 1,
+                    "text": "This is a text",
+                    "x": 0.1,
+                    "y": 0.2,
+                    "truth": "true",
+                },
             ]
         }
     }

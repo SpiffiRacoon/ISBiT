@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class DatasetsResponse(BaseModel):
     """
     Response model for datasets
@@ -12,7 +13,12 @@ class DatasetsResponse(BaseModel):
             "examples": [
                 {
                     "dataList": [
-                        {"dataset": "Dataset 1", "assignment": "labling", "datatype": "Type A", "id": "123"},
+                        {
+                            "dataset": "Dataset 1",
+                            "assignment": "labling",
+                            "datatype": "Type A",
+                            "id": "123",
+                        },
                     ]
                 }
             ]

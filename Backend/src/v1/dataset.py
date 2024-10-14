@@ -26,11 +26,16 @@ def get_all_datasets() -> DatasetsResponse | None:
         return None
 
     for one_collection in collections:
-        info["dataList"].append({"dataset": one_collection, "assignment": "labling", "datatype": "Type A", "id": "123"})
-
+        info["dataList"].append(
+            {
+                "dataset": one_collection,
+                "assignment": "labling",
+                "datatype": "Type A",
+                "id": "123",
+            }
+        )
 
     return DatasetsResponse(**info)
-
 
 
 @router.delete("/", status_code=204)

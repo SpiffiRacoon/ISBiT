@@ -3,8 +3,11 @@ from .connection import MongoConnection
 from ..types import Node
 from ..validators import validate_endpoint_args
 
+
 @validate_endpoint_args
-def add_one_node_to(node: Node, collection: str, ConnectionClass = MongoConnection) -> None:
+def add_one_node_to(
+    node: Node, collection: str, ConnectionClass=MongoConnection
+) -> None:
     """
     Add one node to a collection.
 
@@ -14,7 +17,9 @@ def add_one_node_to(node: Node, collection: str, ConnectionClass = MongoConnecti
         db[collection].insert_one(node.dict())
 
 
-def add_multiple_nodes_to(nodes: list[Node], collection: str, ConnectionClass = MongoConnection) -> None:
+def add_multiple_nodes_to(
+    nodes: list[Node], collection: str, ConnectionClass=MongoConnection
+) -> None:
     """
     Bulk function to adding multiple nodes at once.
     """

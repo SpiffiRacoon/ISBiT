@@ -49,6 +49,9 @@ class IsbitClassifierModel:
         raise Exception("Not implemented.")
 
     def _df_setter(self, df: pd.DataFrame) -> None:
+        """
+        Setter for the data frame attribute.
+        """
 
         df = df[["text", "x", "y", "truth", "cluster"]]
 

@@ -3,6 +3,7 @@ from ..db import (
     get_all_collections as db_get_all_collections,
     delete_collection as db_delete_collection,
 )
+from ..types import DatasetsResponse
 
 # pip
 from fastapi import APIRouter, HTTPException
@@ -14,24 +15,22 @@ router = APIRouter(
 
 
 @router.get("/", status_code=200)
-def get_all_datasets() -> dict:
+def get_all_datasets() -> DatasetsResponse | None:
     """
     Get all datasets in database.
     """
 
     collections = db_get_all_collections()
-    return collections
+    info = {"dataList": []}
+    if collections == []:
+        return None
 
-    info = {
-        "dataList": [
-            {"dataset": "Dataset 1", "assignment": "labling", "datatype": "Type A", "id": "123"},
-            {"dataset": "Dataset 2", "assignment": "labling", "datatype": "Type B", "id": "124"},
-            {"dataset": "Dataset 3", "assignment": "labling", "datatype": "Type C", "id": "125"},
-            {"dataset": "Dataset 4", "assignment": "labling ", "datatype": "Type D", "id": "126"},
-        ],
-    }
+    for one_collection in collections:
+        info["dataList"].append({"dataset": one_collection, "assignment": "labling", "datatype": "Type A", "id": "123"})
 
-    return info
+
+    return DatasetsResponse(**info)
+
 
 
 @router.delete("/", status_code=204)

@@ -1,7 +1,6 @@
 # own
 from ..db import (
     get_all_collections as db_get_all_collections,
-    delete_collection as db_delete_collection,
 )
 from ..types import DatasetsResponse
 

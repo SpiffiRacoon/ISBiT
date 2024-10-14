@@ -3,7 +3,6 @@ from . import v1
 
 # pip
 from fastapi import FastAPI
-import uvicorn
 
 
 app = FastAPI(

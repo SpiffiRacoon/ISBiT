@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.get("/", status_code=200)
-def run(model_name: str, file: str):
+def run(model_name: str, file: str) -> dict:
     """
     Run a ML model on a file
 

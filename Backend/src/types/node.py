@@ -28,7 +28,7 @@ class Node(BaseModel):
         }
     }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
 
         if "_id" in kwargs:
             kwargs["id"] = str(kwargs["_id"])

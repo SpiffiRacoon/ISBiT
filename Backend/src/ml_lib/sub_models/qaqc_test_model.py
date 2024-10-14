@@ -12,7 +12,7 @@ from ..shared import IsbitClassifierModel
 
 class QaqcTestModel(IsbitClassifierModel):
 
-    def _format_data(self, file_name: str):
+    def _format_data(self, file_name: str) -> None:
         """
         Function to format the QAQC data set, replaces comma signs iniside the question data with pipe sign |
         and removes outer qutation marks from the questions, also adds escape characters where its needed.
@@ -40,14 +40,18 @@ class QaqcTestModel(IsbitClassifierModel):
             writer.writerow(["text", "coarse label"])
             writer.writerows(zipped)
 
-    # helper to remove outer quotation marks, specific for qaqc data set
-    def strip_outer_quotationmarks(self, q):
+    def strip_outer_quotationmarks(self, q: str) -> str:
+        """
+        Helper to remove outer quotation marks, specific for qaqc data set
+        """
         if q.startswith('"') and q.endswith('"'):
             q = q[1:-1]
         return q.strip()
 
-    # helper to remove commas in the question text, specific for qaqc data set
-    def replace_commas(self, line):
+    def replace_commas(self, line: str) -> str:
+        """
+        Helper to remove commas in the question text, specific for qaqc data set
+        """
         pattern = r'"([^"]*?)"'
 
         def replace_commas(match):
@@ -55,8 +59,10 @@ class QaqcTestModel(IsbitClassifierModel):
 
         return re.sub(pattern, replace_commas, line)
 
-    # combines the input qeustion data with the calculated 2D point data
-    def first_run(self, df: pd.DataFrame):
+    def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Combines the input qeustion data with the calculated 2D point data
+        """
         questions = df["text"].tolist()
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
         embeddings = model.encode(questions, convert_to_tensor=True)
@@ -70,7 +76,5 @@ class QaqcTestModel(IsbitClassifierModel):
         point_data_df["cluster"] = clusters
         df = df.reset_index(drop=True)
         combined_df = pd.concat([df, point_data_df], axis=1)
-
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
-
         return combined_df

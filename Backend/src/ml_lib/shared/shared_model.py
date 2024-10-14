@@ -9,6 +9,9 @@ class IsbitClassifierModel:
         self._df = df
 
     def _read_data_frame(self, file_name: str) -> pd.DataFrame:
+        """
+        Reads the CSV data and returns it as a Panda data frame.
+        """
         source_path = f"src/data/output/{file_name}_prep.csv"
         data = pd.read_csv(source_path)
         return data
@@ -54,4 +57,7 @@ class IsbitClassifierModel:
 
     @property
     def df(self) -> pd.DataFrame:
+        """
+        Getter for the dataframe of ML models.
+        """
         return self._df

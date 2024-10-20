@@ -17,34 +17,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import axios from 'axios';
+  import { defineComponent, ref, onMounted } from "vue";
+  import axios from 'axios';
 
-export default defineComponent({
-  name: 'DataDisplay',
-  setup() {
-    const dataList = ref<any[]>([]);
-    const error = ref<string | null>(null);
+  export default defineComponent({
+    name: 'DataDisplay',
+    setup() {
+      const dataList = ref<any[]>([]);
+      const error = ref<string | null>(null);
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:8000/V1/dataset');
-        console.log("Data fetched:", response.data);
-        dataList.value = response.data.dataList; 
-      } catch (err) {
-        error.value = 'Error fetching data';
-        console.error(err);
-      }
-    };
+      const fetchData = async () => {
+        try {
+          //TODO: add base url to const file
+          const response = await axios.get('http://localhost:8000/V1/dataset');
+          console.log("Data fetched:", response.data);
+          dataList.value = response.data.dataList; 
+        } catch (err) {
+          error.value = 'Error fetching data';
+          console.error(err);
+        }
+      };
 
-    onMounted(fetchData);
+      onMounted(fetchData);
 
-    return {
-      dataList,
-      error,
-    };
-  },
-});
+      return {
+        dataList,
+        error,
+      };
+    },
+  });
 </script>
 
 <style scoped>

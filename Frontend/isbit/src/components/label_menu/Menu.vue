@@ -7,8 +7,12 @@ import ClusterPlot from "./ClusterPlot.vue"
 
 <template>
     <div id="label-menu">
+        <div class="block">
+        <h2>Dataset: qaqc</h2>
         <ClusterPlot />
+        </div>
         <div id="text-and-labels">
+            <h2>Uppmärk datapunkt</h2>
             <TextBox :text="apiData.t" />
             <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
         </div>
@@ -43,7 +47,11 @@ export default defineComponent({
 
 #text-and-labels {
     margin: 20px;
-    display:block;
+    display: block;
     width: 300px;
+}
+
+.block {
+    display: block;
 }
 </style>

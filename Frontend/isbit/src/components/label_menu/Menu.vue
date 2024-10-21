@@ -41,7 +41,8 @@ export default defineComponent({
     display: flex;
 }
 
-.text-and-labels {
+#text-and-labels {
+    margin: 20px;
     display:block;
     width: 300px;
 }

@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import LabelBox from './LabelBox.vue'
 import TextBox from './TextBox.vue'
+import ClusterPlot from "./ClusterPlot.vue"
 </script>
 
 
 <template>
     <div id="label-menu">
-        <TextBox :text="'Text från datapunkt...'" />
-        <LabelBox :alternatives="['a', 'b', 'c']" />
-        <button type="button" @click="fetchData">API BUTTON</button>
+        <ClusterPlot />
+        <div id="text-and-labels">
+            <TextBox :text="apiData.t" />
+            <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
+        </div>
     </div>
 </template>
 
@@ -21,21 +24,25 @@ export default defineComponent({
     },
     data() {
         return {
-            apiData: {}
+            apiData: {t: String}
         }
     }, methods: {
         fetchData() {
-            axios.get('https://localhost:8000/V1/ping').then(response => console.log(response))
+            axios.get('http://localhost:8000/V1/data/?collection=swe_qaqc_lib_test').then(response => this.apiData.t = response.data[0].text)
         }
+    }, mounted() {
+        axios.get('http://localhost:8000/V1/data/?collection=swe_qaqc_lib_test').then(response => this.apiData.t = response.data[0].text)
     }
 })
 </script>
 
 <style scoped>
 #label-menu {
+    display: flex;
+}
+
+.text-and-labels {
+    display:block;
     width: 300px;
-    padding: 10%;
-    background-color: #f1f1f1;
-    border-radius: 10px;
 }
 </style>

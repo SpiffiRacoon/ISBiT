@@ -1,21 +1,23 @@
 <template>
-    <div class="label-box">
-        <button type="button" @click="select(alternative)" v-bind:class="{'highlight-color': selectedItem == alternative}" class="label-alternative-button main-color isbit-button" 
-        v-for="alternative in alternatives">
-            {{ alternative }}
-        </button>
+    <div class="outer-box">
+        <div class="label-box">
+            <button type="button" @click="select(alternative)" v-bind:class="{'highlight-color': selectedItem == alternative}" class="label-alternative-button main-color isbit-button" 
+            v-for="alternative in alternatives">
+                {{ alternative }}
+            </button>
+        </div>
+            <button type="button" id="save-data" class="isbit-button highlight-color" @click="save">
+                Spara datapunkt
+            </button>
+            <p>
+                {{ selectedItem }}
+            </p>
     </div>
-        <button type="button" id="save-data" class="isbit-button highlight-color" @click="save">
-            Spara datapunkt
-        </button>
-        <p>
-            {{ selectedItem }}
-        </p>
-
 </template>
 
 
 <script lang="ts">
+
 import axios from 'axios';
 import { defineComponent, type PropType } from 'vue'
 export default defineComponent({
@@ -27,7 +29,8 @@ export default defineComponent({
             selectedItem: "",
             info: null
         }
-    }, methods: {
+    }, 
+     methods: {
         select(alternative: string) {
             if (this.selectedItem == alternative) {
                 this.selectedItem = ""
@@ -53,12 +56,16 @@ export default defineComponent({
 }
 
 .label-box {
-    display: flex;
+    display: block;
     flex-direction: column;
     align-items: center;
     border: 2px solid #ccc;  /* Set the border */
     border-radius: 4px;      /* Rounded corners */
     background-color: white;
+}
+
+.outer-box {
+    display:block;
 }
 
 #save-data {

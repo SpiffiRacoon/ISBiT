@@ -18,6 +18,8 @@ interface CustomPoint {
   x: number;
   y: number;
   tooltip: string; 
+  id: string;
+  truth: string;
 }
 
 export default defineComponent({
@@ -48,8 +50,6 @@ export default defineComponent({
 
     ];
 
-
-
     const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<ChartData<'scatter', CustomPoint[]>>({
       datasets: []
     });
@@ -61,6 +61,8 @@ export default defineComponent({
         x: item.x,
         y: item.y,
         tooltip: item.text,
+        id: item.id,
+        truth: item.truth,
       };
 
       if (!clusters[item.cluster]) {
@@ -80,49 +82,50 @@ export default defineComponent({
     });
 
     const chartOptions: ChartOptions<'scatter'> = {
-      scales: {
-        x: {
-          type: 'linear',
-          position: 'bottom',
-          grid: {
-            display: false,
-          },
-          ticks: {
-            display: false,
-          },
-          border: {
-            display: false,
-          },
-        },
-        y: {
-          beginAtZero: true,
-          grid: {
-            display: false,
-          },
-          ticks: {
-            display: false,
-          },
-          border: {
-            display: false,
-          },
-        },
+  scales: {
+    x: {
+      type: 'linear',
+      position: 'bottom',
+      grid: {
+        display: false,
       },
-      interaction: {
-        mode: 'nearest',
-        intersect: true,
+      ticks: {
+        display: false,
       },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: (context) => {
-              const point = scatterData.value.datasets[context.datasetIndex].data[context.dataIndex] as CustomPoint;
-              return point.tooltip || `x: ${point.x}, y: ${point.y}`;
-            },
-          },
+      border: {
+        display: false,
+      },
+    },
+    y: {
+      beginAtZero: true,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
+      border: {
+        display: false,
+      },
+    },
+  },
+  interaction: {
+    mode: 'nearest',
+    intersect: true,
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          const point = scatterData.value.datasets[context.datasetIndex].data[context.dataIndex] as CustomPoint;
+          return `Text: ${point.tooltip} | x: ${point.x}, y: ${point.y} | ID: ${point.id} | Truth: ${point.truth}`;
         },
       },
-      backgroundColor: 'transparent',
-    };
+    },
+  },
+  backgroundColor: 'transparent',
+};
+
 
     const onClick = (event: MouseEvent) => {
       const chartInstance = chartRef.value?.chart;
@@ -141,7 +144,13 @@ export default defineComponent({
           const dataIndex = point.index;
           const clickedPoint = scatterData.value.datasets[datasetIndex].data[dataIndex] as CustomPoint;
 
-          console.log('Clicked point:', { x: clickedPoint.x, y: clickedPoint.y, tooltip: clickedPoint.tooltip });
+          console.log('Clicked point:', { 
+            id: clickedPoint.id, 
+            x: clickedPoint.x, 
+            y: clickedPoint.y, 
+            tooltip: clickedPoint.tooltip,
+            truth: clickedPoint.truth 
+          });
         } else {
           console.log('No point clicked');
         }

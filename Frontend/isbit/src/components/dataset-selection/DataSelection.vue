@@ -1,111 +1,181 @@
 <template>
-    <div class="container">
-      <h1>Dataset Information</h1>
-      <div class="card" v-for="(item, index) in dataList" :key="index">
-        <div class="card-content">
-          <h2>{{ item.dataset }}</h2>
-          <div class="card-details">
-            <p><strong>Assignment:</strong> {{ item.assignment }}</p>
-            <p><strong>Datatype:</strong> {{ item.datatype }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from "vue";
-  
-  export default defineComponent({
-    name: "DataDisplay",
-    data() {
-      return {
-        dataList: [
-          { dataset: "Dataset 1", assignment: "Assignment 1", datatype: "Type A" },
-          { dataset: "Dataset 2", assignment: "Assignment 2", datatype: "Type B" },
-          { dataset: "Dataset 3", assignment: "Assignment 3", datatype: "Type C" },
-          { dataset: "Dataset 4", assignment: "Assignment 4", datatype: "Type D" },
-        ],
+  <div class="chart-container">
+    <ScatterChart ref="chartRef" :data="scatterData" :options="chartOptions" @click="onClick"></ScatterChart>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted } from 'vue';
+import type { Ref } from 'vue';
+import { Chart as ChartJS, registerables } from 'chart.js';
+import type { ChartData, ChartOptions } from 'chart.js';
+import { Scatter } from 'vue-chartjs';
+import axios from 'axios';
+
+ChartJS.register(...registerables);
+
+interface CustomPoint {
+  x: number;
+  y: number;
+  tooltip: string; 
+  id: string;
+  truth: string;
+}
+
+export default defineComponent({
+  components: {
+    ScatterChart: Scatter,
+  },
+  setup() {
+    const chartRef: Ref<{ chart: ChartJS } | null> = ref(null);
+
+    // Example data 
+    var incomingData = [
+      {
+        "id": "6714f4f41ba92ae7309e1558",
+        "cluster": 0,
+        "text": "Hur utvecklades träldomen i Ryssland?",
+        "x": -1.2356,
+        "y": 0.6237,
+        "truth": "DESC"
+      },
+      {
+        "id": "6714f4f41ba92ae7309e1559",
+        "cluster": 1,
+        "text": "Vilka filmer inkluderade karaktären Popeye Doyle?",
+        "x": -1.7641,
+        "y": -0.6591,
+        "truth": "ENTY"
+      },
+
+    ];
+
+    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<ChartData<'scatter', CustomPoint[]>>({
+      datasets: []
+    });
+
+    const clusters: { [key: number]: CustomPoint[] } = {};
+
+    incomingData.forEach(item => {
+      const point: CustomPoint = {
+        x: item.x,
+        y: item.y,
+        tooltip: item.text,
+        id: item.id,
+        truth: item.truth,
       };
+
+      if (!clusters[item.cluster]) {
+        clusters[item.cluster] = [];
+      }
+      clusters[item.cluster].push(point);
+    });
+
+    Object.entries(clusters).forEach(([clusterIndex, points]) => {
+      scatterData.value.datasets.push({
+        label: `Cluster ${clusterIndex}`,
+        data: points,
+        backgroundColor: clusterIndex === '0' ? 'blue' : 'red', 
+        showLine: false,
+        pointRadius: 5,
+      });
+    });
+
+    const chartOptions: ChartOptions<'scatter'> = {
+  scales: {
+    x: {
+      type: 'linear',
+      position: 'bottom',
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
+      border: {
+        display: false,
+      },
     },
-  });
-  </script>
-  
-  <style scoped>
-  /* Container styling */
-  .container {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    max-width: 1100px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
-  }
-  
-  /* Header styling */
-  h1 {
-    text-align: center;
-    font-size: 28px;
-    color: #333;
-    margin-bottom: 30px;
-  }
-  
-  /* Card styling */
-  .card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 0; 
-    margin: 20px 0;
-    padding: 25px 40px; 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-    width: 100%; 
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-  }
-  
-  .card-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 60px;
-  }
-  
-  /* Heading inside card */
-  .card h2 {
-    margin: 0;
-    font-size: 22px;
-    color: #333;
-  }
-  
-  /* Card details arranged horizontally */
-  .card-details {
-    display: flex;
-    gap: 40px; 
-  }
-  
-  .card-details p {
-    margin: 0;
-    font-size: 16px;
-    color: #666;
-  }
-  
-  /* Responsive layout */
-  @media (max-width: 768px) {
-    .card-content {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .card-details {
-      flex-direction: column;
-      gap: 10px; 
-    }
-  
-    .card h2 {
-      font-size: 18px;
-    }
-  }
-  </style>
-  
+    y: {
+      beginAtZero: true,
+      grid: {
+        display: false,
+      },
+      ticks: {
+        display: false,
+      },
+      border: {
+        display: false,
+      },
+    },
+  },
+  interaction: {
+    mode: 'nearest',
+    intersect: true,
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: (context) => {
+          const point = scatterData.value.datasets[context.datasetIndex].data[context.dataIndex] as CustomPoint;
+          return `Text: ${point.tooltip} | x: ${point.x}, y: ${point.y} | ID: ${point.id} | Truth: ${point.truth}`;
+        },
+      },
+    },
+  },
+  backgroundColor: 'transparent',
+};
+
+
+    const onClick = (event: MouseEvent) => {
+      const chartInstance = chartRef.value?.chart;
+
+      if (chartInstance) {
+        const points = chartInstance.getElementsAtEventForMode(
+          event,
+          'nearest',
+          { intersect: true },
+          true
+        );
+
+        if (points && points.length) {
+          const point = points[0];
+          const datasetIndex = point.datasetIndex;
+          const dataIndex = point.index;
+          const clickedPoint = scatterData.value.datasets[datasetIndex].data[dataIndex] as CustomPoint;
+
+          console.log('Clicked point:', { 
+            id: clickedPoint.id, 
+            x: clickedPoint.x, 
+            y: clickedPoint.y, 
+            tooltip: clickedPoint.tooltip,
+            truth: clickedPoint.truth 
+          });
+        } else {
+          console.log('No point clicked');
+        }
+      } else {
+        console.error('Chart instance not found');
+      }
+    };
+
+    return {
+      scatterData,
+      chartOptions,
+      onClick,
+      chartRef,
+    };
+  },
+});
+</script>
+
+<style scoped>
+.chart-container {
+  border: 3px solid green;
+  padding: 10px;
+  border-radius: 8px;
+  width: 800px;
+  height: 600px;
+  position: relative;
+}
+</style>

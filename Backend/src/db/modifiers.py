@@ -1,6 +1,7 @@
 from .connection import MongoConnection
 from ..validators import validate_endpoint_args
 
+
 @validate_endpoint_args
 def delete_collection(collection: str, ConnectionClass=MongoConnection) -> None:
     """

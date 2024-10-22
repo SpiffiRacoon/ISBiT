@@ -250,6 +250,17 @@ export default defineComponent({
 
     ];
 
+    async function fetchData() {
+      try {
+        const response = await axios.get('http://localhost:8000/V1/data/?collection=swe_qaqc_lib_test');
+        console.log("Data fetched:", response.data);
+       // incomingData = response.data;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    onMounted(fetchData);
+
     const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<ChartData<'scatter', CustomPoint[]>>({
       datasets: []
     });

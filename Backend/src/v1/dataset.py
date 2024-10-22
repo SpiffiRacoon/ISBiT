@@ -5,7 +5,7 @@ from ..db import (
 from ..types import DatasetsResponse
 
 # pip
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, UploadFile
 
 router = APIRouter(
     prefix="/dataset",
@@ -35,6 +35,13 @@ def get_all_datasets() -> DatasetsResponse | None:
         )
 
     return DatasetsResponse(**info)
+
+
+@router.post("/")
+def upload_dataset(uploaded_file: UploadFile):
+    contents = uploaded_file.file.read().decode("utf-8")
+    print(contents)
+    return {"status": "success", "details": f"File {uploaded_file.filename} uploaded"}
 
 
 @router.delete("/", status_code=204)

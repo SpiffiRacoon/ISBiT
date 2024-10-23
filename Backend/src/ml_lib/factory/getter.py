@@ -2,6 +2,7 @@
 from ..shared import IsbitClassifierModel
 from ..sub_models import QaqcTestModel
 
+
 def get_instance(model_name: str) -> IsbitClassifierModel:
     """
     Factory to get a ML instance of the requested model.

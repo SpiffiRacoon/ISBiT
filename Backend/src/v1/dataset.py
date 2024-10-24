@@ -3,12 +3,13 @@ from ..db import (
     get_all_collections as db_get_all_collections,
 )
 from ..types import DatasetsResponse
-from ..utils import write_dataset
+from ..utils import write_dataset, write_info
 
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
 import pandas as pd
 from io import StringIO
+import json
 
 router = APIRouter(
     prefix="/dataset",
@@ -42,20 +43,35 @@ def get_all_datasets() -> DatasetsResponse | None:
 
 @router.post("/")
 def upload_dataset(
-    uploaded_file: UploadFile, filename: str, delimiter: str | None = None
+    uploaded_file: UploadFile,
+    filename: str,
+    uploaded_info_file: UploadFile,
+    delimiter: str | None = None
 ):
     """
     Upload a dataset
 
     Currently only csv files are supported.
+
+    Paramaters:
+        uploaded_file, dataset to upload. 
+        filename, name to save uploaded_file as.
+        uploaded_info_file, accompanying .info file to the uploaded dataset.
     """
     try:
         contents = uploaded_file.file.read().decode("utf-8")
         string_content = StringIO(contents)
         df = pd.read_csv(string_content, delimiter=delimiter)
-        write_dataset(filename, df)
+        write_dataset(filename=filename, df=df)
+
+        info_contents = uploaded_info_file.file.read().decode("utf-8")
+        metadata = json.loads(info_contents)
+        write_info(info_filename=filename, metadata=metadata)
+
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Uploaded info file must be in valid JSON format.")
     except Exception as e:
-        raise HTTPException(500, str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
     return {"status": "success", "details": f"File '{filename}' uploaded"}
 

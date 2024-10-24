@@ -18,3 +18,4 @@ def get_all_collections(ConnectionClass=MongoConnection) -> list:
     with ConnectionClass() as (_, db):
         collections = db.list_collection_names()
         return list(collections)
+

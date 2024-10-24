@@ -1,0 +1,4 @@
+{
+    "ref": "qaqc_test",
+    "labels" : "LOC, HUM, DESC, ENTY, ABBR, NUM"
+}

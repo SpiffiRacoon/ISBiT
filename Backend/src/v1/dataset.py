@@ -39,20 +39,20 @@ def get_all_datasets() -> DatasetsResponse | None:
 
 
 @router.delete("/", status_code=204)
-def delete_collection(collection: str) -> None:
+def delete_collection(dataset: str) -> None:
     """
-    Delete a collection in the database.
+    Delete a dataset in the database.
 
     OBS, this is permanent!
     """
 
-    collections = db_get_all_collections()
-    if collections == []:
-        raise HTTPException(status_code=400, detail="No collections found")
+    datasets = db_get_all_collections()
+    if datasets == []:
+        raise HTTPException(status_code=400, detail="No datasets found")
     
-    for one_collection in collections:
-        if one_collection == collection:
-            db_delete_collection(collection=collection)
+    for one_dataset in datasets:
+        if one_dataset == dataset:
+            db_delete_collection(collection=dataset)
             return
     
-    raise HTTPException(status_code=400, detail="No collection found")
+    raise HTTPException(status_code=400, detail="dataset not found")

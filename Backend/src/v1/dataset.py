@@ -1,6 +1,7 @@
 # own
 from ..db import (
     get_all_collections as db_get_all_collections,
+    delete_collection as db_delete_collection
 )
 from ..types import DatasetsResponse
 
@@ -45,5 +46,13 @@ def delete_collection(collection: str) -> None:
     OBS, this is permanent!
     """
 
-    # db_delete_collection(collection=collection)
-    raise HTTPException(status_code=501, detail="Not implemented")
+    collections = db_get_all_collections()
+    if collections == []:
+        raise HTTPException(status_code=400, detail="No collections found")
+    
+    for one_collection in collections:
+        if one_collection == collection:
+            db_delete_collection(collection=collection)
+            return
+    
+    raise HTTPException(status_code=400, detail="No collection found")

@@ -1,6 +1,6 @@
 # own
 from ..shared import IsbitClassifierModel
-from ..sub_models import QaqcTestModel
+from ..sub_models import QaqcTestModel, QaqcTestModelv2
 
 def get_instance(model_name: str) -> IsbitClassifierModel:
     """
@@ -9,5 +9,7 @@ def get_instance(model_name: str) -> IsbitClassifierModel:
     match model_name:
         case "qaqc_test":
             return QaqcTestModel()
+        case "qaqc_test_v2":
+            return QaqcTestModelv2()
         case _:
             raise Exception("Model not found")

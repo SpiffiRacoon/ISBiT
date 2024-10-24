@@ -1,3 +1,3 @@
 from .qaqc_test_model import QaqcTestModel
-
-__all__ = ["QaqcTestModel"]
+from .qaqc_test_model_2 import QaqcTestModelv2
+__all__ = ["QaqcTestModel","QaqcTestModelv2"]

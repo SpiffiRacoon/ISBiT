@@ -52,7 +52,7 @@ export default defineComponent({
     border-style: solid;
     border-width: thin;
     display: block;
-    width: 90%;
+    width: 100%;
 }
 
 .label-box {

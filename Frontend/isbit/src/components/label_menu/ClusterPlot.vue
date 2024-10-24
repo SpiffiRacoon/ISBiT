@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, type PropType } from 'vue';
 import type { Ref } from 'vue';
 import { Chart as ChartJS, registerables } from 'chart.js';
 import type { ChartData, ChartOptions } from 'chart.js';
@@ -22,11 +22,13 @@ interface CustomPoint {
   truth: string;
 }
 
+export type {CustomPoint}
 export default defineComponent({
+  emits: ['pointClick'],
   components: {
     ScatterChart: Scatter,
   },
-  setup() {
+  setup(props, context) {
     const chartRef: Ref<{ chart: ChartJS } | null> = ref(null);
 
     // Scatter data state
@@ -160,6 +162,7 @@ export default defineComponent({
             text: clickedPoint.text,
             truth: clickedPoint.truth 
           });
+          context.emit('pointClick', clickedPoint); // tell parent the point was clicked
         } else {
           console.log('No point clicked');
         }

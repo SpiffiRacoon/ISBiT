@@ -7,7 +7,6 @@ class Node(BaseModel):
     """
 
     id: str | None = None
-    cluster: int
     text: str
     x: float
     y: float
@@ -18,7 +17,6 @@ class Node(BaseModel):
             "examples": [
                 {
                     "id": "123",
-                    "cluster": 1,
                     "text": "This is a text",
                     "x": 0.1,
                     "y": 0.2,

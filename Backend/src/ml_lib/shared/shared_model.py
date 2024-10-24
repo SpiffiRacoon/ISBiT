@@ -22,7 +22,7 @@ class IsbitClassifierModel:
         """
         pass
 
-    def run(self, file_name: str, is_first: bool) -> None:
+    def run(self, file_name: str, is_first: bool, dim: str | None = None) -> None:
         """
         Run declared in super class, initializes
         """
@@ -30,13 +30,13 @@ class IsbitClassifierModel:
         data = self._read_data_frame(file_name)
 
         if not is_first:
-            df = self.latter_run(data)
+            df = self.latter_run(data, dim)
         else:
             df = self.first_run(data)
 
         self._df_setter(df)
 
-    def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str | None = None) -> pd.DataFrame:
         """
         First clustering run logic, overridden by child classes.
         """
@@ -53,7 +53,7 @@ class IsbitClassifierModel:
         Setter for the data frame attribute.
         """
 
-        df = df[["text", "x", "y", "truth", "cluster"]]
+        df = df[["text", "x", "y", "truth"]]
 
         # TODO: validators
         self._df = df

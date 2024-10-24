@@ -39,7 +39,7 @@ def get_all_datasets() -> DatasetsResponse | None:
 
 
 @router.delete("/", status_code=204)
-def delete_collection(dataset: str) -> None:
+def delete_dataset(dataset: str) -> None:
     """
     Delete a dataset in the database.
 

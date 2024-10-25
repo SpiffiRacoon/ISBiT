@@ -30,9 +30,9 @@ class IsbitClassifierModel:
         data = self._read_data_frame(file_name)
 
         if not is_first:
-            df = self.latter_run(data, dim)
+            df = self.latter_run(data)
         else:
-            df = self.first_run(data)
+            df = self.first_run(data, dim)
 
         self._df_setter(df)
 

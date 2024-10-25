@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import LabelBox from './LabelBox.vue'
-import TextBox from './TextBox.vue'
 import ClusterPlot from "./ClusterPlot.vue"
 </script>
 
@@ -13,8 +12,7 @@ import ClusterPlot from "./ClusterPlot.vue"
         </div>
         <div id="text-and-labels">
             <h2>Uppmärk datapunkt</h2>
-            <TextBox :text="activePoint.text" />
-            <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" /> 
+            <LabelBox :text="activePoint.text" :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" /> 
         </div>
     </div>
 </template>

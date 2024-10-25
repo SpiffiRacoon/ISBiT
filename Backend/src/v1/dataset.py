@@ -1,6 +1,7 @@
 # own
 from ..db import (
     get_all_collections as db_get_all_collections,
+    delete_collection as db_delete_collection
 )
 from ..types import DatasetsResponse
 from ..utils import write_dataset
@@ -61,12 +62,20 @@ def upload_dataset(
 
 
 @router.delete("/", status_code=204)
-def delete_collection(collection: str) -> None:
+def delete_dataset(dataset: str) -> None:
     """
-    Delete a collection in the database.
+    Delete a dataset in the database.
 
     OBS, this is permanent!
     """
 
-    # db_delete_collection(collection=collection)
-    raise HTTPException(status_code=501, detail="Not implemented")
+    datasets = db_get_all_collections()
+    if datasets == []:
+        raise HTTPException(status_code=400, detail="No datasets found")
+    
+    for one_dataset in datasets:
+        if one_dataset == dataset:
+            db_delete_collection(collection=dataset)
+            return
+    
+    raise HTTPException(status_code=400, detail="dataset not found")

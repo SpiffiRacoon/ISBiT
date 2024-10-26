@@ -10,7 +10,7 @@ from sklearn.manifold import TSNE
 from ..shared import IsbitClassifierModel
 
 
-class QaqcTestModelv2(IsbitClassifierModel):
+class QaqcMainModel(IsbitClassifierModel):
 
     def _format_data(self, file_name: str) -> None:
         """

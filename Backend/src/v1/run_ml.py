@@ -12,16 +12,18 @@ router = APIRouter(
 )
 
 @router.get("/", status_code=200)
-def runV2(model_name: str, file: str, dim_red_method: str) -> dict:
+def run(model_name: str, file: str, dim_red_method: str) -> dict:
     """
     Run a ML model on a file
 
     Ex)
-    model: qaqc_test_v2
+    model: qaqc_main
 
     file: swe_qaqc_lib_test
 
     dim_red_method: COMBO
+
+    NOTE: If you want to use the test model, the dim_red_method will not be read, but has to be filled in with something.
     """
 
     model_obj = get_model_instance(model_name)

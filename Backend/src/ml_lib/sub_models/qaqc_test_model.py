@@ -59,9 +59,9 @@ class QaqcTestModel(IsbitClassifierModel):
 
         return re.sub(pattern, replace_commas, line)
 
-    def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str = None) -> pd.DataFrame:
         """
-        Combines the input qeustion data with the calculated 2D point data
+        Combines the input question data with the calculated 2D point data
         """
         questions = df["text"].tolist()
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")

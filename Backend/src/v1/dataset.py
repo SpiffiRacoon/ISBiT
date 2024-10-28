@@ -4,7 +4,7 @@ from ..db import (
     delete_collection as db_delete_collection
 )
 from ..types import DatasetsResponse
-from ..utils import write_dataset
+from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem
 
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
@@ -18,7 +18,7 @@ router = APIRouter(
 
 
 @router.get("/", status_code=200)
-def get_all_datasets() -> DatasetsResponse | None:
+def get_all_processed_datasets() -> DatasetsResponse | None:
     """
     Get all datasets in database.
     """
@@ -26,7 +26,7 @@ def get_all_datasets() -> DatasetsResponse | None:
     collections = db_get_all_collections()
     info = {"dataList": []}
     if collections == []:
-        return None
+        return DatasetsResponse(**info)
 
     for one_collection in collections:
         info["dataList"].append(
@@ -34,6 +34,29 @@ def get_all_datasets() -> DatasetsResponse | None:
                 "dataset": one_collection,
                 "assignment": "labling",
                 "datatype": "Type A",
+                "id": "123",
+            }
+        )
+
+    return DatasetsResponse(**info)
+
+
+@router.get("/dataset_files", status_code=200)
+def get_all_dataset_files() -> DatasetsResponse | None:
+    """
+    Get all dataset files in the data folder.
+    """
+
+    files = get_all_dataset_files_from_filesystem()
+    info = {"dataList": []}
+
+    if files == []:
+        return DatasetsResponse(**info)
+
+    for one_collection in files:
+        info["dataList"].append(
+            {
+                "dataset": one_collection,
                 "id": "123",
             }
         )
@@ -72,10 +95,10 @@ def delete_dataset(dataset: str) -> None:
     datasets = db_get_all_collections()
     if datasets == []:
         raise HTTPException(status_code=400, detail="No datasets found")
-    
+
     for one_dataset in datasets:
         if one_dataset == dataset:
             db_delete_collection(collection=dataset)
             return
-    
+
     raise HTTPException(status_code=400, detail="dataset not found")

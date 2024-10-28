@@ -72,21 +72,19 @@ class QaqcMainModel(IsbitClassifierModel):
                 reduced_embeddings_pca2 = pca2.fit_transform(embeddings)
                 tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings = tsne.fit_transform(reduced_embeddings_pca2)
-                point_data_df_COMBO = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
-                combined_df_COMBO = pd.concat([df, point_data_df_COMBO], axis=1)
-                combined_df_COMBO = combined_df_COMBO.rename(columns={"coarse label": "truth"})
-                return combined_df_COMBO
+                point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
             case "PCA":
                 pca = PCA(n_components=2, random_state=42)
                 reduced_embeddings_PCA = pca.fit_transform(embeddings)
-                point_data_df_PCA = pd.DataFrame(reduced_embeddings_PCA, columns=["x", "y"])
-                combined_df_PCA = pd.concat([df, point_data_df_PCA], axis=1)
-                combined_df_PCA = combined_df_PCA.rename(columns={"coarse label": "truth"})
-                return combined_df_PCA
+                point_data_df = pd.DataFrame(reduced_embeddings_PCA, columns=["x", "y"])
+
             case "TSNE":
                 pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
-                point_data_df_TSNE = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
-                combined_df_TSNE = pd.concat([df, point_data_df_TSNE], axis=1)
-                combined_df_TSNE = combined_df_TSNE.rename(columns={"coarse label": "truth"})
-                return combined_df_TSNE
+                point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
+            case _: 
+                raise Exception("Invalid dimension reduction method.")
+            
+        combined_df = pd.concat([df, point_data_df], axis=1)
+        combined_df = combined_df.rename(columns={"coarse label": "truth"})
+        return combined_df

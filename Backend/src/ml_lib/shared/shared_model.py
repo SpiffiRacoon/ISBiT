@@ -22,7 +22,7 @@ class IsbitClassifierModel:
         """
         pass
 
-    def run(self, file_name: str, is_first: bool, dim: str = None) -> None:
+    def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
         """
         Run declared in super class, initializes
         """

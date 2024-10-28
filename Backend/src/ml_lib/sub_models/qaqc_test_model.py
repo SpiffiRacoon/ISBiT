@@ -59,7 +59,7 @@ class QaqcTestModel(IsbitClassifierModel):
 
         return re.sub(pattern, replace_commas, line)
 
-    def first_run(self, df: pd.DataFrame, dim: str = None) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data
         """

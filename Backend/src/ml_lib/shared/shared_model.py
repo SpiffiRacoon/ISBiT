@@ -36,7 +36,7 @@ class IsbitClassifierModel:
 
         self._df_setter(df)
 
-    def first_run(self, df: pd.DataFrame, dim: str = None) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         First clustering run logic, overridden by child classes.
         """

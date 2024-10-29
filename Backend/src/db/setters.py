@@ -1,4 +1,5 @@
 # own
+from bson import ObjectId
 from .connection import MongoConnection
 from ..types import Node
 from ..validators import validate_endpoint_args
@@ -11,7 +12,7 @@ def add_one_node_to(
     """
     Add one node to a collection.
 
-    Id needs to be unique, otherwise the node will not be added
+    Id needs to be unique, otherwise the node will not be added.
     """
     with ConnectionClass() as (_, db):
         db[collection].insert_one(node.dict())
@@ -26,3 +27,54 @@ def add_multiple_nodes_to(
     nodes_to_insert = [one_node.dict() for one_node in nodes]
     with ConnectionClass() as (_, db):
         db[collection].insert_many(nodes_to_insert)
+
+
+@validate_endpoint_args
+def add_multiple_nodes_to_id(
+    nodes: list[Node], collection: str, document_id: str, ConnectionClass=MongoConnection
+) -> None:
+    """
+    Bulk function to adding multiple nodes at once to a specific id.
+    """
+    nodes_to_insert = [{**one_node.dict(), "id": ObjectId()} for one_node in nodes]
+    
+    with ConnectionClass() as (_, db):
+        db[collection].update_one(
+            {"_id": document_id},  # TODO: change id to some hash of the tuple (question, label)
+            {"$push": {"data": {"$each": nodes_to_insert}}},
+            upsert=True
+        )
+
+@validate_endpoint_args
+def add_about_node_to_id(
+    about_node: dict, collection: str, id: str, ConnectionClass=MongoConnection
+) -> None:
+    """
+    Adds an about field with a document from a datasets accompanying .info file to a specific id.
+    """ 
+    with ConnectionClass() as (_, db):
+         db[collection].update_one(
+             {"_id": id},
+             {"$set" : {"about": about_node}},
+             upsert=True,
+            )
+
+@validate_endpoint_args
+def add_label_list_to(
+    label_id: str, labels: list, collection: str, ConnectionClass=MongoConnection
+) -> None:
+    """
+    Adds an additional list of labels to an existing 'labels' field in a metadata document.
+    """
+    collection_suffix = "_meta_data"
+    meta_collection = f"{collection}{collection_suffix}"
+
+    with ConnectionClass() as (_, db):
+        db[meta_collection].update_one(
+            {"_id": label_id},  
+            {"$push": {"labels": labels}}
+        )
+
+
+
+

@@ -1,6 +1,6 @@
 # own
 from ..db import (
-    get_all_collections as db_get_all_collections,
+    get_all_collections as db_get_all_collections
 )
 from ..types import DatasetsResponse
 from ..utils import write_dataset, write_info
@@ -40,7 +40,6 @@ def get_all_datasets() -> DatasetsResponse | None:
 
     return DatasetsResponse(**info)
 
-
 @router.post("/")
 def upload_dataset(
     uploaded_file: UploadFile,
@@ -54,8 +53,8 @@ def upload_dataset(
     Currently only csv files are supported.
 
     Paramaters:
-        uploaded_file, dataset to upload. 
-        filename, name to save uploaded_file as.
+        uploaded_file, dataset to upload.   
+        filename, name to save uploaded_file as. 
         uploaded_info_file, accompanying .info file to the uploaded dataset.
     """
     try:
@@ -65,8 +64,8 @@ def upload_dataset(
         write_dataset(filename=filename, df=df)
 
         info_contents = uploaded_info_file.file.read().decode("utf-8")
-        metadata = json.loads(info_contents)
-        write_info(info_filename=filename, metadata=metadata)
+        meta_data = json.loads(info_contents)
+        write_info(info_filename=filename, metadata=meta_data)
 
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Uploaded info file must be in valid JSON format.")
@@ -86,3 +85,6 @@ def delete_collection(collection: str) -> None:
 
     # db_delete_collection(collection=collection)
     raise HTTPException(status_code=501, detail="Not implemented")
+
+
+

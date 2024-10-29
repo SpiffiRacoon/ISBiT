@@ -3,7 +3,7 @@ from ..db import (
     get_all_collections as db_get_all_collections,
     delete_collection as db_delete_collection
 )
-from ..types import DatasetsResponse
+from ..types import DatasetsResponse, DatasetFileResponse
 from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem
 
 # pip
@@ -41,8 +41,8 @@ def get_all_processed_datasets() -> DatasetsResponse | None:
     return DatasetsResponse(**info)
 
 
-@router.get("/dataset_files", status_code=200)
-def get_all_dataset_files() -> DatasetsResponse | None:
+@router.get("/files", status_code=200)
+def get_all_dataset_files() -> DatasetFileResponse| None:
     """
     Get all dataset files in the data folder.
     """
@@ -51,7 +51,7 @@ def get_all_dataset_files() -> DatasetsResponse | None:
     info = {"dataList": []}
 
     if files == []:
-        return DatasetsResponse(**info)
+        return DatasetFileResponse(**info)
 
     for one_collection in files:
         info["dataList"].append(
@@ -61,7 +61,7 @@ def get_all_dataset_files() -> DatasetsResponse | None:
             }
         )
 
-    return DatasetsResponse(**info)
+    return DatasetFileResponse(**info)
 
 
 @router.post("/")

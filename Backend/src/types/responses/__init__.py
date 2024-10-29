@@ -1,3 +1,3 @@
-from .datasets import DatasetsResponse
+from .datasets import DatasetsResponse, DatasetFileResponse
 
-__all__ = ["DatasetsResponse"]
+__all__ = ["DatasetsResponse", "DatasetFileResponse"]

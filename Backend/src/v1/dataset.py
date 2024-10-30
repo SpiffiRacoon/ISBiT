@@ -72,10 +72,10 @@ def delete_dataset(dataset: str) -> None:
     datasets = db_get_all_collections()
     if datasets == []:
         raise HTTPException(status_code=400, detail="No datasets found")
-    
+
     for one_dataset in datasets:
         if one_dataset == dataset:
             db_delete_collection(collection=dataset)
             return
-    
+
     raise HTTPException(status_code=400, detail="dataset not found")

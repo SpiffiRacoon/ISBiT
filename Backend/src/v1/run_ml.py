@@ -23,7 +23,7 @@ def run(model_name: str, file: str, dim_red_method: str | None = None) -> dict:
 
     dim_red_method: COMBO
 
-    NOTE: If you want to use the test model, the dim_red_method will not be read, but has to be filled in with something.
+    NOTE: If you want to use the qaqc_test model, the dim_red_method field can be left blank because it will only use PCA.
     """
 
     model_obj = get_model_instance(model_name)

@@ -28,7 +28,8 @@ class IsbitClassifierModel:
         """
         pass
 
-    def run(self, file_name: str, is_first: bool) -> None:
+
+    def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
         """
         Run declared in super class, initializes
         """
@@ -38,11 +39,11 @@ class IsbitClassifierModel:
         if not is_first:
             df = self.latter_run(data)
         else:
-            df = self.first_run(data)
+            df = self.first_run(data, dim)
 
         self._df_setter(df)
 
-    def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         First clustering run logic, overridden by child classes.
         """

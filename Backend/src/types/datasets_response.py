@@ -24,3 +24,26 @@ class DatasetsResponse(BaseModel):
             ]
         }
     }
+
+
+class DatasetFileResponse(BaseModel):
+    """
+    Response model for dataset files
+    """
+
+    dataList: list[dict]
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "dataList": [
+                        {
+                            "dataset": "qaqc_test_data",
+                            "id": "123",
+                        },
+                    ]
+                }
+            ]
+        }
+    }

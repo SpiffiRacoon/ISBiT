@@ -32,8 +32,6 @@ def get_all_labels(collection: str,) -> list[str] | None:
     """
     label_dict = db_get_all_labels(collection=collection)
 
-    #print(label_dict)
-
     # TODO: need to find a good way not to hardcode key strings like this..
     for label_doc in label_dict:
         if "about" in label_doc and "labels" in label_doc["about"]:

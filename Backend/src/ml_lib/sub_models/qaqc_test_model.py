@@ -84,9 +84,9 @@ class QaqcTestModel(IsbitClassifierModel):
         id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
         return id
 
-    def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
-        Combines the input qeustion data with the calculated 2D point data
+        Combines the input question data with the calculated 2D point data
         """
         questions = df["text"].tolist()
         ids = [self.get_id(question) for question in questions]

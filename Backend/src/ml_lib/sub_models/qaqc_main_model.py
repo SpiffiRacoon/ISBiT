@@ -2,6 +2,7 @@ import pandas as pd
 import csv
 import re
 import os
+import umap
 
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
@@ -82,6 +83,11 @@ class QaqcMainModel(IsbitClassifierModel):
                 pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
                 point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
+            
+            case "UMAP":
+                umap_model = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1, metric='euclidean')
+                reduced_embeddings_umap = umap_model.fit_transform(embeddings)
+                point_data_df = pd.DataFrame(reduced_embeddings_umap, columns=["x", "y"])
             case _: 
                 raise Exception("Invalid dimension reduction method.")
             

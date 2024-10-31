@@ -1,9 +1,10 @@
 # own
 from ..db import (
-    get_all_collections as db_get_all_collections
+    get_all_collections as db_get_all_collections,
+    delete_collection as db_delete_collection
 )
-from ..types import DatasetsResponse
-from ..utils import write_dataset, write_info
+from ..types import DatasetsResponse, DatasetFileResponse
+from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem, write_info
 
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
@@ -18,7 +19,7 @@ router = APIRouter(
 
 
 @router.get("/", status_code=200)
-def get_all_datasets() -> DatasetsResponse | None:
+def get_all_processed_datasets() -> DatasetsResponse | None:
     """
     Get all datasets in database.
     """
@@ -26,7 +27,7 @@ def get_all_datasets() -> DatasetsResponse | None:
     collections = db_get_all_collections()
     info = {"dataList": []}
     if collections == []:
-        return None
+        return DatasetsResponse(**info)
 
     for one_collection in collections:
         info["dataList"].append(
@@ -39,6 +40,30 @@ def get_all_datasets() -> DatasetsResponse | None:
         )
 
     return DatasetsResponse(**info)
+
+
+@router.get("/files", status_code=200)
+def get_all_dataset_files() -> DatasetFileResponse| None:
+    """
+    Get all dataset files in the data folder.
+    """
+
+    files = get_all_dataset_files_from_filesystem()
+    info = {"dataList": []}
+
+    if files == []:
+        return DatasetFileResponse(**info)
+
+    for one_collection in files:
+        info["dataList"].append(
+            {
+                "dataset": one_collection,
+                "id": "123",
+            }
+        )
+
+    return DatasetFileResponse(**info)
+
 
 @router.post("/")
 def upload_dataset(
@@ -76,15 +101,20 @@ def upload_dataset(
 
 
 @router.delete("/", status_code=204)
-def delete_collection(collection: str) -> None:
+def delete_dataset(dataset: str) -> None:
     """
-    Delete a collection in the database.
+    Delete a dataset in the database.
 
     OBS, this is permanent!
     """
 
-    # db_delete_collection(collection=collection)
-    raise HTTPException(status_code=501, detail="Not implemented")
+    datasets = db_get_all_collections()
+    if datasets == []:
+        raise HTTPException(status_code=400, detail="No datasets found")
 
+    for one_dataset in datasets:
+        if one_dataset == dataset:
+            db_delete_collection(collection=dataset)
+            return
 
-
+    raise HTTPException(status_code=400, detail="dataset not found")

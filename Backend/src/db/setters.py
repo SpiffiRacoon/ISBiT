@@ -59,22 +59,6 @@ def add_about_node_to_id(
              upsert=True,
             )
 
-# ?
-# @validate_endpoint_args
-# def add_label_list_to(
-#     label_id: str, labels: list, collection: str, ConnectionClass=MongoConnection
-# ) -> None:
-#     """
-#     Adds an additional list of labels to an existing 'labels' field in a metadata document.
-#     """
-#     collection_suffix = "_meta_data"
-#     meta_collection = f"{collection}{collection_suffix}"
-
-#     with ConnectionClass() as (_, db):
-#         db[meta_collection].update_one(
-#             {"_id": label_id},  
-#             {"$push": {"labels": labels}}
-#         )
 
 
 

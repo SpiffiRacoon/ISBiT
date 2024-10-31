@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 class IsbitClassifierModel:
 
     def __init__(
@@ -60,8 +59,6 @@ class IsbitClassifierModel:
         Setter for the data frame attribute.
         """
 
-        df = df[["text", "x", "y", "truth", "cluster"]]
-
         # TODO: validators
         self._df = df
 
@@ -71,3 +68,10 @@ class IsbitClassifierModel:
         Getter for the dataframe of ML models.
         """
         return self._df
+    
+    def get_id(self, content: str) -> str:
+        """
+        Get the id of a datapoint.
+        """
+        pass
+        

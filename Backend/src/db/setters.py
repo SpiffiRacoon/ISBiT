@@ -36,11 +36,11 @@ def add_multiple_nodes_to_id(
     """
     Bulk function to adding multiple nodes at once to a specific id.
     """
-    nodes_to_insert = [{**one_node.dict(), "id": ObjectId()} for one_node in nodes]
+    nodes_to_insert = [one_node.dict() for one_node in nodes]
     
     with ConnectionClass() as (_, db):
         db[collection].update_one(
-            {"_id": document_id},  # TODO: change id to some hash of the tuple (question, label)
+            {"_id": document_id},
             {"$push": {"data": {"$each": nodes_to_insert}}},
             upsert=True
         )

@@ -3,6 +3,7 @@ import pandas as pd
 import csv
 import re
 import os
+import hashlib
 
 from sentence_transformers import SentenceTransformer
 from sklearn.cluster import KMeans
@@ -78,12 +79,19 @@ class QaqcTestModel(IsbitClassifierModel):
             return '"' + match.group(1).replace(",", "|") + '"'
 
         return re.sub(pattern, replace_commas, line)
+    
+    def get_id(self, content: str) -> str:
+        id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
+        return id
 
     def first_run(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Combines the input qeustion data with the calculated 2D point data
         """
         questions = df["text"].tolist()
+        ids = [self.get_id(question) for question in questions]
+        d = {'id': ids}
+        id_df = pd.DataFrame(data=d)
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
         embeddings = model.encode(questions, convert_to_tensor=True)
         num_clusters = 6  # coarse lables: [LOC, HUM, DESC, ENTY, ABBR, NUM]
@@ -96,5 +104,6 @@ class QaqcTestModel(IsbitClassifierModel):
         point_data_df["cluster"] = clusters
         df = df.reset_index(drop=True)
         combined_df = pd.concat([df, point_data_df], axis=1)
+        combined_df = pd.concat([combined_df, id_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df

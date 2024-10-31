@@ -50,44 +50,24 @@ export default defineComponent({
         )
         const incomingData = response.data
 
-        const clusters: { [key: number]: CustomPoint[] } = {}
+        const points: CustomPoint[] = incomingData.map((item: any) => ({
+          x: item.x,
+          y: item.y,
+          text: item.text,
+          id: item.id,
+          truth: item.truth
+        }))
 
-        incomingData.forEach((item: any) => {
-          const point: CustomPoint = {
-            x: item.x,
-            y: item.y,
-            text: item.text,
-            id: item.id,
-            truth: item.truth
-          }
-
-          if (!clusters[item.cluster]) {
-            clusters[item.cluster] = []
-          }
-          clusters[item.cluster].push(point)
-        })
-
-        const newDatasets = Object.entries(clusters).map(([clusterIndex, points]) => {
-          const getRandomColor = () => {
-            const letters = '0123456789ABCDEF'
-            let color = '#'
-            for (let i = 0; i < 6; i++) {
-              color += letters[Math.floor(Math.random() * 16)]
-            }
-            return color
-          }
-
-          return {
-            label: `Cluster ${clusterIndex}`,
-            data: points,
-            backgroundColor: getRandomColor(),
-            showLine: false,
-            pointRadius: 5
-          }
-        })
+        const newDataset = {
+          label: 'Data Points',
+          data: points,
+          backgroundColor: 'black',
+          showLine: false,
+          pointRadius: 5
+        }
 
         scatterData.value = {
-          datasets: newDatasets
+          datasets: [newDataset]
         }
 
         console.log('Scatter Data Updated:', scatterData.value)
@@ -140,7 +120,7 @@ export default defineComponent({
         tooltip: {
           callbacks: {
             label: (context) => {
-              const point = scatterData.value.datasets[context.datasetIndex].data[
+              const point = scatterData.value.datasets[0].data[
                 context.dataIndex
               ] as CustomPoint
               return `Text: ${point.text} | x: ${point.x}, y: ${point.y} | ID: ${point.id} | Truth: ${point.truth}`
@@ -164,9 +144,8 @@ export default defineComponent({
 
         if (points && points.length) {
           const point = points[0]
-          const datasetIndex = point.datasetIndex
           const dataIndex = point.index
-          const clickedPoint = scatterData.value.datasets[datasetIndex].data[
+          const clickedPoint = scatterData.value.datasets[0].data[
             dataIndex
           ] as CustomPoint
 

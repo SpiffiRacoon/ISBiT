@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import DataDisplay from '../components/dataset-selection/DataSelection.vue';
+import { defineComponent } from 'vue'
+import DataDisplay from '../components/dataset-selection/DataSelection.vue'
 
 export default defineComponent({
   name: 'DataView',
   components: {
     DataDisplay
   }
-});
+})
 </script>
 
 <style scoped>
@@ -21,6 +21,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; 
+  height: 100vh;
 }
 </style>

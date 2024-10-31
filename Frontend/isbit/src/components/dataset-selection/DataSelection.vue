@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <h1>Dataset Information</h1>
-    <div v-if="error" class="error">{{ error }}</div> <!-- Error handling -->
+    <div v-if="error" class="error">{{ error }}</div>
+    <!-- Error handling -->
     <div class="card" v-for="(item, index) in dataList" :key="index">
       <div class="card-content">
         <h2>{{ item.dataset }}</h2>
@@ -10,6 +11,7 @@
             <p><strong>Uppgift:</strong> {{ item.assignment }}</p>
             <p><strong>Typ av data:</strong> {{ item.datatype }}</p>
           </div>
+          <button @click="redirectToDetails(item.dataset)">Uppmärk Data</button>
         </div>
       </div>
     </div>
@@ -17,32 +19,36 @@
 </template>
 
 <script lang="ts">
-
-import { defineComponent, ref, onMounted } from "vue";
-  import axios from 'axios';
-  export default defineComponent({
-    name: 'DataDisplay',
-    setup() {
-      const dataList = ref<any[]>([]);
-      const error = ref<string | null>(null);
-      const fetchData = async () => {
-        try {
-          //TODO: add base url to const file
-          const response = await axios.get('http://localhost:8000/V1/dataset');
-          console.log("Data fetched:", response.data);
-          dataList.value = response.data.dataList; 
-        } catch (err) {
-          error.value = 'Error fetching data';
-          console.error(err);
-        }
-      };
-      onMounted(fetchData);
-      return {
-        dataList,
-        error,
-      };
-    },
-  });
+import { defineComponent, ref, onMounted } from 'vue'
+import axios from 'axios'
+export default defineComponent({
+  name: 'DataDisplay',
+  setup() {
+    const dataList = ref<any[]>([])
+    const error = ref<string | null>(null)
+    const fetchData = async () => {
+      try {
+        //TODO: add base url to const file
+        const response = await axios.get('http://localhost:8000/V1/dataset')
+        console.log('Data fetched:', response.data)
+        dataList.value = response.data.dataList
+      } catch (err) {
+        error.value = 'Error fetching data'
+        console.error(err)
+      }
+    }
+    onMounted(fetchData)
+    return {
+      dataList,
+      error
+    }
+  },
+  methods: {
+    redirectToDetails(dataset: string) {
+      this.$router.push({ path: '/label', query: { dataset: dataset } })
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -75,18 +81,18 @@ h1 {
 .card-content {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; 
-  gap: 30px; 
+  align-items: flex-start;
+  gap: 30px;
 }
 .card h2 {
   margin: 0;
   font-size: 22px;
   color: #333;
-  flex-shrink: 0; 
+  flex-shrink: 0;
 }
 .card-details {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   align-items: center;
 }
 .label-group {
@@ -98,7 +104,7 @@ h1 {
   margin: 0;
   font-size: 16px;
   color: #666;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 @media (max-width: 768px) {
   .card-content {

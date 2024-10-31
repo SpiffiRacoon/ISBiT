@@ -8,6 +8,4 @@ import Menu from '../components/label_menu/Menu.vue'
   </main>
 </template>
 
-
-<style scoped>
-</style>
+<style scoped></style>

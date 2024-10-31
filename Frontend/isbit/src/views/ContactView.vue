@@ -1,6 +1,3 @@
 <template>
-  <div id="app">
-    Contact 
-  </div>
+  <div id="app">Contact</div>
 </template>
-

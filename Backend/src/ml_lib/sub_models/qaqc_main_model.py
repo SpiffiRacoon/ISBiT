@@ -73,6 +73,7 @@ class QaqcMainModel(IsbitClassifierModel):
                 tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings = tsne.fit_transform(reduced_embeddings_pca2)
                 point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
+
             case "PCA":
                 pca = PCA(n_components=2, random_state=42)
                 reduced_embeddings_PCA = pca.fit_transform(embeddings)
@@ -82,6 +83,7 @@ class QaqcMainModel(IsbitClassifierModel):
                 pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
                 point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
+                
             case _: 
                 raise Exception("Invalid dimension reduction method.")
             

@@ -1,6 +1,5 @@
 <script>
-import Navbar from './components/navbar/NavBar.vue'; // Adjust the path as necessary
-
+import Navbar from './components/navbar/NavBar.vue' 
 export default {
   components: {
     Navbar
@@ -14,18 +13,16 @@ export default {
     <main>
       <router-view></router-view>
     </main>
-
-  
   </div>
 </template>
 
 <style>
 .main-color {
-  background-color: #246a3c;;
+  background-color: #246a3c;
 }
 
 .highlight-color {
-  background-color: #4954B0;
+  background-color: #4954b0;
 }
 </style>
 

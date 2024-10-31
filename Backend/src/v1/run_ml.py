@@ -11,21 +11,24 @@ router = APIRouter(
     tags=["Run ML"],
 )
 
-
 @router.get("/", status_code=200)
-def run(model_name: str, file: str) -> dict:
+def run(model_name: str, file: str, dim_red_method: str | None = None) -> dict:
     """
     Run a ML model on a file
 
     Ex)
-    model: qaqc_test
+    model: qaqc_main
 
     file: swe_qaqc_lib_test
+
+    dim_red_method: COMBO
+
+    NOTE: If you want to use the qaqc_test model, the dim_red_method field can be left blank because it will only use PCA.
     """
 
     model_obj = get_model_instance(model_name)
     try:
-        model_obj.run(file_name=file, is_first=True)
+        model_obj.run(file_name=file, is_first=True, dim = dim_red_method)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

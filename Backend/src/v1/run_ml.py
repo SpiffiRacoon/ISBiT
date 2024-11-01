@@ -18,7 +18,6 @@ router = APIRouter(
 executor = ThreadPoolExecutor(max_workers=10)
 
 
-
 @router.post("/", status_code=200)
 async def run(model_name: str, file: str) -> MlStatus:
     """
@@ -26,9 +25,13 @@ async def run(model_name: str, file: str) -> MlStatus:
     If the model is already running, it will return the status of the run.
 
     Ex)
-    model: qaqc_test
+    model: qaqc_main
 
     file: swe_qaqc_lib_test
+
+    dim_red_method: COMBO
+
+    NOTE: If you want to use the qaqc_test model, the dim_red_method field can be left blank because it will only use PCA.
     """
 
     ml_id = f"{model_name}_{file}"
@@ -36,7 +39,9 @@ async def run(model_name: str, file: str) -> MlStatus:
     if ml_status.status == "Running":
         return get_ml_status(ml_id)
 
-    ml_status = set_ml_status(MlStatus(ml_id=ml_id, status="Running", details="Request received"))
+    ml_status = set_ml_status(
+        MlStatus(ml_id=ml_id, status="Running", details="Request received")
+    )
     executor.submit(run_ml_background_task, model_name, file)
     return ml_status
 
@@ -57,16 +62,18 @@ def flush_ml_status(model_name: str, file: str) -> None:
 
     Sometimes the status of the ML run is not updated correctly. This function can be used to flush the status of the ML run.
 
-    Example of when it can be wrong, is when stopping the docker container during a ML run.
+    An example of when it can be wrong is when stopping the docker container during a ML run.
     """
     ml_id = f"{model_name}_{file}"
     delete_ml_status(ml_id)
     return None
 
 
-def run_ml_background_task(model_name: str, file: str) -> None:
+def run_ml_background_task(
+    model_name: str, file: str, dim_red_method: str | None = None
+) -> None:
     """
-    Syncronous function to run the ML model in the background
+    Synchronous function to run the ML model in the background
     This function updates the status of the ML run in the database
     """
     ml_id = f"{model_name}_{file}"
@@ -76,9 +83,11 @@ def run_ml_background_task(model_name: str, file: str) -> None:
     starting_time = datetime.now()
     model_obj = get_model_instance(model_name)
     try:
-        model_obj.run(file_name=file, is_first=True)
+        model_obj.run(file_name=file, is_first=True, dim=dim_red_method)
     except Exception as e:
-        set_ml_status(MlStatus(ml_id=ml_id, status="Not running", details=f"Error: {str(e)}"))
+        set_ml_status(
+            MlStatus(ml_id=ml_id, status="Not running", details=f"Error: {str(e)}")
+        )
         raise e
 
     df = model_obj.df
@@ -86,4 +95,11 @@ def run_ml_background_task(model_name: str, file: str) -> None:
     add_multiple_nodes_to(list_of_nodes, collection=file)
 
     total_running_time = datetime.now() - starting_time
-    set_ml_status(MlStatus(ml_id=ml_id, status="Not running", details="Success ML run completed", running_time=str(total_running_time)))
+    set_ml_status(
+        MlStatus(
+            ml_id=ml_id,
+            status="Not running",
+            details="Success ML run completed",
+            running_time=str(total_running_time),
+        )
+    )

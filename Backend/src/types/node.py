@@ -6,7 +6,7 @@ class Node(BaseModel):
     Datamodel for a node
     """
 
-    id: str | None=No
+    id: str
     cluster: int
     text: str
     x: float
@@ -31,6 +31,6 @@ class Node(BaseModel):
 
     def __init__(self, *args, **kwargs) -> None:
 
-#        if "_id" in kwargs:
-#            kwargs["id"] = str(kwargs["_id"])
+        if "_id" in kwargs:
+            kwargs["id"] = str(kwargs["_id"])
         super().__init__(*args, **kwargs)

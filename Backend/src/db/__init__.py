@@ -11,5 +11,4 @@ __all__ = [
     "add_about_node_to_id",
     "add_multiple_nodes_to_id",
     "get_all_label_from",
-    "add_label",
 ]

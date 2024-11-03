@@ -61,9 +61,5 @@ def categorize_node(node_id: str, category: str, collection: str) -> None:
     """
     Categorize a node
     """
-    #TODO: not working
-    try:
-        db_add_label(node_id, category, collection)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    raise HTTPException(status_code=501, detail="Not implemented")
 

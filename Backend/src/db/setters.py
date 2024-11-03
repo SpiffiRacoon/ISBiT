@@ -22,7 +22,7 @@ def add_multiple_nodes_to(
     nodes: list[Node], collection: str, ConnectionClass=MongoConnection
 ) -> None:
     """
-    Bulk function to adding multiple nodes at once.
+    Bulk function for adding multiple nodes at once.
     """
     nodes_to_insert = [one_node.dict() for one_node in nodes]
     with ConnectionClass() as (_, db):
@@ -34,7 +34,7 @@ def add_multiple_nodes_to_id(
     nodes: list[Node], collection: str, document_id: str, ConnectionClass=MongoConnection
 ) -> None:
     """
-    Bulk function to adding multiple nodes at once to a specific id.
+    Bulk function for adding multiple nodes at once to a specific id.
     """
     nodes_to_insert = [one_node.dict() for one_node in nodes]
     

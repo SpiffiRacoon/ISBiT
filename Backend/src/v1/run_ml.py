@@ -19,7 +19,7 @@ executor = ThreadPoolExecutor(max_workers=10)
 
 
 @router.post("/", status_code=200)
-async def run(model_name: str, file: str) -> MlStatus:
+async def run(model_name: str, file: str, dim_red_method: str | None = None) -> MlStatus:
     """
     Run a ML model on a file asynchronously. This will start the run in the background and return the status of the run.
     If the model is already running, it will return the status of the run.
@@ -42,7 +42,7 @@ async def run(model_name: str, file: str) -> MlStatus:
     ml_status = set_ml_status(
         MlStatus(ml_id=ml_id, status="Running", details="Request received")
     )
-    executor.submit(run_ml_background_task, model_name, file)
+    executor.submit(run_ml_background_task, model_name, file, dim_red_method)
     return ml_status
 
 

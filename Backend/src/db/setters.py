@@ -1,7 +1,10 @@
+# std
+from datetime import datetime
+
 # own
 from bson import ObjectId
 from .connection import MongoConnection
-from ..types import Node
+from ..types import Node, MlStatus
 from ..validators import validate_endpoint_args
 
 
@@ -63,3 +66,14 @@ def add_about_node_to_id(
 
 
 
+def set_ml_status(new_ml_status: MlStatus, ConnectionClass=MongoConnection) -> MlStatus:
+    """
+    Set status of ML run, removing the old one if it exists
+    """
+    with ConnectionClass() as (_, db):
+        query = {"ml_id": new_ml_status.ml_id}
+        db["ml_status"].delete_many(query)
+
+        db["ml_status"].insert_one(new_ml_status.dict())
+
+    return new_ml_status

@@ -12,3 +12,10 @@ def delete_collection(collection: str, ConnectionClass=MongoConnection) -> None:
         db_col.drop()
 
 
+def delete_ml_status(id: str, ConnectionClass=MongoConnection) -> None:
+    """
+    Delete a ml_status entry
+    """
+    with ConnectionClass() as (_, db):
+        query = {"ml_id": id}
+        db["ml_status"].delete_many(query)

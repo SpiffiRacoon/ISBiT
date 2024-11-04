@@ -12,13 +12,10 @@ def delete_collection(collection: str, ConnectionClass=MongoConnection) -> None:
         db_col.drop()
 
 
-def add_label(node_id: str, category: str, collection: str, ConnectionClass=MongoConnection) -> None:
-    """ 
-    Label a node in a collection.
+def delete_ml_status(id: str, ConnectionClass=MongoConnection) -> None:
     """
-    query_filter = {'id': node_id} #TODO: not working
-    update_operation = {'$set': {'input_label': category}}
+    Delete a ml_status entry
+    """
     with ConnectionClass() as (_, db):
-        db_col = db[collection]
-        db_col.update_one(query_filter, update_operation)
-        
+        query = {"ml_id": id}
+        db["ml_status"].delete_many(query)

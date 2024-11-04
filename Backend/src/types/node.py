@@ -7,7 +7,6 @@ class Node(BaseModel):
     """
 
     id: str
-    cluster: int
     text: str
     x: float
     y: float

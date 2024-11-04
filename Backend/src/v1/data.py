@@ -19,7 +19,6 @@ def get_all_nodes(collection: str) -> list[Node]:
     """
     Get all nodes in one collection
     """
-
     nodes = db_get_all_nodes_from(collection=collection)
     return nodes
 

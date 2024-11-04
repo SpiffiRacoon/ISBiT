@@ -2,12 +2,12 @@
 from datetime import datetime
 
 # own
-from bson import ObjectId
 from .connection import MongoConnection
 from ..types import Node, MlStatus
 from ..validators import validate_endpoint_args
 
 
+# TODO : this will need an update to be compatible with the new mongo doc structure
 @validate_endpoint_args # db validator
 def add_one_node_to(
     node: Node, collection: str, ConnectionClass=MongoConnection
@@ -19,18 +19,6 @@ def add_one_node_to(
     """
     with ConnectionClass() as (_, db):
         db[collection].insert_one(node.dict())
-
-@validate_endpoint_args
-def add_multiple_nodes_to(
-    nodes: list[Node], collection: str, ConnectionClass=MongoConnection
-) -> None:
-    """
-    Bulk function for adding multiple nodes at once.
-    """
-    nodes_to_insert = [one_node.dict() for one_node in nodes]
-    with ConnectionClass() as (_, db):
-        db[collection].insert_many(nodes_to_insert)
-
 
 @validate_endpoint_args
 def add_multiple_nodes_to_id(
@@ -50,14 +38,14 @@ def add_multiple_nodes_to_id(
 
 @validate_endpoint_args
 def add_about_node_to_id(
-    about_node: dict, collection: str, id: str, ConnectionClass=MongoConnection
+    about_node: dict, collection: str, document_id: str, ConnectionClass=MongoConnection
 ) -> None:
     """
     Adds an about field with a document from a datasets accompanying .info file to a specific id.
     """ 
     with ConnectionClass() as (_, db):
          db[collection].update_one(
-             {"_id": id},
+             {"_id": document_id},
              {"$set" : {"about": about_node}},
              upsert=True,
             )

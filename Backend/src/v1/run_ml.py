@@ -6,8 +6,13 @@ from datetime import datetime
 from ..types import Node, MlStatus
 from ..ml_lib import get_model_instance
 
-from ..db import add_multiple_nodes_to, set_ml_status, get_ml_status, delete_ml_status
-from ..db import add_about_node_to_id, add_multiple_nodes_to_id
+from ..db import (set_ml_status,
+                  get_ml_status,
+                  delete_ml_status,
+                  add_about_node_to_id,
+                  add_multiple_nodes_to_id
+            )
+
 
 # pip
 from fastapi import APIRouter, HTTPException
@@ -91,7 +96,7 @@ def run_ml_background_task(
         raise HTTPException(status_code=400, detail=str(e))
     
     ref_id = f"{file}{"_id"}"
-    add_about_node_to_id(about_node=about_dict, collection=file, id=ref_id)
+    add_about_node_to_id(about_node=about_dict, collection=file, document_id=ref_id)
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]

@@ -1,3 +1,4 @@
+import hashlib
 import json
 import pandas as pd
 import csv
@@ -79,12 +80,19 @@ class QaqcMainModel(IsbitClassifierModel):
             return '"' + match.group(1).replace(",", "|") + '"'
 
         return re.sub(pattern, replace_commas, line)
+    
+    def get_id(self, content: str) -> str:
+        id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
+        return id
 
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data
         """
         questions = df["text"].tolist()
+        ids = [self.get_id(question) for question in questions]
+        d = {'id': ids}
+        id_df = pd.DataFrame(data=d)
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
         embeddings = model.encode(questions, convert_to_tensor=True)
         match dim:
@@ -114,5 +122,6 @@ class QaqcMainModel(IsbitClassifierModel):
                 raise Exception("Invalid dimension reduction method.")
             
         combined_df = pd.concat([df, point_data_df], axis=1)
+        combined_df = pd.concat([combined_df, id_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df

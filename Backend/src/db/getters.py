@@ -9,6 +9,13 @@ from ..types import Node, MlStatus
 # pip
 from pandas.core.arrays import boolean
 
+def get_all_collections(ConnectionClass=MongoConnection) -> list:
+    """
+    Get all collections in database
+    """
+    with ConnectionClass() as (_, db):
+        collections = db.list_collection_names()
+        return list(collections)
 
 def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
     """
@@ -26,34 +33,19 @@ def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list
                 
         return nodes
 
-def get_all_collections(ConnectionClass=MongoConnection) -> list:
-    """
-    Get all collections in database
-    """
-    with ConnectionClass() as (_, db):
-        collections = db.list_collection_names()
-        return list(collections)
-
 def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list[dict]:
     """
     Get list document with labels from a collection. 
     """
-    
     with ConnectionClass() as (_, db):
         labels = list(db[collection].find({}, {"about.labels" : 1, "_id": 0}))
         return labels
 
 
-        all_datasets = list(collections)
-        all_datasets.remove("ml_status")
-
-        return all_datasets
-
 def get_ml_status(id: str, ConnectionClass=MongoConnection) -> MlStatus:
     """
     Get a dict with info about the ML run
     """
-
     with ConnectionClass() as (_, db):
         query = {"ml_id": id}
 

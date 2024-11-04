@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 import os
 from json import dump
@@ -41,3 +42,21 @@ def write_info(info_filename: str, metadata: dict) -> None:
     with open(f"{folder}/{info_filename}{suffix}.info", 'w') as f:
         dump(metadata, f, indent=4) 
 
+def read_meta_info(file_name: str) -> dict:
+    """
+    Extracts the JSON structure from a datasets accompanying .info file,  
+    returns the parsed JSON data as a dictionary.
+    """
+    meta_info_suffix = "_meta_info"
+    meta_info_path = f"src/data/info/{file_name}{meta_info_suffix}.info" 
+
+    if not os.path.exists(meta_info_path):
+        raise FileNotFoundError(f"The file '{meta_info_path}' does not exist.")
+
+    with open(meta_info_path, 'r') as file:
+        try:
+            meta_info_data = json.load(file)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Error parsing JSON from file '{meta_info_path}': {e}")
+
+    return meta_info_data

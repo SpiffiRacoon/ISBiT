@@ -1,3 +1,4 @@
+import hashlib
 import pandas as pd
 
 class IsbitClassifierModel:
@@ -19,12 +20,6 @@ class IsbitClassifierModel:
     def _format_data(self, file_name: str) -> None:
         """
         Formatting logic, overridden by child classes.
-        """
-        pass
-
-    def _read_meta_info(self, file_name: str) -> dict:
-        """
-        Reading accompanying info file, overridden by child classes.
         """
         pass
 
@@ -63,6 +58,10 @@ class IsbitClassifierModel:
         # TODO: validators
         self._df = df
 
+    def get_id(self, content: str) -> str:
+        id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
+        return id
+
     @property
     def df(self) -> pd.DataFrame:
         """
@@ -70,9 +69,4 @@ class IsbitClassifierModel:
         """
         return self._df
     
-    def get_id(self, content: str) -> str:
-        """
-        Get the id of a datapoint.
-        """
-        pass
         

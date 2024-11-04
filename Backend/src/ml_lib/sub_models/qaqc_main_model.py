@@ -43,25 +43,6 @@ class QaqcMainModel(IsbitClassifierModel):
             writer.writerow(["text", "coarse label"])
             writer.writerows(zipped)
 
-    def _read_meta_info(self, file_name: str) -> dict:
-        """
-        Extracts the JSON structure from a datasets accompanying .info file,  
-        returns the parsed JSON data as a dictionary.
-        """
-        meta_info_suffix = "_meta_info"
-        meta_info_path = f"src/data/info/{file_name}{meta_info_suffix}.info" 
-
-        if not os.path.exists(meta_info_path):
-            raise FileNotFoundError(f"The file '{meta_info_path}' does not exist.")
-
-        with open(meta_info_path, 'r') as file:
-            try:
-                meta_info_data = json.load(file)
-            except json.JSONDecodeError as e:
-                raise ValueError(f"Error parsing JSON from file '{meta_info_path}': {e}")
-
-        return meta_info_data
-
     def strip_outer_quotationmarks(self, q: str) -> str:
         """
         Helper to remove outer quotation marks, specific for qaqc data set
@@ -78,13 +59,8 @@ class QaqcMainModel(IsbitClassifierModel):
 
         def replace_commas(match):
             return '"' + match.group(1).replace(",", "|") + '"'
-
         return re.sub(pattern, replace_commas, line)
     
-    def get_id(self, content: str) -> str:
-        id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
-        return id
-
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data

@@ -73,7 +73,7 @@ def upload_dataset(
     delimiter: str | None = None
 ):
     """
-    Upload a dataset
+    Upload a dataset with an accompanying .info file, the info needs to be JSON format and will get the same name as the file with a suffix "_meta_info".
 
     Currently only csv files are supported.
 

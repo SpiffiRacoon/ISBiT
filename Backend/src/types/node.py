@@ -22,7 +22,7 @@ class Node(BaseModel):
                     "x": 0.1,
                     "y": 0.2,
                     "truth": "true",
-                    "label": "true"
+                    "input_label": "true"
                 },
             ]
         }

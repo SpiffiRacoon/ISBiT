@@ -41,7 +41,7 @@ def add_about_node_to_id(
     about_node: dict, collection: str, document_id: str, ConnectionClass=MongoConnection
 ) -> None:
     """
-    Adds an about field with a document from a datasets accompanying .info file to a specific id.
+    Adds an "about" field with a document from a datasets accompanying .info file to a specific id.
     """ 
     with ConnectionClass() as (_, db):
          db[collection].update_one(

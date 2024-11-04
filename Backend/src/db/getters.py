@@ -17,21 +17,17 @@ def get_all_collections(ConnectionClass=MongoConnection) -> list:
         collections = db.list_collection_names()
         return list(collections)
 
+
 def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
     """
-    Get all nodes from a collection.
+    Get all nodes from a collections node array in its data field.
     """
     with ConnectionClass() as (_, db):
         documents = db[collection].find()
         nodes = []
         for doc in documents:
-            if 'data' in doc:
-                for data_item in doc['data']:
-                    if isinstance(data_item.get("id"), ObjectId): # TODO: if we swap to hash ids this conversion should not be needed.
-                        data_item["id"] = str(data_item["id"])
-            nodes.extend([Node(**data_item) for data_item in doc['data']])
-                
-        return nodes
+            nodes.extend([Node(**data_item) for data_item in doc['data']])        
+    return nodes
 
 def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list[dict]:
     """

@@ -3,7 +3,6 @@ from ..db import (
     get_all_nodes_from as db_get_all_nodes_from,
     add_one_node_to as db_add_one_node_to,
     get_all_labels_from as db_get_all_labels,
-    add_label as db_add_label
 )
 from ..types import Node
 
@@ -14,7 +13,6 @@ router = APIRouter(
     prefix="/data",
     tags=["Data"],
 )
-
 
 @router.get("/", status_code=200)
 def get_all_nodes(collection: str) -> list[Node]:
@@ -37,10 +35,8 @@ def get_all_labels(collection: str,) -> list[str] | None:
         if "about" in label_doc and "labels" in label_doc["about"]:
             for _, value in label_doc["about"]["labels"].items(): # only returns first labels attribute for now.
                 if isinstance(value, list):
-                    return value
-                
+                    return value                
     return None
-
 
 @router.post("/", status_code=201)
 def add_one_node(node: Node, collection: str) -> None:

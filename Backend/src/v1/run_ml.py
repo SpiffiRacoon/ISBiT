@@ -3,12 +3,11 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 # own
-from ..ml_lib import get_model_instance
-from ..types import Node
-from ..db import add_multiple_nodes_to
-from ..db import add_about_node_to_id, add_multiple_nodes_to_id
 from ..types import Node, MlStatus
+from ..ml_lib import get_model_instance
+
 from ..db import add_multiple_nodes_to, set_ml_status, get_ml_status, delete_ml_status
+from ..db import add_about_node_to_id, add_multiple_nodes_to_id
 
 # pip
 from fastapi import APIRouter, HTTPException

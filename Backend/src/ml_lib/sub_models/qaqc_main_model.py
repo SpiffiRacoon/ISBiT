@@ -71,32 +71,8 @@ class QaqcMainModel(IsbitClassifierModel):
         id_df = pd.DataFrame(data=d)
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
         embeddings = model.encode(questions, convert_to_tensor=True)
-        match dim:
-            case "COMBO":
-                pca2 = PCA(n_components=50, whiten=False, random_state=42)
-                reduced_embeddings_pca2 = pca2.fit_transform(embeddings)
-                tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
-                reduced_embeddings = tsne.fit_transform(reduced_embeddings_pca2)
-                point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
 
-            case "PCA":
-                pca = PCA(n_components=2, random_state=42)
-                reduced_embeddings_PCA = pca.fit_transform(embeddings)
-                point_data_df = pd.DataFrame(reduced_embeddings_PCA, columns=["x", "y"])
-
-            case "TSNE":
-                pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
-                reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
-                point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
-
-            case "UMAP":
-                umap_model = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1, metric='euclidean')
-                reduced_embeddings_umap = umap_model.fit_transform(embeddings)
-                point_data_df = pd.DataFrame(reduced_embeddings_umap, columns=["x", "y"])
-
-            case _: 
-                raise Exception("Invalid dimension reduction method.")
-            
+        point_data_df = self.dim_red(embeddings=embeddings, dim=dim)
         combined_df = pd.concat([df, point_data_df], axis=1)
         combined_df = pd.concat([combined_df, id_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})

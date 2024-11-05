@@ -11,7 +11,7 @@ import ClusterPlot from './ClusterPlot.vue'
       <ClusterPlot />
     </div>
     <div id="text-and-labels">
-      <h2>Uppmärk datapunkt</h2>
+      <h2>Märk Upp Datapunkt</h2>
       <TextBox :text="apiData.t" />
       <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
     </div>

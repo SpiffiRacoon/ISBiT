@@ -27,28 +27,37 @@
               @click="redirectToDetails(item.dataset)"
               class="btn primary-btn"
             >
-              Uppmärk Data
+              Märk Upp Data
             </button>
             <button
-            v-if="isDataAvailable(item.dataset)" 
+              v-if="isDataAvailable(item.dataset)" 
               @click="removeDataset(item.dataset)"
               class="btn third-btn"
             >
               Ta bort dataset
             </button>
           </div>
-
-          <button
-            @click="runModel(item.dataset, index)"
-            class="btn secondary-btn"
-          >
-            Kör modell
-            <span v-if="item.loading" class="loading-indicator">
-              <i class="loading-spinner"></i> 
-            </span> 
-          </button>
-
-
+          <div class="run-container"
+          v-if="!isDataAvailable(item.dataset)">
+            <button
+              @click="runModel(item.dataset, index, item.dimRedMethod)"
+              class="btn secondary-btn"
+            >
+              Kör modell
+              <span v-if="item.loading" class="loading-indicator">
+                <i class="loading-spinner"></i> 
+              </span> 
+            </button>
+            <div class="select-label">  
+              <p>Välj modell:</p>
+              <select v-model="item.dimRedMethod">
+                <option value="PCA">PCA</option>
+                <option value="UMAP">UMAP</option>
+                <option value="TSNE">TSNE</option>
+                <option value="COMBO">COMBO</option>
+              </select> 
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -71,11 +80,9 @@ export default defineComponent({
     const fetchData = async () => {
       try {
         const filesResponse = await axios.get('http://localhost:8000/V1/dataset/files');
-        console.log('Data files fetched:', filesResponse.data);
         dataList.value = filesResponse.data.dataList;
 
         const availableDataResponse = await axios.get('http://localhost:8000/V1/dataset');
-        console.log('Data availability fetched:', availableDataResponse.data);
         availableDatasets.value = availableDataResponse.data.dataList;
 
         combineData();
@@ -92,17 +99,15 @@ export default defineComponent({
           ...file,
           assignment: availableData ? availableData.assignment : null,
           datatype: availableData ? availableData.datatype : null,
-          loading: false
+          loading: false,
+          dimRedMethod: 'TSNE'
         };
       });
     };
 
-
     const isDataAvailable = (dataset: string): boolean => {
       return availableDatasets.value.some(item => item.dataset === dataset);
     };
-
-    onMounted(fetchData);
 
     return {
       combinedDataList,
@@ -116,17 +121,37 @@ export default defineComponent({
     redirectToDetails(dataset: string) {
       this.$router.push({ path: '/label', query: { dataset: dataset } });
     },
-    async runModel(file: string, index: number) {
+    async runModel(file: string, index: number, dimRedMethod: string) {
       try {
-          this.combinedDataList[index].loading = true;
-          await axios.get('http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=' + file + '&dim_red_method=COMBO');
-          console.log(`Model run for dataset ${file}`);
-          this.fetchData();
+        this.combinedDataList[index].loading = true;
+        //TOOD: fix model name
+        await axios.post('http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=' + file + '&dim_red_method=' + dimRedMethod);
+        console.log(`Model run initiated for dataset ${file}`);
+        this.startPolling(file, index); 
       } catch (err) {
         this.error = 'Error running model';
         console.error(err);
-      } finally {
-        this.combinedDataList[index].loading = false; 
+      } 
+    },
+    async startPolling(file: string, index: number) {
+      const interval = setInterval(async () => {
+        const status = await this.getStatus(file);
+        if (status === "Not running") {
+          console.log('Model run completed');
+          this.combinedDataList[index].loading = false; 
+
+          clearInterval(interval);
+          this.fetchData(); 
+        }
+      }, 500); 
+    },
+    async getStatus(file: string) {
+      try {
+        const response = await axios.get(`http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=${file}`);
+        return response.data.status;
+      } catch (err) {
+        console.error('Error fetching status', err);
+        return null; 
       }
     },
     async removeDataset(dataset: string) {
@@ -138,11 +163,15 @@ export default defineComponent({
         this.error = 'Error removing dataset';
         console.error(err);
       }
-
     }
+  },
+  mounted() {
+    this.fetchData();
   }
 });
 </script>
+
+
 
 
 <style scoped>
@@ -197,6 +226,16 @@ export default defineComponent({
   display: flex;
   align-items: center; 
 }
+
+.run-container {
+  display: flex;
+  align-items: center; 
+}
+
+.select-label {
+  margin: 1px;
+}
+
 
 .primary-btn {
   background-color: #3498db;

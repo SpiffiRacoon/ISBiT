@@ -1,5 +1,5 @@
+import hashlib
 import pandas as pd
-
 
 class IsbitClassifierModel:
 
@@ -15,12 +15,14 @@ class IsbitClassifierModel:
         source_path = f"src/data/output/{file_name}_prep.csv"
         data = pd.read_csv(source_path)
         return data
+    
 
     def _format_data(self, file_name: str) -> None:
         """
         Formatting logic, overridden by child classes.
         """
         pass
+
 
     def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
         """
@@ -53,10 +55,12 @@ class IsbitClassifierModel:
         Setter for the data frame attribute.
         """
 
-        df = df[["text", "x", "y", "truth"]]
-
         # TODO: validators
         self._df = df
+
+    def get_id(self, content: str) -> str:
+        id = hashlib.sha256(bytes(content, 'utf-8')).hexdigest()
+        return id
 
     @property
     def df(self) -> pd.DataFrame:
@@ -64,3 +68,5 @@ class IsbitClassifierModel:
         Getter for the dataframe of ML models.
         """
         return self._df
+    
+        

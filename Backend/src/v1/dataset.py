@@ -4,12 +4,13 @@ from ..db import (
     delete_collection as db_delete_collection
 )
 from ..types import DatasetsResponse, DatasetFileResponse
-from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem
+from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem, write_info
 
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
 import pandas as pd
 from io import StringIO
+import json
 
 router = APIRouter(
     prefix="/dataset",
@@ -66,20 +67,35 @@ def get_all_dataset_files() -> DatasetFileResponse| None:
 
 @router.post("/")
 def upload_dataset(
-    uploaded_file: UploadFile, filename: str, delimiter: str | None = None
+    uploaded_file: UploadFile,
+    filename: str,
+    uploaded_info_file: UploadFile,
+    delimiter: str | None = None
 ):
     """
-    Upload a dataset
+    Upload a dataset with an accompanying .info file, the info needs to be JSON format and will get the same name as the file with a suffix "_meta_info".
 
     Currently only csv files are supported.
+
+    Parameters:
+        uploaded_file, dataset to upload.   
+        filename, name to save uploaded_file as. 
+        uploaded_info_file, accompanying .info file to the uploaded dataset.
     """
     try:
         contents = uploaded_file.file.read().decode("utf-8")
         string_content = StringIO(contents)
         df = pd.read_csv(string_content, delimiter=delimiter)
-        write_dataset(filename, df)
+        write_dataset(filename=filename, df=df)
+
+        info_contents = uploaded_info_file.file.read().decode("utf-8")
+        meta_data = json.loads(info_contents)
+        write_info(info_filename=filename, metadata=meta_data)
+
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Uploaded info file must be in valid JSON format.")
     except Exception as e:
-        raise HTTPException(500, str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
     return {"status": "success", "details": f"File '{filename}' uploaded"}
 

@@ -3,9 +3,16 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 # own
-from ..ml_lib import get_model_instance
 from ..types import Node, MlStatus
-from ..db import add_multiple_nodes_to, set_ml_status, get_ml_status, delete_ml_status
+from ..utils import read_meta_info
+from ..ml_lib import get_model_instance
+
+from ..db import (set_ml_status,
+                  get_ml_status,
+                  delete_ml_status,
+                  add_about_node_to_id,
+                  add_multiple_nodes_to_id
+            )
 
 # pip
 from fastapi import APIRouter, HTTPException
@@ -31,7 +38,7 @@ async def run(model_name: str, file: str, dim_red_method: str | None = None) -> 
 
     dim_red_method: COMBO
 
-    NOTE: If you want to use the qaqc_test model, the dim_red_method field can be left blank because it will only use PCA.
+    NOTE: If the target file does not have an accompanying .info file the function will not run. Upload your dataset via the POST route with its accompanying .info file. 
     """
 
     ml_id = f"{model_name}_{file}"
@@ -83,16 +90,17 @@ def run_ml_background_task(
     starting_time = datetime.now()
     model_obj = get_model_instance(model_name)
     try:
-        model_obj.run(file_name=file, is_first=True, dim=dim_red_method)
+        about_dict = read_meta_info(file_name=file)
+        model_obj.run(file_name=file, is_first=True, dim = dim_red_method)
     except Exception as e:
-        set_ml_status(
-            MlStatus(ml_id=ml_id, status="Not running", details=f"Error: {str(e)}")
-        )
-        raise e
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    ref_id = f"{file}_id"
+    add_about_node_to_id(about_node=about_dict, collection=file, document_id=ref_id)
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
-    add_multiple_nodes_to(list_of_nodes, collection=file)
+    add_multiple_nodes_to_id(list_of_nodes, collection=file, document_id=ref_id)
 
     total_running_time = datetime.now() - starting_time
     set_ml_status(

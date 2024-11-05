@@ -1,3 +1,5 @@
+import hashlib
+import json
 import pandas as pd
 import csv
 import re
@@ -57,14 +59,16 @@ class QaqcMainModel(IsbitClassifierModel):
 
         def replace_commas(match):
             return '"' + match.group(1).replace(",", "|") + '"'
-
         return re.sub(pattern, replace_commas, line)
-
+    
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data
         """
         questions = df["text"].tolist()
+        ids = [self.get_id(question) for question in questions]
+        d = {'id': ids}
+        id_df = pd.DataFrame(data=d)
         model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
         embeddings = model.encode(questions, convert_to_tensor=True)
         match dim:
@@ -74,6 +78,7 @@ class QaqcMainModel(IsbitClassifierModel):
                 tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings = tsne.fit_transform(reduced_embeddings_pca2)
                 point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
+
             case "PCA":
                 pca = PCA(n_components=2, random_state=42)
                 reduced_embeddings_PCA = pca.fit_transform(embeddings)
@@ -83,14 +88,16 @@ class QaqcMainModel(IsbitClassifierModel):
                 pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
                 reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
                 point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
-            
+
             case "UMAP":
                 umap_model = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1, metric='euclidean')
                 reduced_embeddings_umap = umap_model.fit_transform(embeddings)
                 point_data_df = pd.DataFrame(reduced_embeddings_umap, columns=["x", "y"])
+
             case _: 
                 raise Exception("Invalid dimension reduction method.")
             
         combined_df = pd.concat([df, point_data_df], axis=1)
+        combined_df = pd.concat([combined_df, id_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df

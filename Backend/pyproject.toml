@@ -1,2 +1,7 @@
-[pytest]
+[tool.pytest]
 pythonpath = "."
+
+[tool.pyright]
+reportUnusedImport = true
+reportDuplicateImport = true
+reportImportCycles = true

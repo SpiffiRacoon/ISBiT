@@ -1,13 +1,7 @@
-from bson import ObjectId
-# str
-from datetime import datetime
-
 # own
 from .connection import MongoConnection
 from ..types import Node, MlStatus
 
-# pip
-from pandas.core.arrays import boolean
 
 def get_all_collections(ConnectionClass=MongoConnection) -> list:
     """
@@ -15,7 +9,27 @@ def get_all_collections(ConnectionClass=MongoConnection) -> list:
     """
     with ConnectionClass() as (_, db):
         collections = db.list_collection_names()
+        if "ml_run" in collections:
+            collections.remove("ml_run")
+
         return list(collections)
+
+
+def get_latest_version_number(collection: str, ConnectionClass=MongoConnection) -> int:
+    """
+    Returns the latest version number for a collection.
+    """
+    print("[WARNING] get_latest_version_number is not implemented yet.")
+
+    return 0
+
+
+def get_nodes_from_latest_version(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
+    """
+    Returns all nodes from the latest version of a collection.
+    """
+    print("[WARNING] get_nodes_from_latest_version is not implemented yet.")
+    return [Node()]
 
 
 def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
@@ -26,12 +40,13 @@ def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list
         documents = db[collection].find()
         nodes = []
         for doc in documents:
-            nodes.extend([Node(**data_item) for data_item in doc['data']])        
+            nodes.extend([Node(**data_item) for data_item in doc['data']])
     return nodes
+
 
 def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list[dict]:
     """
-    Get list document with labels from a collection. 
+    Get list document with labels from a collection.
     """
     with ConnectionClass() as (_, db):
         labels = list(db[collection].find({}, {"about.labels" : 1, "_id": 0}))

@@ -34,13 +34,16 @@ def get_all_labels(collection: str,) -> list[str] | None:
         if "about" in label_doc and "labels" in label_doc["about"]:
             for _, value in label_doc["about"]["labels"].items(): # only returns first labels attribute for now.
                 if isinstance(value, list):
-                    return value                
+                    return value
     return None
 
 @router.post("/", status_code=201)
 def add_one_node(node: Node, collection: str) -> None:
     """
     Add one node to a collection
+
+    This route should not be used in acutal cases, this is for testing/development only.
+    This could mess upp other functionality in the app.
     """
 
     try:
@@ -57,4 +60,3 @@ def categorize_node(node_id: str, category: str, collection: str) -> None:
     Categorize a node
     """
     raise HTTPException(status_code=501, detail="Not implemented")
-

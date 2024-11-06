@@ -40,7 +40,7 @@ def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list
         documents = db[collection].find()
         nodes = []
         for doc in documents:
-            nodes.extend([Node(**data_item) for data_item in doc['data']])
+            nodes.extend([Node(**data_item) for data_item in doc["data"]])
     return nodes
 
 
@@ -49,7 +49,7 @@ def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> lis
     Get list document with labels from a collection.
     """
     with ConnectionClass() as (_, db):
-        labels = list(db[collection].find({}, {"about.labels" : 1, "_id": 0}))
+        labels = list(db[collection].find({}, {"about.labels": 1, "_id": 0}))
         return labels
 
 

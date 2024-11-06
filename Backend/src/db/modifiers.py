@@ -19,3 +19,11 @@ def delete_ml_status(id: str, ConnectionClass=MongoConnection) -> None:
     with ConnectionClass() as (_, db):
         query = {"ml_id": id}
         db["ml_status"].delete_many(query)
+
+def add_label(node_id: str, category: str, collection: str, ConnectionClass=MongoConnection) -> None:
+    """ 
+    Label a node in a collection.
+    """
+    
+    with ConnectionClass() as (_, db):
+        db[collection].update_one({"data.id": node_id}, {"$set": {"data.$[elem].input_label": category}}, array_filters=[{"elem.id": node_id}])

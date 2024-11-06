@@ -3,6 +3,7 @@ from ..db import (
     get_all_nodes_from as db_get_all_nodes_from,
     add_one_node_to as db_add_one_node_to,
     get_all_labels_from as db_get_all_labels,
+    add_label as db_add_label,
 )
 from ..types import Node
 
@@ -56,5 +57,9 @@ def categorize_node(node_id: str, category: str, collection: str) -> None:
     """
     Categorize a node
     """
-    raise HTTPException(status_code=501, detail="Not implemented")
+    #TODO: not working
+    try:
+        db_add_label(node_id, category, collection)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 

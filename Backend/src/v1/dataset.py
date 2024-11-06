@@ -77,7 +77,7 @@ def upload_dataset(
 
     Currently only csv files are supported.
 
-    Paramaters:
+    Parameters:
         uploaded_file, dataset to upload.   
         filename, name to save uploaded_file as. 
         uploaded_info_file, accompanying .info file to the uploaded dataset.

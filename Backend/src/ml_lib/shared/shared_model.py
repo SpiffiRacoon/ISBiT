@@ -19,14 +19,12 @@ class IsbitClassifierModel:
         source_path = f"src/data/output/{file_name}_prep.csv"
         data = pd.read_csv(source_path)
         return data
-    
 
     def _format_data(self, file_name: str) -> None:
         """
         Formatting logic, overridden by child classes.
         """
         pass
-
 
     def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
         """

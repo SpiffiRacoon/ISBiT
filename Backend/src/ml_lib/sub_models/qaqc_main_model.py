@@ -60,7 +60,7 @@ class QaqcMainModel(IsbitClassifierModel):
         def replace_commas(match):
             return '"' + match.group(1).replace(",", "|") + '"'
         return re.sub(pattern, replace_commas, line)
-    
+
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data

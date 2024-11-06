@@ -2,6 +2,7 @@ import hashlib
 import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+from sklearn.ensemble import RandomForestClassifier
 import umap
 from sentence_transformers import SentenceTransformer
 import torch #May be able to do this without importing entire library, only need this to define embeddings as torch.Tensor

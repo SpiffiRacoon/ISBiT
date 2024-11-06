@@ -1,13 +1,9 @@
-import hashlib
-import json
 import pandas as pd
 import csv
 import re
 import os
-import umap
 
 from sentence_transformers import SentenceTransformer
-
 from ..shared import IsbitClassifierModel
 
 

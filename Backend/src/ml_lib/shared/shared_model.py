@@ -1,5 +1,7 @@
 import hashlib
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sentence_transformers import SentenceTransformer
 
 class IsbitClassifierModel:
 
@@ -44,7 +46,16 @@ class IsbitClassifierModel:
         """
         raise Exception("Not implemented.")
 
-    def latter_run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def latter_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
+
+        # [text,UserTruth]=getTextWhereUserTruth!=NIL();
+        # UnAssignedText=getTextWhereUserTruth==NIL();
+        # predictedLabels=classifier([text,UserTruth], UnAssignedLabels)
+        # UpdateDataFrame(predictedLabels)
+        #                                                                                                               UpdateEmbeddings
+        # PingFrontEndToUpdate
+
+        #
         """
         (mby not needed, but run after feedback loop) Latter clustering run logic, overridden by child classes.
         """
@@ -70,3 +81,27 @@ class IsbitClassifierModel:
         return self._df
     
         
+
+    def Random_Forest_classifier(sentencesWithLabels, labels, sentencesWithoutLabels):
+        model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+        sentencesWithLabels_embeddings = model.encode(sentencesWithLabels, show_progress_bar=True)
+        sentencesWithoutLabels_embeddings = model.encode(sentencesWithoutLabels, show_progress_bar=True)
+
+      
+
+        # Initialize the Random Forest Classifier
+        clf = RandomForestClassifier(n_estimators=1024, random_state=42, max_leaf_nodes=4)
+
+# testing?
+
+        # test=clf.apply(X_train)
+        # print(test)
+        # Train the classifier
+        clf.fit(sentencesWithLabels_embeddings, labels)
+
+        # Predict the test set results
+        label_pred = clf.predict(sentencesWithoutLabels_embeddings)
+
+        return (label_pred)
+
+

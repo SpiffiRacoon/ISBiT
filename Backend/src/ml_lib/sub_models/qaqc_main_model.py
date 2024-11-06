@@ -101,3 +101,19 @@ class QaqcMainModel(IsbitClassifierModel):
         combined_df = pd.concat([combined_df, id_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df
+    
+
+
+    def latter_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
+        
+        DataWithInputFromUser = df.loc[df['input_label'] != None]
+        DataWithoutInputFromUser = df.loc[df['input_label'] == None]
+
+        TextWithLabels = DataWithInputFromUser["text"].tolist()
+        AssignedLabels = DataWithInputFromUser["input_label"].tolist()
+        TextWithoutLabels = DataWithoutInputFromUser["text"].tolist()
+
+        predictedLabels = self.Random_Forest_classifier(TextWithLabels,AssignedLabels,TextWithoutLabels)
+        
+        
+        return super().latter_run(df)

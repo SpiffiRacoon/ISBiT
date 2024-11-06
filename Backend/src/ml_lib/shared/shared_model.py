@@ -1,8 +1,10 @@
 import hashlib
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+import umap
 from sentence_transformers import SentenceTransformer
-
+import torch #May be able to do this without importing entire library, only need this to define embeddings as torch.Tensor
 class IsbitClassifierModel:
 
     def __init__(
@@ -17,14 +19,12 @@ class IsbitClassifierModel:
         source_path = f"src/data/output/{file_name}_prep.csv"
         data = pd.read_csv(source_path)
         return data
-    
 
     def _format_data(self, file_name: str) -> None:
         """
         Formatting logic, overridden by child classes.
         """
         pass
-
 
     def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
         """
@@ -34,7 +34,7 @@ class IsbitClassifierModel:
         data = self._read_data_frame(file_name)
 
         if not is_first:
-            df = self.latter_run(data)
+            df = self.latter_run(data, dim)
         else:
             df = self.first_run(data, dim)
 
@@ -44,6 +44,7 @@ class IsbitClassifierModel:
         """
         First clustering run logic, overridden by child classes.
         """
+
         raise Exception("Not implemented.")
 
     def latter_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
@@ -92,7 +93,7 @@ class IsbitClassifierModel:
         # Initialize the Random Forest Classifier
         clf = RandomForestClassifier(n_estimators=1024, random_state=42, max_leaf_nodes=4)
 
-# testing?
+        # testing?
 
         # test=clf.apply(X_train)
         # print(test)
@@ -105,3 +106,35 @@ class IsbitClassifierModel:
         return (label_pred)
 
 
+    def dim_red(self, embeddings: torch.Tensor, dim: str | None) -> pd.DataFrame:
+        """
+        Reduces embeddings to 2 dimensions using PCA, TSNE, or UMAP and
+        returns a dataframe with the reduced embeddings.
+        """
+        match dim:
+            case "COMBO":
+                pca2 = PCA(n_components=50, whiten=False, random_state=42)
+                reduced_embeddings_pca2 = pca2.fit_transform(embeddings)
+                tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
+                reduced_embeddings = tsne.fit_transform(reduced_embeddings_pca2)
+                point_data_df = pd.DataFrame(reduced_embeddings, columns=["x", "y"])
+
+            case "PCA":
+                pca = PCA(n_components=2, random_state=42)
+                reduced_embeddings_PCA = pca.fit_transform(embeddings)
+                point_data_df = pd.DataFrame(reduced_embeddings_PCA, columns=["x", "y"])
+
+            case "TSNE":
+                pure_tsne = TSNE(n_components=2, random_state=42, perplexity=30, n_iter=300, early_exaggeration=4, learning_rate=1000)
+                reduced_embeddings_tsne = pure_tsne.fit_transform(embeddings)
+                point_data_df = pd.DataFrame(reduced_embeddings_tsne, columns=["x", "y"])
+
+            case "UMAP":
+                umap_model = umap.UMAP(n_components=2, random_state=42, n_neighbors=15, min_dist=0.1, metric='euclidean')
+                reduced_embeddings_umap = umap_model.fit_transform(embeddings)
+                point_data_df = pd.DataFrame(reduced_embeddings_umap, columns=["x", "y"])
+
+            case _: 
+                raise Exception("Invalid dimension reduction method.")
+            
+        return point_data_df

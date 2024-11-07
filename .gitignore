@@ -164,6 +164,9 @@ cython_debug/
 Backend/src/data/**/*.csv
 !Backend/src/data/.gitkeep
 
+Backend/src/data/info/**/*.info
+!Backend/src/data/info/.gitkeep
+
 # Ignore all .csv files under QAQC_v1 and its subdirectories
 ML/data/QAQC_v1/**/*.csv
 

@@ -1,3 +1,4 @@
+from bson import ObjectId
 # str
 from datetime import datetime
 
@@ -8,33 +9,39 @@ from ..types import Node, MlStatus
 # pip
 from pandas.core.arrays import boolean
 
-
-def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
-    """
-    Get all nodes from a collection
-    """
-    with ConnectionClass() as (_, db):
-        nodes = db[collection].find()
-        return [Node(**one_node) for one_node in nodes]
-
-
 def get_all_collections(ConnectionClass=MongoConnection) -> list:
     """
     Get all collections in database
     """
     with ConnectionClass() as (_, db):
         collections = db.list_collection_names()
+        return list(collections)
 
-        all_datasets = list(collections)
-        all_datasets.remove("ml_status")
 
-        return all_datasets
+def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
+    """
+    Get all nodes from a collections node array in its data field.
+    """
+    with ConnectionClass() as (_, db):
+        documents = db[collection].find()
+        nodes = []
+        for doc in documents:
+            nodes.extend([Node(**data_item) for data_item in doc['data']])        
+    return nodes
+
+def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list[dict]:
+    """
+    Get list document with labels from a collection. 
+    """
+    with ConnectionClass() as (_, db):
+        labels = list(db[collection].find({}, {"about.labels" : 1, "_id": 0}))
+        return labels
+
 
 def get_ml_status(id: str, ConnectionClass=MongoConnection) -> MlStatus:
     """
     Get a dict with info about the ML run
     """
-
     with ConnectionClass() as (_, db):
         query = {"ml_id": id}
 

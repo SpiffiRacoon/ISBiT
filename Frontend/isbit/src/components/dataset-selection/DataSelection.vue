@@ -27,7 +27,7 @@
               @click="redirectToDetails(item.dataset)"
               class="btn primary-btn"
             >
-              Märk Upp Data
+              Märk upp data
             </button>
             <button
               v-if="isDataAvailable(item.dataset)" 

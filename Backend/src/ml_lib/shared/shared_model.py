@@ -84,25 +84,22 @@ class IsbitClassifierModel:
     
         
 
-    def Random_Forest_classifier(sentencesWithLabels, labels, sentencesWithoutLabels):
-        model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
-        sentencesWithLabels_embeddings = model.encode(sentencesWithLabels, show_progress_bar=True)
-        sentencesWithoutLabels_embeddings = model.encode(sentencesWithoutLabels, show_progress_bar=True)
-
-      
-
+    def random_forest_classifier(embeddingsWithLabels: torch.Tensor, labels: list, embeddingsWithoutLabels: torch.Tensor):
+    
         # Initialize the Random Forest Classifier
-        clf = RandomForestClassifier(n_estimators=1024, random_state=42, max_leaf_nodes=4)
-
+        clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=4)
+        #n_estimators ska vara equal till embeddingrymden(alltsp sentenceswithoutlabels)
+        
         # testing?
 
         # test=clf.apply(X_train)
         # print(test)
         # Train the classifier
-        clf.fit(sentencesWithLabels_embeddings, labels)
+        # is this what we want to use as enhanced embeddings?
+        clf.fit(embeddingsWithLabels, labels)
 
         # Predict the test set results
-        label_pred = clf.predict(sentencesWithoutLabels_embeddings)
+        label_pred = clf.predict(embeddingsWithoutLabels)
 
         return (label_pred)
 

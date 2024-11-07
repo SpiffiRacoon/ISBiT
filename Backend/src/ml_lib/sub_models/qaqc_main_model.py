@@ -2,10 +2,10 @@ import pandas as pd
 import csv
 import re
 import os
+import torch
 
 from sentence_transformers import SentenceTransformer
 from ..shared import IsbitClassifierModel
-
 
 class QaqcMainModel(IsbitClassifierModel):
 
@@ -73,15 +73,33 @@ class QaqcMainModel(IsbitClassifierModel):
 
 
     def latter_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
-        
-        DataWithInputFromUser = df.loc[df['input_label'] != None]
-        DataWithoutInputFromUser = df.loc[df['input_label'] == None]
 
-        TextWithLabels = DataWithInputFromUser["text"].tolist()
-        AssignedLabels = DataWithInputFromUser["input_label"].tolist()
-        TextWithoutLabels = DataWithoutInputFromUser["text"].tolist()
+        all_text_df = self.get_embeddings(df["text"].tolist())
+        x_and_y = self.dim_red(embeddings=all_text_df["embeddings"], dim=dim) #generates coordinates x and y for plotting in frontend
 
-        predictedLabels = self.Random_Forest_classifier(TextWithLabels,AssignedLabels,TextWithoutLabels)
+        #Splits the sentences into labeled and unlabeled based on whether they have an input label or not
+        dataWithInputFromUser = all_text_df.loc[df['input_label'] != None]
+        dataWithoutInputFromUser = all_text_df.loc[df['input_label'] == None]
+
+        #Generating necessary input for the classifier
+        embeddingsWithLabels = dataWithInputFromUser["embeddings"].tolist()
+        AssignedLabels = dataWithInputFromUser["input_label"].tolist()
+        embeddingsWithoutLabels = dataWithoutInputFromUser["embeddings"].tolist()
+
+        #Calls the classifier to generate the predicted labels
+        predictedLabels = self.random_forest_classifier(embeddingsWithLabels, AssignedLabels, embeddingsWithoutLabels)
+        predLabels_df = pd.DataFrame(predictedLabels.tolist(), columns=["predicted_labels"])
         
-        
-        return super().latter_run(df)
+        #Combines all of the dataframes together in order to form the final dataframe
+        combined_df = pd.concat([df["text"], x_and_y, df["truth"], df["input_label"], predLabels_df], axis=1)
+        return combined_df
+    
+    def get_embeddings(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Function to get the embeddings from the sentences
+        """
+        model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
+        embeddings = model.encode(df["text"].tolist(), convert_to_tensor=True)
+        embedded_df = pd.DataFrame(embeddings.tolist(), columns=["embeddings"])
+        returning_df = pd.concat([df["input_label"], embedded_df], axis=1)
+        return returning_df

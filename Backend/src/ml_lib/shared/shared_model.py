@@ -84,24 +84,33 @@ class IsbitClassifierModel:
     
         
 
-    def random_forest_classifier(embeddingsWithLabels: torch.Tensor, labels: list, embeddingsWithoutLabels: torch.Tensor):
-    
+    def random_forest_classifier(df: pd.DataFrame):
+        max_leaf = 4
         # Initialize the Random Forest Classifier
-        clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=4)
-        #n_estimators ska vara equal till embeddingrymden(alltsp sentenceswithoutlabels)
-        
-        # testing?
+        clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=max_leaf)
+        #n_estimators should be equal to the embedding space(i.e sentenceswithoutlabels)
 
-        # test=clf.apply(X_train)
-        # print(test)
-        # Train the classifier
-        # is this what we want to use as enhanced embeddings?
-        clf.fit(embeddingsWithLabels, labels)
+         #Generating necessary input for the classifier
+        all_old_embeddings_lst = df["embeddings"].tolist()
+        assignedLabels_lst = df["input_label"].tolist()
+        if assignedLabels_lst.__sizeof__ != all_old_embeddings_lst.__sizeof__:
+            raise Exception("user labeling is not equal to the number of embeddings")
+        
+        #Splits the sentences into labeled and unlabeled based on whether they have an input label or not
+        embeddingsWithInputFromUser = all_old_embeddings_lst.loc[df['input_label'] != None]
+        embeddingsWithoutInputFromUser = all_old_embeddings_lst.loc[df['input_label'] == None]
+        actual_assigned_labels = assignedLabels_lst.loc[df['input_label'] != None]
+        
+        # Train the classifier        
+        clf.fit(embeddingsWithInputFromUser, actual_assigned_labels)
+
+        #Generates new embeddings for use in the frontend
+        embeddings=clf.apply(all_old_embeddings_lst)
 
         # Predict the test set results
-        label_pred = clf.predict(embeddingsWithoutLabels)
+        label_pred = clf.predict(embeddingsWithoutInputFromUser)
 
-        return (label_pred)
+        return (label_pred, embeddings)
 
 
     def dim_red(self, embeddings: torch.Tensor, dim: str | None) -> pd.DataFrame:

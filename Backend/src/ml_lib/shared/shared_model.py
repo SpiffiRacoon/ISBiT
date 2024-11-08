@@ -90,10 +90,10 @@ class IsbitClassifierModel:
         clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=max_leaf)
         #n_estimators should be equal to the embedding space(i.e sentenceswithoutlabels)
 
-         #Generating necessary input for the classifier
+        #Generating necessary input for the classifier
         all_old_embeddings_lst = df["embeddings"].tolist()
         assignedLabels_lst = df["input_label"].tolist()
-        if assignedLabels_lst.__sizeof__ != all_old_embeddings_lst.__sizeof__:
+        if assignedLabels_lst.len() != all_old_embeddings_lst.len():
             raise Exception("user labeling is not equal to the number of embeddings")
         
         #Splits the sentences into labeled and unlabeled based on whether they have an input label or not
@@ -101,7 +101,7 @@ class IsbitClassifierModel:
         embeddingsWithoutInputFromUser = all_old_embeddings_lst.loc[df['input_label'] == None]
         actual_assigned_labels = assignedLabels_lst.loc[df['input_label'] != None]
         
-        # Train the classifier        
+        #Train the classifier        
         clf.fit(embeddingsWithInputFromUser, actual_assigned_labels)
 
         #Generates new embeddings for use in the frontend

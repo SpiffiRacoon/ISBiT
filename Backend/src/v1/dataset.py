@@ -67,8 +67,8 @@ def get_all_dataset_files() -> DatasetFileResponse| None:
 
 @router.post("/")
 def upload_dataset(
-    uploaded_file: UploadFile,
     filename: str,
+    uploaded_file: UploadFile,
     uploaded_info_file: UploadFile,
     delimiter: str | None = None
 ):

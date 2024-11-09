@@ -16,9 +16,9 @@ nav {
   background-color: #246a3c;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  padding: 20px 40px; 
+  padding: 20px 40px;
   display: flex;
-  justify-content: flex-start; 
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -39,6 +39,6 @@ nav a:active {
 
 .home-link {
   font-size: 30px;
-  font-family: 'Orbitron', sans-serif; 
+  font-family: 'Orbitron', sans-serif;
 }
 </style>

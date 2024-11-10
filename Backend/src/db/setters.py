@@ -1,8 +1,9 @@
 # own
 from .connection import MongoConnection
-from ..types import Node, MlStatus, VersionName, DataVersion
+from ..types import Node, MlStatus, VersionName
 from ..validators import validate_endpoint_args
 from .getters import get_about_from_latest_version
+from .data_version import DataVersion
 
 # pip
 import pandas as pd
@@ -15,11 +16,15 @@ def add_dataset_to_db(df: pd.DataFrame, dataset_name: str, about: dict | None = 
 
     If there is a collection with the same name, it will be dropped.
     """
-
     v_obj = DataVersion(dataset_name=dataset_name, version_name=VersionName.DATA_FILE)
 
     with ConnectionClass() as (_, db):
-        if v_obj.collection_name in db.list_collection_names():
+        if v_obj.dataset_name not in db.list_collection_names():
+            collection = db.create_collection(v_obj.dataset_name)
+        else:
+            collection = db[v_obj.dataset_name]
+
+        if v_obj.version_name in db[v_obj.dataset_name].find():
             raise Exception(f"Error: Tried to add collection {v_obj.dataset_name}, but it already exists")
 
         data_to_save: dict = {"data": df.to_dict(orient="records"), }
@@ -28,7 +33,7 @@ def add_dataset_to_db(df: pd.DataFrame, dataset_name: str, about: dict | None = 
             about.update({"version": v_obj.version, "dataset_name": v_obj.dataset_name})
             data_to_save["about"] = about
 
-        db[v_obj.collection_name].insert_one(data_to_save)
+        collection.insert_one(data_to_save)
 
 
 @validate_endpoint_args
@@ -45,15 +50,18 @@ def add_versioned_nodes(
 
     nodes_to_insert = [one_node.dict() for one_node in nodes]
 
-    info = get_about_from_latest_version(dataset_name=v_obj.collection_name)
+    info = get_about_from_latest_version(dataset_name=v_obj.dataset_name)
     info.update(v_obj.about_dict)
 
-    with ConnectionClass() as (_, db):
-        if v_obj.collection_name in db.list_collection_names() and "data" in db[v_obj.collection_name].list_collection_names():
-            raise Exception(f"Error: Tried to add nodes to {collection}, but it already exists")
+    data_to_save = {"data": nodes_to_insert, "about": info}
 
-        db[v_obj.collection_name]["about"].insert_one(info)
-        db[v_obj.collection_name]["data"].insert_many(nodes_to_insert)
+    with ConnectionClass() as (_, db):
+        # TODO:
+            # This need to be rewritten, does not work
+        if v_obj.version_name in db[v_obj.dataset_name].find() and "data" in db[v_obj.dataset_name].list_collection_names():
+            raise Exception(f"Error: Tried to add nodes to {v_obj.version_name}, but it already exists")
+
+        db[v_obj.dataset_name].update_one({}, {'$addToSet': {v_obj.version_name: data_to_save}})
 
 
 @validate_endpoint_args
@@ -72,7 +80,7 @@ def label_one_node(
 
     with ConnectionClass() as (_, db):
         if v_new_obj not in db.list_collection_names():
-            db[v_new_obj.collection_name] = db[v_obj.collection_name].copy()
+            db[v_new_obj.collection_name] = db[v_obj.version_name].copy()
 
         query = {"_id": node_id}
         update = {"$set": {"data.input_label": label}}

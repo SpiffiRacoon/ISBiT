@@ -95,13 +95,16 @@ def run_ml_background_task(
     try:
         model_obj.run(df=df, is_first=True, dim = dim_red_method)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-    ref_id = f"{file}_id"
+        raise e
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
-    add_versioned_nodes(nodes = list_of_nodes, dataset_name=file)
+
+
+    try:
+        add_versioned_nodes(nodes = list_of_nodes, dataset_name=file)
+    except Exception as e:
+        raise e
 
     total_running_time = datetime.now() - starting_time
     set_ml_status(

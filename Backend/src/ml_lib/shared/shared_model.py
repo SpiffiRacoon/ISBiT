@@ -61,6 +61,9 @@ class IsbitClassifierModel:
         """
         Getter for the dataframe of ML models.
         """
+        if self._df is None:
+            raise Exception("Dataframe is None.")
+
         return self._df
 
 

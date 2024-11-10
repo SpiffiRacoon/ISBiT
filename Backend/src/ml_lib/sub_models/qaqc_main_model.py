@@ -12,9 +12,6 @@ class QaqcMainModel(IsbitClassifierModel):
         """
         df = df[['text', 'coarse label']]
 
-        print("[Debug] in _format_data child class")
-        print(df.columns)
-
         return df
 
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:

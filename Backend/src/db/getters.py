@@ -17,16 +17,31 @@ def get_all_dataset_names(ConnectionClass=MongoConnection) -> list:
 
 
 def get_latest_version_number(dataset_name: str, ConnectionClass=MongoConnection) -> int:
-    print("[WARNING] get_latest_version_number is not implemented yet.")
-    return 0
+
+    with ConnectionClass() as (_, db):
+        result = db[dataset_name].aggregate([
+            { "$group": { "_id": None, "maxVersion": { "$max": "$about.version" } } },
+            { "$project": { "_id": 0, "maxVersion": 1 } }
+        ])
+
+
+    latest_version = list(result)[0]["maxVersion"]
+    return latest_version
 
 
 def get_nodes_from_latest_version(dataset_name: str, ConnectionClass=MongoConnection) -> pd.DataFrame:
     """
     Returns all nodes from the latest version of a collection.
     """
-    print("[WARNING] get_nodes_from_latest_version is not implemented yet.")
-    return pd.DataFrame()
+    latest_version = get_latest_version_number(dataset_name)
+
+    with ConnectionClass() as (_, db):
+        result = db[dataset_name].find_one({"about.version": latest_version})
+        if result is not None:
+            df = pd.DataFrame(result["data"])
+            return df
+
+    raise Exception(f"Error: Could not find latest version of {dataset_name}")
 
 
 def get_about_from_latest_version(dataset_name: str, ConnectionClass=MongoConnection) -> dict:

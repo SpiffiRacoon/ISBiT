@@ -1,12 +1,12 @@
-from .version_name import VersionName, version_name_to_number, highest_version_number, get_version_name_exponent
+from ..types import VersionName, version_name_to_number, highest_version_number, get_version_name_exponent
 from typing import Self
+from .getters import get_latest_version_number
 
 
 class DataVersion:
     """
     Class to handle the data version, if only `dataset_name` is given, the latest version will be taken.
     """
-
     def __init__(
         self,
         dataset_name: str,
@@ -25,6 +25,7 @@ class DataVersion:
         else:
             # Another version then the default
             self.set_version(version_name, version_number, label)
+
 
     def set_version(
         self, version_name: VersionName, version_name_number: int | None = None, label: bool = False
@@ -66,6 +67,7 @@ class DataVersion:
 
         self.current_version = version_number
 
+
     def upgrade(
         self, automatic: bool = False, major: bool = False, minor: bool = False, label: bool = False, copy: bool = False
     ) -> Self | "DataVersion":
@@ -97,11 +99,12 @@ class DataVersion:
             x.version => 2.2.0
             y.version => 2.2.1
         """
-        if (self.current_version == 0) and (not major):
+        if (self.current_version == 0) and (not major) and (not automatic):
             raise Exception("Error: Cannot label or minor upgrade datafile.")
 
         instance = self
         if copy:
+            print("In copy")
             instance = self.copy()
 
         version_exponent = get_version_name_exponent()
@@ -130,6 +133,7 @@ class DataVersion:
 
         return instance
 
+
     def downgrade(self, copy: bool = False) -> Self | "DataVersion":
         """
         The previous version will be set as the current version.
@@ -155,24 +159,28 @@ class DataVersion:
 
         return self
 
+
     def copy(self) -> "DataVersion":
         """
         Retruns a new object with the same version.
         """
 
-        return DataVersion(self.dataset_name, self.current_version)
+        x = DataVersion(dataset_name=(self.dataset_name), version_number=int(self.current_version))
+        return x
+
 
     @property
-    def collection_name(self) -> str:
+    def version_name(self) -> str:
         """
         Returns the name of the collection.
         """
         return f"{self.dataset_name}_{self.current_version}"
 
+
     @property
     def latest_version(self) -> int:
-        print("[WARNING] VersionedData.latest_version is not implemented yet.")
-        return 1
+        return get_latest_version_number(self.dataset_name)
+
 
     @property
     def version(self) -> int:
@@ -180,6 +188,7 @@ class DataVersion:
         Alias for current_version.
         """
         return self.current_version
+
 
     @property
     def about_dict(self) -> dict:

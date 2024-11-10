@@ -5,15 +5,39 @@ from ..types import Node, MlStatus
 # pip
 import pandas as pd
 
+def get_dataset_names_with_processed_data(ConnectionClass=MongoConnection) -> list:
+    with ConnectionClass() as (_, db):
+        collections = list(db.list_collection_names())
+        if collections == []:
+            return []
 
-def get_all_dataset_names(ConnectionClass=MongoConnection) -> list:
-    """
-    Get all collections in database
+        for one_collection in collections.copy():
+            query_version_not_datafile = {"about.version": {"$gt": 0}}
 
-    This should return all unique dataset_names in the "info" table of the collections.
-    """
-    print("[WARNING] get_all_collections is not implemented yet.")
-    return []
+            if not db[one_collection].find_one(query_version_not_datafile):
+                collections.remove(one_collection)
+
+
+        return collections
+
+def get_datafiles_not_processed(ConnectionClass=MongoConnection) -> list:
+    with ConnectionClass() as (_, db):
+        collections = list(db.list_collection_names())
+        if collections == []:
+            return []
+
+        processed = get_dataset_names_with_processed_data()
+
+        for one_collection in collections.copy():
+            query_version_not_datafile = {"about.version": 0}
+
+            if not db[one_collection].find_one(query_version_not_datafile):
+                collections.remove(one_collection)
+
+            elif one_collection in processed:
+                collections.remove(one_collection)
+
+        return collections
 
 
 def get_latest_version_number(dataset_name: str, ConnectionClass=MongoConnection) -> int:
@@ -48,8 +72,15 @@ def get_about_from_latest_version(dataset_name: str, ConnectionClass=MongoConnec
     """
     Returns all nodes from the latest version of a collection.
     """
-    print("[WARNING] get_about_from_latest_version is not implemented yet.")
-    return {}
+    latest_version = get_latest_version_number(dataset_name)
+
+    with ConnectionClass() as (_, db):
+        result = db[dataset_name].find_one({"about.version": latest_version})
+        if result is not None:
+            print(result["about"])
+            return result["about"]
+
+    raise Exception(f"Error: Could not find latest version of {dataset_name}")
 
 
 def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:

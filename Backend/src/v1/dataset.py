@@ -1,12 +1,12 @@
 # own
 from ..db import (
-    get_all_dataset_names as db_get_all_dataset_names,
     delete_collection as db_delete_collection,
-    add_dataset_to_db
+    add_dataset_to_db,
+    get_dataset_names_with_processed_data,
+    get_datafiles_not_processed
 
 )
 from ..types import DatasetsResponse, DatasetFileResponse
-from ..utils import get_all_dataset_files as get_all_dataset_files_from_filesystem
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
 import pandas as pd
@@ -25,7 +25,8 @@ def get_all_processed_datasets() -> DatasetsResponse | None:
     Get all datasets in database.
     """
 
-    collections = db_get_all_dataset_names()
+    # collections = db_get_all_dataset_names()
+    collections = get_dataset_names_with_processed_data()
     info = {"dataList": []}
     if collections == []:
         return DatasetsResponse(**info)
@@ -49,7 +50,7 @@ def get_all_dataset_files() -> DatasetFileResponse| None:
     Get all dataset files in the data folder.
     """
 
-    files = get_all_dataset_files_from_filesystem()
+    files = get_datafiles_not_processed()
     info = {"dataList": []}
 
     if files == []:

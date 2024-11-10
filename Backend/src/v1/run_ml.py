@@ -10,12 +10,12 @@ from ..db import (set_ml_status,
                   get_ml_status,
                   delete_ml_status,
                   add_versioned_nodes,
-                  add_multiple_nodes_to_id,
-                  get_nodes_from_latest_version
+                  get_nodes_from_latest_version,
+                  get_datafiles_not_processed
             )
 
 # pip
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/run_ml",
@@ -23,7 +23,6 @@ router = APIRouter(
 )
 
 executor = ThreadPoolExecutor(max_workers=10)
-
 
 @router.post("/", status_code=200)
 async def run(model_name: str, file: str, dim_red_method: str | None = None) -> MlStatus:
@@ -93,13 +92,16 @@ def run_ml_background_task(
     df = get_nodes_from_latest_version(dataset_name=file)
 
     try:
-        model_obj.run(df=df, is_first=True, dim = dim_red_method)
+        is_first = True
+        if file not in get_datafiles_not_processed():
+            is_first = False
+        print(f"Is first: {is_first}")
+        model_obj.run(df=df, is_first=is_first, dim = dim_red_method)
     except Exception as e:
         raise e
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
-
 
     try:
         add_versioned_nodes(nodes = list_of_nodes, dataset_name=file)

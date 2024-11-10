@@ -61,7 +61,7 @@ def add_versioned_nodes(
         if v_obj.version_name in db[v_obj.dataset_name].find() and "data" in db[v_obj.dataset_name].list_collection_names():
             raise Exception(f"Error: Tried to add nodes to {v_obj.version_name}, but it already exists")
 
-        db[v_obj.dataset_name].update_one({}, {'$addToSet': {v_obj.version_name: data_to_save}})
+        db[v_obj.dataset_name].insert_one(data_to_save)
 
 
 @validate_endpoint_args

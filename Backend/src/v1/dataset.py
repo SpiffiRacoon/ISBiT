@@ -3,7 +3,8 @@ from ..db import (
     delete_collection as db_delete_collection,
     add_dataset_to_db,
     get_dataset_names_with_processed_data,
-    get_datafiles_not_processed
+    get_datafiles_not_processed,
+    get_all_dataset_names as db_get_all_dataset_names,
 
 )
 from ..types import DatasetsResponse, DatasetFileResponse

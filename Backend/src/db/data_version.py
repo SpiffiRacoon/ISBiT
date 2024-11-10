@@ -7,6 +7,7 @@ class DataVersion:
     """
     Class to handle the data version, if only `dataset_name` is given, the latest version will be taken.
     """
+
     def __init__(
         self,
         dataset_name: str,
@@ -25,7 +26,6 @@ class DataVersion:
         else:
             # Another version then the default
             self.set_version(version_name, version_number, label)
-
 
     def set_version(
         self, version_name: VersionName, version_name_number: int | None = None, label: bool = False
@@ -66,7 +66,6 @@ class DataVersion:
             version_number += 1
 
         self.current_version = version_number
-
 
     def upgrade(
         self, automatic: bool = False, major: bool = False, minor: bool = False, label: bool = False, copy: bool = False
@@ -125,14 +124,13 @@ class DataVersion:
             raise Exception("Error: Trying to upgrade to higher version than allowed.")
 
         if major:
-            prev_major = instance.current_version // (10 ** version_exponent)
-            instance.current_version = (prev_major + 1) * (10 ** version_exponent)
+            prev_major = instance.current_version // (10**version_exponent)
+            instance.current_version = (prev_major + 1) * (10**version_exponent)
 
         if minor:
             instance.current_version += 10
 
         return instance
-
 
     def downgrade(self, copy: bool = False) -> Self | "DataVersion":
         """
@@ -159,7 +157,6 @@ class DataVersion:
 
         return self
 
-
     def copy(self) -> "DataVersion":
         """
         Retruns a new object with the same version.
@@ -168,7 +165,6 @@ class DataVersion:
         x = DataVersion(dataset_name=(self.dataset_name), version_number=int(self.current_version))
         return x
 
-
     @property
     def version_name(self) -> str:
         """
@@ -176,11 +172,9 @@ class DataVersion:
         """
         return f"{self.dataset_name}_{self.current_version}"
 
-
     @property
     def latest_version(self) -> int:
         return get_latest_version_number(self.dataset_name)
-
 
     @property
     def version(self) -> int:
@@ -188,7 +182,6 @@ class DataVersion:
         Alias for current_version.
         """
         return self.current_version
-
 
     @property
     def about_dict(self) -> dict:

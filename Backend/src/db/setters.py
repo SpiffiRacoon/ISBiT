@@ -10,7 +10,9 @@ import pandas as pd
 
 
 @validate_endpoint_args
-def add_dataset_to_db(df: pd.DataFrame, dataset_name: str, about: dict | None = None, ConnectionClass=MongoConnection) -> None:
+def add_dataset_to_db(
+    df: pd.DataFrame, dataset_name: str, about: dict | None = None, ConnectionClass=MongoConnection
+) -> None:
     """
     Add a dataset to the database.
 
@@ -27,7 +29,9 @@ def add_dataset_to_db(df: pd.DataFrame, dataset_name: str, about: dict | None = 
         if v_obj.version_name in db[v_obj.dataset_name].find():
             raise Exception(f"Error: Tried to add collection {v_obj.dataset_name}, but it already exists")
 
-        data_to_save: dict = {"data": df.to_dict(orient="records"), }
+        data_to_save: dict = {
+            "data": df.to_dict(orient="records"),
+        }
 
         if about is not None:
             about.update({"version": v_obj.version, "dataset_name": v_obj.dataset_name})
@@ -37,9 +41,7 @@ def add_dataset_to_db(df: pd.DataFrame, dataset_name: str, about: dict | None = 
 
 
 @validate_endpoint_args
-def add_versioned_nodes(
-    nodes: list[Node], dataset_name: str, ConnectionClass=MongoConnection
-) -> None:
+def add_versioned_nodes(nodes: list[Node], dataset_name: str, ConnectionClass=MongoConnection) -> None:
     """
     Add data nodes with versioning.
 
@@ -57,8 +59,11 @@ def add_versioned_nodes(
 
     with ConnectionClass() as (_, db):
         # TODO:
-            # This need to be rewritten, does not work
-        if v_obj.version_name in db[v_obj.dataset_name].find() and "data" in db[v_obj.dataset_name].list_collection_names():
+        # This need to be rewritten, does not work
+        if (
+            v_obj.version_name in db[v_obj.dataset_name].find()
+            and "data" in db[v_obj.dataset_name].list_collection_names()
+        ):
             raise Exception(f"Error: Tried to add nodes to {v_obj.version_name}, but it already exists")
 
         db[v_obj.dataset_name].insert_one(data_to_save)

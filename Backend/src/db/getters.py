@@ -5,6 +5,16 @@ from ..types import Node, MlStatus
 # pip
 import pandas as pd
 
+
+def get_all_dataset_names() -> list:
+    with MongoConnection() as (_, db):
+        collections = db.list_collection_names()
+
+        for one_collection in collections.copy():
+            if one_collection in ["ml_status", "labels"]
+                collections.remove(one_collection)
+    return collections
+
 def get_dataset_names_with_processed_data(ConnectionClass=MongoConnection) -> list:
     with ConnectionClass() as (_, db):
         collections = list(db.list_collection_names())
@@ -17,8 +27,8 @@ def get_dataset_names_with_processed_data(ConnectionClass=MongoConnection) -> li
             if not db[one_collection].find_one(query_version_not_datafile):
                 collections.remove(one_collection)
 
+    return collections
 
-        return collections
 
 def get_datafiles_not_processed(ConnectionClass=MongoConnection) -> list:
     with ConnectionClass() as (_, db):
@@ -37,17 +47,18 @@ def get_datafiles_not_processed(ConnectionClass=MongoConnection) -> list:
             elif one_collection in processed:
                 collections.remove(one_collection)
 
-        return collections
+    return collections
 
 
 def get_latest_version_number(dataset_name: str, ConnectionClass=MongoConnection) -> int:
 
     with ConnectionClass() as (_, db):
-        result = db[dataset_name].aggregate([
-            { "$group": { "_id": None, "maxVersion": { "$max": "$about.version" } } },
-            { "$project": { "_id": 0, "maxVersion": 1 } }
-        ])
-
+        result = db[dataset_name].aggregate(
+            [
+                {"$group": {"_id": None, "maxVersion": {"$max": "$about.version"}}},
+                {"$project": {"_id": 0, "maxVersion": 1}},
+            ]
+        )
 
     latest_version = list(result)[0]["maxVersion"]
     return latest_version

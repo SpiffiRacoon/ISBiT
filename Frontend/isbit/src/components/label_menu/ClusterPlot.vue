@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container">
+  <div class="chart-container" @mousedown="startSelecting" @mousemove="onMouseMove" @mouseup="endSelecting">
     <ScatterChart
       ref="chartRef"
       :data="scatterData"
@@ -7,14 +7,17 @@
       @click="onClick"
     ></ScatterChart>
   </div>
-  <button @click="resetZoom" class="reset-zoom-btn">Reset Zoom</button>
+  <button @click="resetZoom" class="reset-zoom-btn">Återställ zoom</button>
+  <button @click="setZoomOption('pan')" class="reset-zoom-btn">Drag</button>
+  <button @click="setZoomOption('drag')" class="reset-zoom">Markera zoom</button>
+  <button @click="setZoomOption('')"> Markera område</button>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, watch } from 'vue'
 import type { Ref } from 'vue'
 import { Chart as ChartJS, registerables } from 'chart.js'
-import zoomPlugin from 'chartjs-plugin-zoom'
+import zoomPlugin from 'chartjs-plugin-zoom';
 import type { ChartData, ChartOptions } from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 import axios from 'axios'
@@ -38,15 +41,16 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const dataset = route.query.dataset as string
-    console.log(dataset)
     const chartRef: Ref<{ chart: ChartJS } | null> = ref(null)
     const error: Ref<string | null> = ref(null)
 
-    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<
-      ChartData<'scatter', CustomPoint[]>
-    >({
+    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<ChartData<'scatter', CustomPoint[]>>({
       datasets: []
     })
+
+    var zoomOption = ref('pan');
+    const selectionRect = ref<{ startX: number, startY: number, endX: number, endY: number } | null>(null);
+    const selectedPoints: Ref<CustomPoint[]> = ref([]);
 
     async function fetchData() {
       try {
@@ -72,8 +76,6 @@ export default defineComponent({
         scatterData.value = {
           datasets: [newDataset]
         }
-
-        console.log('Scatter Data Updated:', scatterData.value)
       } catch (err) {
         console.error(err)
       }
@@ -87,7 +89,7 @@ export default defineComponent({
       }
     })
 
-    const chartOptions: ChartOptions<'scatter'> = {
+    const chartOptions: Ref<ChartOptions<'scatter'>> = ref({
       scales: {
         x: {
           type: 'linear',
@@ -131,24 +133,40 @@ export default defineComponent({
         zoom: {
           zoom: {
             wheel: {
-              enabled: true
+              enabled: true,
             },
             drag: {
-              enabled: false
+              enabled: zoomOption.value === 'drag'
             },
             pinch: {
               enabled: true
             },
-            mode: 'xy'
+            mode: 'xy',
           },
           pan: {
-            enabled: true,
+            enabled: zoomOption.value === 'pan',
             mode: 'xy'
-          }
+          },
         }
       },
       backgroundColor: 'transparent'
-    }
+    })
+
+    watch(zoomOption, () => {
+      const chartInstance = chartRef.value?.chart;
+
+      if (chartInstance && chartInstance.options?.plugins?.zoom) {
+        const zoomPlugin = chartInstance.options.plugins.zoom;
+
+
+        if (zoomPlugin.zoom && zoomPlugin.zoom.drag && zoomPlugin.pan) {
+          zoomPlugin.zoom.drag.enabled = zoomOption.value === 'drag';
+          zoomPlugin.pan.enabled = zoomOption.value === 'pan';
+        }
+
+        chartInstance.update(); 
+      }
+    });
 
     const onClick = (event: MouseEvent) => {
       const chartInstance = chartRef.value?.chart
@@ -180,12 +198,62 @@ export default defineComponent({
         console.error('Chart instance not found')
       }
     }
+
     const resetZoom = () => {
       const chartInstance = chartRef.value?.chart
       if (chartInstance) {
         chartInstance.resetZoom()
       }
     }
+
+    const setZoomOption = (option: string) => {
+      zoomOption.value = option;
+    }
+
+    const startSelecting = (event: MouseEvent) => {
+      const chartInstance = chartRef.value?.chart
+      if (chartInstance) {
+        const { offsetX, offsetY } = event;
+        const chartArea = chartInstance.chartArea;
+        const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0;
+        const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0;
+        
+        selectionRect.value = { startX: chartX, startY: chartY, endX: chartX, endY: chartY };
+      }
+    };
+
+    const onMouseMove = (event: MouseEvent) => {
+      if (selectionRect.value) {
+        const chartInstance = chartRef.value?.chart
+        if (chartInstance) {
+          const { offsetX, offsetY } = event;
+          const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0;
+          const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0;
+
+          selectionRect.value.endX = chartX;
+          selectionRect.value.endY = chartY;
+        }
+      }
+    };
+
+    const endSelecting = () => {
+      if (selectionRect.value) {
+        const { startX, startY, endX, endY } = selectionRect.value;
+        const selectedPointsArray = scatterData.value.datasets[0].data.filter((point: CustomPoint) => {
+          return (
+            point.x >= Math.min(startX, endX) &&
+            point.x <= Math.max(startX, endX) &&
+            point.y >= Math.min(startY, endY) &&
+            point.y <= Math.max(startY, endY)
+          );
+        });
+        
+        selectedPoints.value = selectedPointsArray;
+        console.log('Selected points:', selectedPointsArray);
+        selectionRect.value = null;
+      }
+    };
+
     return {
       scatterData,
       chartOptions,
@@ -193,7 +261,11 @@ export default defineComponent({
       chartRef,
       dataset,
       error,
-      resetZoom
+      resetZoom,
+      setZoomOption,
+      startSelecting,
+      onMouseMove,
+      endSelecting
     }
   }
 })

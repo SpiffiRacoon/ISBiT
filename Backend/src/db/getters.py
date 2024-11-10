@@ -2,34 +2,39 @@
 from .connection import MongoConnection
 from ..types import Node, MlStatus
 
+# pip
+import pandas as pd
 
-def get_all_collections(ConnectionClass=MongoConnection) -> list:
+
+def get_all_dataset_names(ConnectionClass=MongoConnection) -> list:
     """
     Get all collections in database
-    """
-    with ConnectionClass() as (_, db):
-        collections = db.list_collection_names()
-        if "ml_run" in collections:
-            collections.remove("ml_run")
 
-        return list(collections)
+    This should return all unique dataset_names in the "info" table of the collections.
+    """
+    print("[WARNING] get_all_collections is not implemented yet.")
+    return []
 
 
-def get_latest_version_number(collection: str, ConnectionClass=MongoConnection) -> int:
-    """
-    Returns the latest version number for a collection.
-    """
+def get_latest_version_number(dataset_name: str, ConnectionClass=MongoConnection) -> int:
     print("[WARNING] get_latest_version_number is not implemented yet.")
-
     return 0
 
 
-def get_nodes_from_latest_version(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
+def get_nodes_from_latest_version(dataset_name: str, ConnectionClass=MongoConnection) -> pd.DataFrame:
     """
     Returns all nodes from the latest version of a collection.
     """
     print("[WARNING] get_nodes_from_latest_version is not implemented yet.")
-    return [Node()]
+    return pd.DataFrame()
+
+
+def get_about_from_latest_version(dataset_name: str, ConnectionClass=MongoConnection) -> dict:
+    """
+    Returns all nodes from the latest version of a collection.
+    """
+    print("[WARNING] get_about_from_latest_version is not implemented yet.")
+    return {}
 
 
 def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:

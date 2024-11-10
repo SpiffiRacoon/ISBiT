@@ -4,14 +4,14 @@ from datetime import datetime
 
 # own
 from ..types import Node, MlStatus
-from ..utils import read_meta_info
 from ..ml_lib import get_model_instance
 
 from ..db import (set_ml_status,
                   get_ml_status,
                   delete_ml_status,
-                  add_about_node_to_id,
-                  add_multiple_nodes_to_id
+                  add_versioned_nodes,
+                  add_multiple_nodes_to_id,
+                  get_nodes_from_latest_version
             )
 
 # pip
@@ -38,7 +38,7 @@ async def run(model_name: str, file: str, dim_red_method: str | None = None) -> 
 
     dim_red_method: COMBO
 
-    NOTE: If the target file does not have an accompanying .info file the function will not run. Upload your dataset via the POST route with its accompanying .info file. 
+    NOTE: If the target file does not have an accompanying .info file the function will not run. Upload your dataset via the POST route with its accompanying .info file.
     """
 
     ml_id = f"{model_name}_{file}"
@@ -89,18 +89,19 @@ def run_ml_background_task(
 
     starting_time = datetime.now()
     model_obj = get_model_instance(model_name)
+
+    df = get_nodes_from_latest_version(dataset_name=file)
+
     try:
-        about_dict = read_meta_info(file_name=file)
-        model_obj.run(file_name=file, is_first=True, dim = dim_red_method)
+        model_obj.run(df=df, is_first=True, dim = dim_red_method)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    
+
     ref_id = f"{file}_id"
-    add_about_node_to_id(about_node=about_dict, collection=file, document_id=ref_id)
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
-    add_multiple_nodes_to_id(list_of_nodes, collection=file, document_id=ref_id)
+    add_versioned_nodes(nodes = list_of_nodes, dataset_name=file)
 
     total_running_time = datetime.now() - starting_time
     set_ml_status(

@@ -9,9 +9,11 @@ def validate_endpoint_args(func):
 
     def wrapper_func(*args, **kwargs):
         not_allowed_collection_names = ["About", "about", "Labels", "labels"]
-        if "collection" in kwargs:
-            if kwargs["collection"] in not_allowed_collection_names:
-                raise Exception("Usage of unallowed collection name")
+        for collection_name in ["collection", "dataset_name"]:
+            if collection_name in kwargs:
+                if kwargs[collection_name] in not_allowed_collection_names:
+                    raise Exception(f"Usage of unallowed {collection_name} name")
+
         func(*args, **kwargs)
 
     return wrapper_func

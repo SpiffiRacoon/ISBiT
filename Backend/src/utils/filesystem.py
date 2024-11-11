@@ -11,6 +11,7 @@ def get_all_dataset_files() -> list:
         paths = list(os.listdir(folder))
         paths.remove('.gitkeep')
         paths.remove('output')
+        paths.remove('info')
 
         paths = [path.split('.')[0] for path in paths]
         return paths

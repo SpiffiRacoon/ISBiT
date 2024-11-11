@@ -11,7 +11,7 @@ def get_all_dataset_names() -> list:
         collections = db.list_collection_names()
 
         for one_collection in collections.copy():
-            if one_collection in ["ml_status", "labels"]
+            if one_collection in ["ml_status", "labels"]:
                 collections.remove(one_collection)
     return collections
 

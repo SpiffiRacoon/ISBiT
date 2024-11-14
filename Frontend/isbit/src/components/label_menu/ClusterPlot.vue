@@ -22,6 +22,7 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+export type {CustomPoint}
 
 ChartJS.register(...registerables)
 ChartJS.register(zoomPlugin)
@@ -35,10 +36,11 @@ interface CustomPoint {
 }
 
 export default defineComponent({
+  emits: ['pointClick'],
   components: {
     ScatterChart: Scatter
   },
-  setup() {
+  setup(props, context) {
     const route = useRoute()
     const dataset = route.query.dataset as string
     const chartRef: Ref<{ chart: ChartJS } | null> = ref(null)
@@ -191,6 +193,7 @@ export default defineComponent({
             text: clickedPoint.text,
             truth: clickedPoint.truth
           })
+          context.emit('pointClick', clickedPoint); // tell parent the point was clicked
         } else {
           console.log('No point clicked')
         }

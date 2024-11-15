@@ -55,6 +55,14 @@ class QaqcMainModel(IsbitClassifierModel):
             return '"' + match.group(1).replace(",", "|") + '"'
         return re.sub(pattern, replace_commas, line)
 
+    def get_embeddings(self,text_lst: list) -> torch.Tensor:
+        """
+        Function to get the embeddings from the sentences
+        """
+        model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
+        embeddings = model.encode(text_lst, convert_to_tensor=True)
+        return embeddings
+    
     def first_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         """
         Combines the input question data with the calculated 2D point data
@@ -62,36 +70,25 @@ class QaqcMainModel(IsbitClassifierModel):
         questions = df["text"].tolist()
         ids = [self.get_id(question) for question in questions]
         df["id"] = pd.Series(ids)
-        model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
-        embeddings = model.encode(questions, convert_to_tensor=True)
+        embeddings = self.get_embeddings(questions)
 
         point_data_df = self.dim_red(embeddings=embeddings, dim=dim)
         combined_df = pd.concat([df, point_data_df], axis=1)
         combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df
-    
 
-
-    def latter_run(self, df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
-
-        old_embeddings_and_input_labels_df = self.get_embeddings(df["text","input_label"].tolist()) #This is equal to the first embeddings(1.2 in our figure)
-        
+    def latter_run(self,df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
+        questions = df["text"].tolist()
+        embeddings_tensor = self.get_embeddings(questions) #This is equal to the first embeddings(1.2 in our figure)
+        user_truth = df["input_label"].tolist()
         #Calls the classifier to generate the predicted labels
-        predictedLabels, new_embeddings = self.random_forest_classifier(old_embeddings_and_input_labels_df)
+        predictedLabels, new_embeddings = self.random_forest_classifier(embeddings=embeddings_tensor, user_truth=user_truth)
         predLabels_df = pd.DataFrame(predictedLabels.tolist(), columns=["predicted_labels"])
+        
         
         x_and_y = self.dim_red(embeddings=new_embeddings, dim=dim) #generates coordinates x and y for plotting in frontend
 
         #Combines all of the dataframes together in order to form the final dataframe
-        combined_df = pd.concat([df["text"], x_and_y, df["truth"], df["input_label"], predLabels_df], axis=1)
+        combined_df = pd.concat([df["text"], x_and_y, df["coarse label"], df["id"] , df["input_label"], predLabels_df], axis=1)
         return combined_df
     
-    def get_embeddings(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Function to get the embeddings from the sentences
-        """
-        model = SentenceTransformer("paraphrase-MiniLM-L6-v2")
-        embeddings = model.encode(df["text"].tolist(), convert_to_tensor=True)
-        embedded_df = pd.DataFrame(embeddings.tolist(), columns=["embeddings"])
-        returning_df = pd.concat([df["input_label"], embedded_df], axis=1)
-        return returning_df

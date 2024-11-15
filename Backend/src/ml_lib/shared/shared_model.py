@@ -84,33 +84,39 @@ class IsbitClassifierModel:
     
         
 
-    def random_forest_classifier(df: pd.DataFrame):
+    def random_forest_classifier(embeddings: torch.Tensor, user_truth: list):
         max_leaf = 4
         # Initialize the Random Forest Classifier
         clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=max_leaf)
         #n_estimators should be equal to the embedding space(i.e sentenceswithoutlabels)
 
         #Generating necessary input for the classifier
-        all_old_embeddings_lst = df["embeddings"].tolist()
-        assignedLabels_lst = df["input_label"].tolist()
-        if assignedLabels_lst.len() != all_old_embeddings_lst.len():
+        all_old_embeddings_lst = embeddings.tolist()
+        if len(user_truth) != len(all_old_embeddings_lst):
             raise Exception("user labeling is not equal to the number of embeddings")
-        
+
+        embeddingsWithInputFromUser = []
+        embeddingsWithoutInputFromUser = []
+        actual_assigned_labels = []
         #Splits the sentences into labeled and unlabeled based on whether they have an input label or not
-        embeddingsWithInputFromUser = all_old_embeddings_lst.loc[df['input_label'] != None]
-        embeddingsWithoutInputFromUser = all_old_embeddings_lst.loc[df['input_label'] == None]
-        actual_assigned_labels = assignedLabels_lst.loc[df['input_label'] != None]
+        for x in range(len(all_old_embeddings_lst)):
+              if user_truth[x] == None:
+                  embeddingsWithoutInputFromUser.append(all_old_embeddings_lst[x])
+              else:
+                  embeddingsWithInputFromUser.append(all_old_embeddings_lst[x])
+                  actual_assigned_labels.append(user_truth[x])
         
         #Train the classifier        
         clf.fit(embeddingsWithInputFromUser, actual_assigned_labels)
 
         #Generates new embeddings for use in the frontend
-        embeddings=clf.apply(all_old_embeddings_lst)
+        new_embeddings=clf.apply(all_old_embeddings_lst)
 
         # Predict the test set results
-        label_pred = clf.predict(embeddingsWithoutInputFromUser)
+        # label_pred = clf.predict(embeddingsWithoutInputFromUser)
+        label_pred = clf.predict(all_old_embeddings_lst)
 
-        return (label_pred, embeddings)
+        return (label_pred, new_embeddings)
 
 
     def dim_red(self, embeddings: torch.Tensor, dim: str | None) -> pd.DataFrame:

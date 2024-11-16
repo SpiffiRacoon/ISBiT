@@ -36,15 +36,16 @@ class DataVersion:
 
         0 000000 0 (Format of versions)
         0 - this is version as in the version_name
-          000000 - this is the version number (The iteration of the model or cluster..., max iterations is 999999)
+          000000 - this is the version number (The iteration of the classified or grouped..., max iterations is 999999)
                  0 - this is a indicator if it is labeled or not
 
         Ex)
         0 - <filename> (datafile)
-        10000000 - <filename>_cluster_0
-        20000041 - <filename>_model_4_labeled
-        10000011 - <filename>_cluster_1_labeled
-        10001031 - <filename>_cluster_103_labeled
+        10000000 - <filename>_grouped_0
+        20000040 - <filename>_classified_4
+        20000041 - <filename>_classified_4_labeled
+        10000011 - <filename>_grouped_1_labeled
+        10001031 - <filename>_grouped_103_labeled
         """
         version_number = 0
         if version_name is VersionName.DATA_FILE:

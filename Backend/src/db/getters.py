@@ -106,13 +106,15 @@ def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list
     return nodes
 
 
-def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list[dict]:
+def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list:
     """
     Get list document with labels from a collection.
     """
     with ConnectionClass() as (_, db):
-        labels = list(db[collection].find({}, {"about.labels": 1, "_id": 0}))
-        return labels
+        result = db[collection].find_one({}, {"about.labels": 1, "_id": 0})
+        if result is None:
+            raise ValueError(f"Error: Could not find any labels in {collection}")
+        return result["about"]["labels"]
 
 
 def get_ml_status(id: str, ConnectionClass=MongoConnection) -> MlStatus:

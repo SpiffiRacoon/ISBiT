@@ -1,7 +1,6 @@
 # own
 from ..db import (
     get_all_nodes_from as db_get_all_nodes_from,
-    add_one_node_to as db_add_one_node_to,
     get_all_labels_from as db_get_all_labels,
 )
 from ..types import Node
@@ -31,32 +30,9 @@ def get_all_labels(
     """
     Get all labels for a collection from database.
     """
-    label_dict = db_get_all_labels(collection=collection)
+    labels = db_get_all_labels(collection=collection)
+    return labels
 
-    # TODO: need to find a good way not to hardcode key strings like this..
-    for label_doc in label_dict:
-        if "about" in label_doc and "labels" in label_doc["about"]:
-            for _, value in label_doc["about"]["labels"].items():  # only returns first labels attribute for now.
-                if isinstance(value, list):
-                    return value
-    return None
-
-
-@router.post("/", status_code=201)
-def add_one_node(node: Node, collection: str) -> None:
-    """
-    Add one node to a collection
-
-    This route should not be used in acutal cases, this is for testing/development only.
-    This could mess upp other functionality in the app.
-    """
-
-    try:
-        db_add_one_node_to(node=node, collection=collection)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-    return None
 
 
 @router.post("/categorize", status_code=204)

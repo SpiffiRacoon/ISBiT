@@ -9,7 +9,6 @@ from .getters import (
     get_datafiles_not_processed,
 )
 from .setters import (
-    add_one_node_to,
     add_about_node_to_id,
     add_multiple_nodes_to_id,
     set_ml_status,
@@ -27,7 +26,6 @@ __all__ = [
     "get_all_nodes_from",
     "get_dataset_names_with_processed_data",
     "get_datafiles_not_processed",
-    "add_one_node_to",
     "delete_collection",
     "add_about_node_to_id",
     "add_versioned_nodes",

@@ -14,7 +14,11 @@ def write_dataset(filename: str, df: pd.DataFrame) -> None:
     """
     folder = "src/data"
 
-    df.to_csv(f"{folder}/{filename}.csv", index=False)
+    file_path = f"{folder}/{filename}.csv"
+    df.to_csv(file_path, index=False)
+
+    with open(file_path, "rb") as file:
+        os.fsync(file.fileno())
 
 def get_all_dataset_files() -> list:
     """
@@ -39,9 +43,9 @@ def write_info(info_filename: str, metadata: dict) -> None:
     filename should not contain type suffix (.info, .etc)
     """
     folder = "src/data/info"
-    suffix = "_meta_info"
+    suffix = "_meta_info.info"
 
-    with open(f"{folder}/{info_filename}{suffix}.info", 'w') as f:
+    with open(f"{folder}/{info_filename}{suffix}", 'w') as f:
         dump(metadata, f, indent=4) 
 
 def read_meta_info(file_name: str) -> dict:

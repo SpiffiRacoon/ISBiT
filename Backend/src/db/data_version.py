@@ -74,11 +74,11 @@ class DataVersion:
         """
         The new version will be set as the current version.
 
-        Major upgrade => This is when going from 1.0.0 to 2.0.0 (Cluster to Model) or (Datafile to Cluster)
-        Minor upgrade => This is when going from 1.0.0 to 1.1.0 (Cluster to Cluster) or (Model to Model)
-        Label upgrade => This is when going from 1.0.0 to 1.0.1 (Cluster to Cluster) or (Model to Model)
-        Automatic upgrade => Steps: From Datafile to Cluster to Model to new minor version of Model.
-            Automatic versioning will not have minor versions of Datafile or Cluster.
+        Major upgrade => This is when going from 1.0.0 to 2.0.0 (Grouped to Classified) or (Datafile to Grouped)
+        Minor upgrade => This is when going from 1.0.0 to 1.1.0 (Grouped to Classified) or (Model to Model)
+        Label upgrade => This is when going from 1.0.0 to 1.0.1 (Grouped to Classified) or (Model to Model)
+        Automatic upgrade => Steps: From Datafile to Grouped to Classified to new minor version of Model.
+            Automatic versioning will not have minor versions of Datafile or Grouped.
 
         If trying to upgrade to higher version than allowed, it will raise an exception.
 

@@ -3,8 +3,8 @@ from enum import Enum
 
 class VersionName(Enum):
     DATA_FILE = "data_file"
-    FIRST_RUN = "cluster"
-    LATTER_RUN = "model"
+    FIRST_RUN = "grouped"
+    LATTER_RUN = "classified"
 
 
 exponent = 7

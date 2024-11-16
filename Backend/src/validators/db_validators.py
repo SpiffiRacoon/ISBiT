@@ -8,8 +8,13 @@ def validate_endpoint_args(func):
     """
 
     def wrapper_func(*args, **kwargs):
-        not_allowed_collection_names = ["About", "about", "Labels", "labels"]
-        for collection_name in ["collection", "dataset_name"]:
+        reserved_names = ["about", "ml_runs", "labels"]
+        not_allowed_collection_names = []
+        for one_name in reserved_names:
+            not_allowed_collection_names.append(one_name)
+            not_allowed_collection_names.append(one_name.capitalize())
+
+        for collection_name in not_allowed_collection_names:
             if collection_name in kwargs:
                 if kwargs[collection_name] in not_allowed_collection_names:
                     raise Exception(f"Usage of unallowed {collection_name} name")

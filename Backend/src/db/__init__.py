@@ -1,5 +1,4 @@
 from .getters import (
-    get_all_nodes_from,
     get_all_dataset_names,
     get_all_labels_from,
     get_ml_status,
@@ -23,7 +22,6 @@ __all__ = [
     "get_latest_version_number",
     "get_all_dataset_names",
     "get_nodes_from_latest_version",
-    "get_all_nodes_from",
     "get_dataset_names_with_processed_data",
     "get_datafiles_not_processed",
     "delete_collection",

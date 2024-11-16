@@ -1,6 +1,6 @@
 # own
 from .connection import MongoConnection
-from ..types import Node, MlStatus
+from ..types import MlStatus
 
 # pip
 import pandas as pd
@@ -88,22 +88,9 @@ def get_about_from_latest_version(dataset_name: str, ConnectionClass=MongoConnec
     with ConnectionClass() as (_, db):
         result = db[dataset_name].find_one({"about.version": latest_version})
         if result is not None:
-            print(result["about"])
             return result["about"]
 
     raise Exception(f"Error: Could not find latest version of {dataset_name}")
-
-
-def get_all_nodes_from(collection: str, ConnectionClass=MongoConnection) -> list[Node]:
-    """
-    Get all nodes from a collections node array in its data field.
-    """
-    with ConnectionClass() as (_, db):
-        documents = db[collection].find()
-        nodes = []
-        for doc in documents:
-            nodes.extend([Node(**data_item) for data_item in doc["data"]])
-    return nodes
 
 
 def get_all_labels_from(collection: str, ConnectionClass=MongoConnection) -> list:

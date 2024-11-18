@@ -10,7 +10,7 @@ class Node(BaseModel):
     text: str
     x: float
     y: float
-    truth: str
+    truth: str | int | None = None
     input_label: str | None = None
 
     model_config = {
@@ -29,7 +29,6 @@ class Node(BaseModel):
     }
 
     def __init__(self, *args, **kwargs) -> None:
-
         if "_id" in kwargs:
             kwargs["id"] = str(kwargs["_id"])
         super().__init__(*args, **kwargs)

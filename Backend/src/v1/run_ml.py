@@ -4,18 +4,19 @@ from datetime import datetime
 
 # own
 from ..types import Node, MlStatus
-from ..utils import read_meta_info
 from ..ml_lib import get_model_instance
 
-from ..db import (set_ml_status,
-                  get_ml_status,
-                  delete_ml_status,
-                  add_about_node_to_id,
-                  add_multiple_nodes_to_id
-            )
+from ..db import (
+    set_ml_status,
+    get_ml_status,
+    delete_ml_status,
+    add_versioned_nodes,
+    get_nodes_from_latest_version,
+    get_datafiles_not_processed,
+)
 
 # pip
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 router = APIRouter(
     prefix="/run_ml",
@@ -38,7 +39,7 @@ async def run(model_name: str, file: str, dim_red_method: str | None = None) -> 
 
     dim_red_method: COMBO
 
-    NOTE: If the target file does not have an accompanying .info file the function will not run. Upload your dataset via the POST route with its accompanying .info file. 
+    NOTE: If the target file does not have an accompanying .info file the function will not run. Upload your dataset via the POST route with its accompanying .info file.
     """
 
     ml_id = f"{model_name}_{file}"
@@ -46,9 +47,7 @@ async def run(model_name: str, file: str, dim_red_method: str | None = None) -> 
     if ml_status.status == "Running":
         return get_ml_status(ml_id)
 
-    ml_status = set_ml_status(
-        MlStatus(ml_id=ml_id, status="Running", details="Request received")
-    )
+    ml_status = set_ml_status(MlStatus(ml_id=ml_id, status="Running", details="Request received"))
     executor.submit(run_ml_background_task, model_name, file, dim_red_method)
     return ml_status
 
@@ -76,9 +75,7 @@ def flush_ml_status(model_name: str, file: str) -> None:
     return None
 
 
-def run_ml_background_task(
-    model_name: str, file: str, dim_red_method: str | None = None
-) -> None:
+def run_ml_background_task(model_name: str, file: str, dim_red_method: str | None = None) -> None:
     """
     Synchronous function to run the ML model in the background
     This function updates the status of the ML run in the database
@@ -89,18 +86,24 @@ def run_ml_background_task(
 
     starting_time = datetime.now()
     model_obj = get_model_instance(model_name)
+
+    df = get_nodes_from_latest_version(dataset_name=file)
+
     try:
-        about_dict = read_meta_info(file_name=file)
-        model_obj.run(file_name=file, is_first=True, dim = dim_red_method)
+        is_first = True
+        if file not in get_datafiles_not_processed():
+            is_first = False
+        model_obj.run(df=df, is_first=is_first, dim=dim_red_method)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-    
-    ref_id = f"{file}_id"
-    add_about_node_to_id(about_node=about_dict, collection=file, document_id=ref_id)
+        raise e
 
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
-    add_multiple_nodes_to_id(list_of_nodes, collection=file, document_id=ref_id)
+
+    try:
+        add_versioned_nodes(nodes=list_of_nodes, dataset_name=file)
+    except Exception as e:
+        raise e
 
     total_running_time = datetime.now() - starting_time
     set_ml_status(

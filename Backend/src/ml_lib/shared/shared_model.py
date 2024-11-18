@@ -4,7 +4,6 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.ensemble import RandomForestClassifier
 import umap
-from sentence_transformers import SentenceTransformer
 import torch #May be able to do this without importing entire library, only need this to define embeddings as torch.Tensor
 class IsbitClassifierModel:
 
@@ -13,26 +12,17 @@ class IsbitClassifierModel:
     ) -> None:
         self._df = df
 
-    def _read_data_frame(self, file_name: str) -> pd.DataFrame:
-        """
-        Reads the CSV data and returns it as a Panda data frame.
-        """
-        source_path = f"src/data/output/{file_name}_prep.csv"
-        data = pd.read_csv(source_path)
-        return data
-
-    def _format_data(self, file_name: str) -> None:
+    def _format_data(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Formatting logic, overridden by child classes.
         """
-        pass
+        return df
 
-    def run(self, file_name: str, is_first: bool, dim: str | None) -> None:
+    def run(self, df: pd.DataFrame, is_first: bool, dim: str | None) -> None:
         """
         Run declared in super class, initializes
         """
-        self._format_data(file_name=file_name)
-        data = self._read_data_frame(file_name)
+        data = self._format_data(df=df)
 
         if not is_first:
             df = self.latter_run(data, dim)
@@ -80,6 +70,9 @@ class IsbitClassifierModel:
         """
         Getter for the dataframe of ML models.
         """
+        if self._df is None:
+            raise Exception("Dataframe is None.")
+
         return self._df
     
         
@@ -147,7 +140,7 @@ class IsbitClassifierModel:
                 reduced_embeddings_umap = umap_model.fit_transform(embeddings)
                 point_data_df = pd.DataFrame(reduced_embeddings_umap, columns=["x", "y"])
 
-            case _: 
+            case _:
                 raise Exception("Invalid dimension reduction method.")
-            
+
         return point_data_df

@@ -1,11 +1,13 @@
 # own
 from ..db import (
-    get_all_collections as db_get_all_collections,
-    delete_collection as db_delete_collection
+    delete_collection as db_delete_collection,
+    add_dataset_to_db,
+    get_dataset_names_with_processed_data,
+    get_datafiles_not_processed,
+    get_all_dataset_names as db_get_all_dataset_names,
+
 )
 from ..types import DatasetsResponse, DatasetFileResponse
-from ..utils import write_dataset, get_all_dataset_files as get_all_dataset_files_from_filesystem, write_info
-
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
 import pandas as pd
@@ -24,7 +26,8 @@ def get_all_processed_datasets() -> DatasetsResponse | None:
     Get all datasets in database.
     """
 
-    collections = db_get_all_collections()
+    # collections = db_get_all_dataset_names()
+    collections = get_dataset_names_with_processed_data()
     info = {"dataList": []}
     if collections == []:
         return DatasetsResponse(**info)
@@ -48,7 +51,7 @@ def get_all_dataset_files() -> DatasetFileResponse| None:
     Get all dataset files in the data folder.
     """
 
-    files = get_all_dataset_files_from_filesystem()
+    files = get_datafiles_not_processed()
     info = {"dataList": []}
 
     if files == []:
@@ -78,19 +81,19 @@ def upload_dataset(
     Currently only csv files are supported.
 
     Parameters:
-        uploaded_file, dataset to upload.   
-        filename, name to save uploaded_file as. 
+        uploaded_file, dataset to upload.
+        filename, name to save uploaded_file as.
         uploaded_info_file, accompanying .info file to the uploaded dataset.
     """
     try:
         contents = uploaded_file.file.read().decode("utf-8")
         string_content = StringIO(contents)
         df = pd.read_csv(string_content, delimiter=delimiter)
-        write_dataset(filename=filename, df=df)
 
         info_contents = uploaded_info_file.file.read().decode("utf-8")
         meta_data = json.loads(info_contents)
-        write_info(info_filename=filename, metadata=meta_data)
+
+        add_dataset_to_db(df=df, about=meta_data, dataset_name=filename)
 
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Uploaded info file must be in valid JSON format.")
@@ -108,7 +111,7 @@ def delete_dataset(dataset: str) -> None:
     OBS, this is permanent!
     """
 
-    datasets = db_get_all_collections()
+    datasets = db_get_all_dataset_names()
     if datasets == []:
         raise HTTPException(status_code=400, detail="No datasets found")
 

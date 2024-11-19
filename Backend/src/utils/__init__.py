@@ -1,9 +1,12 @@
 from .filesystem import (
             get_all_dataset_files,
             read_meta_info,
-            download_qaqc_source_dataset,
-            get_qaqc_info_dict
-) 
+)
+
+from .test_helper import(
+    download_qaqc_source_dataset,
+    get_qaqc_info_dict
+)
 
 
 __all__ = [

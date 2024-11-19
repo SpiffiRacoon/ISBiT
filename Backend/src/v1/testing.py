@@ -1,7 +1,5 @@
 # own
 from datetime import time
-import os
-import random
 from ..types import TestingResponse, DatasetsResponse
 from ..utils import (
     download_qaqc_source_dataset as util_download_qaqc,
@@ -20,8 +18,6 @@ import time
 import io
 import json
 
-
-
 router = APIRouter(
     prefix="/testing",
     tags=["Testing"],
@@ -30,9 +26,10 @@ router = APIRouter(
 @router.post("/")
 async def manual_test_sequence(
     filename: str,
-    dim_red_method: str,
-    n_rows: int | None = None,
-    run_time: float | None = None,
+    model_name: str = "qaqc_main",
+    dim_red_method: str = "COMBO",  
+    n_rows: int = 250,
+    run_time: float = 120,
     run_unit: str = "s", 
     ) -> TestingResponse:
     """
@@ -43,8 +40,8 @@ async def manual_test_sequence(
     2. Starts an async run of the ml lib.
     3. GET running statuses.
     5. GET Processed data sets.
-    6. Get labels.
-    7. Get 10 random nodes of from the generated collection.
+    6. GET labels.
+    7. GET 10 random nodes of from the generated collection.
 
     Returns a response consisting of a collection of status responses from other routes ran in the sequence. 
 
@@ -52,7 +49,7 @@ async def manual_test_sequence(
 
     1. filename, will name the generated collection.
     2. n_row, slices the source data with n rows.
-    3. run_time, sets the expected running time of the ml lib An error will be raised if the run wont complete within the given timeframe.
+    3. run_time, sets the expected running time of the ml lib An error will be raised if the run wont complete within the given timeframe, otherwise it will run until completed status.
     4. run_unit, 's' for seconds and 'm' for minutes. 
 
     """
@@ -101,7 +98,7 @@ async def manual_test_sequence(
     start_time = time.time()
     retry_interval = 4 # check the status every 4s
     while True:
-        status_response = get_status(model_name="qaqc_main", file=filename)
+        status_response = get_status(model_name=model_name, file=filename)
         status = status_response.status
         details = status_response.details
         if status_response not in response.ml_status:
@@ -109,11 +106,11 @@ async def manual_test_sequence(
         if status == "Not running" and "Success" in details:
             break
         elif status == "Not running" and "Error" in details:
-            raise Exception(f"ML run error: {details}")
+            raise HTTPException(f"ML run error: {details}")
         elif status == "error":
-            raise Exception(f"ML run error: {details}")
+            raise HTTPException(f"ML run error: {details}")
         if total_run_time is not None and (time.time() - start_time) > total_run_time:
-            raise Exception(f"ML did not complete during run_time :{run_time}{run_unit}")
+            raise HTTPException(f"ML did not complete during run_time :{run_time}{run_unit}")
         await asyncio.sleep(retry_interval)
 
     try:

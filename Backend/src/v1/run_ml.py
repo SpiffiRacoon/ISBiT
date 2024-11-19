@@ -93,10 +93,12 @@ def run_ml_background_task(model_name: str, file: str, dim_red_method: str | Non
         is_first = True
         if file not in get_datafiles_not_processed():
             is_first = False
+        print(f"Before run: {is_first = }")
         model_obj.run(df=df, is_first=is_first, dim=dim_red_method)
     except Exception as e:
         raise e
 
+    print("After run")
     df = model_obj.df
     list_of_nodes = [Node(**one_node) for one_node in df.to_dict("records")]
 

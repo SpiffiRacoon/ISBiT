@@ -10,7 +10,9 @@ class QaqcMainModel(IsbitClassifierModel):
         """
         Formats the input data
         """
-        df = df[['text', 'coarse label']]
+        df["truth"] = df["verbose label"].str.split(":").str[0]
+
+        df = df[['text', 'truth']]
 
         return df
 
@@ -28,5 +30,5 @@ class QaqcMainModel(IsbitClassifierModel):
         point_data_df = self.dim_red(embeddings=embeddings, dim=dim)
         combined_df = pd.concat([df, point_data_df], axis=1)
         combined_df = pd.concat([combined_df, id_df], axis=1)
-        combined_df = combined_df.rename(columns={"coarse label": "truth"})
+        # combined_df = combined_df.rename(columns={"coarse label": "truth"})
         return combined_df

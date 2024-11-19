@@ -11,7 +11,7 @@ class TestingResponse(BaseModel):
     """
     download_msgs: str = ""
     upload_msgs: str = ""
-    fraction: int = ""
+    n_rows: str = ""
     ml_status: list[MlStatus] = []
     datasets: list[DatasetsResponse] = []
     labels: list[str] = []

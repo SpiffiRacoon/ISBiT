@@ -46,12 +46,15 @@ async def manual_test_sequence(
     6. Get labels.
     7. Get 10 random nodes of from the generated collection.
 
-    Returns a response consisting of responses from other routes ran in the sequence. 
+    Returns a response consisting of a collection of status responses from other routes ran in the sequence. 
 
     Parameters:
-        filename, will name the generated collection.
-        n_row, slices the source data with n rows.
-        run_time, sets the expected running time of the ml lib An error will be raised if the run wont complete within the given timeframe. 
+
+    1. filename, will name the generated collection.
+    2. n_row, slices the source data with n rows.
+    3. run_time, sets the expected running time of the ml lib An error will be raised if the run wont complete within the given timeframe.
+    4. run_unit, 's' for seconds and 'm' for minutes. 
+
     """
     if run_time is not None:
         if run_unit == "m":
@@ -64,6 +67,10 @@ async def manual_test_sequence(
         total_run_time = None
 
     response = TestingResponse()
+    if n_rows == None:
+        response.n_rows = "Full dataset."
+    else:
+        response.n_rows = str(n_rows)
 
     try: 
         df = util_download_qaqc()

@@ -22,11 +22,11 @@ class IsbitClassifierModel:
         """
         Run declared in super class, initializes
         """
-        data = self._format_data(df=df)
 
         if not is_first:
-            df = self.latter_run(data, dim)
+            df = self.latter_run(df, dim)
         else:
+            data = self._format_data(df=df)
             df = self.first_run(data, dim)
 
         self._df_setter(df)

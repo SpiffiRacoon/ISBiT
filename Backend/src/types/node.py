@@ -11,7 +11,8 @@ class Node(BaseModel):
     x: float
     y: float
     truth: str | int | None = None
-    input_label: str | None = None
+    input_label: str | int | None = None
+    predicted_labels: str | int | None = None
 
     model_config = {
         "json_schema_extra": {
@@ -21,8 +22,9 @@ class Node(BaseModel):
                     "text": "This is a text",
                     "x": 0.1,
                     "y": 0.2,
-                    "truth": "true",
-                    "input_label": "true"
+                    "truth": "DESC",
+                    "input_label": "DESC",
+                    "predicted_labels": "DESC"
                 },
             ]
         }

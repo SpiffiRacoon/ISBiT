@@ -41,16 +41,16 @@ class QaqcMainModel(IsbitClassifierModel):
 
     def latter_run(self,df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         questions = df["text"].tolist()
-        embeddings_tensor = self.get_embeddings(questions) #This is equal to the first embeddings(1.2 in our figure)
+        embeddings_tensor = self.get_embeddings(questions) #This is equal to the first embeddings(1.2 in our figure), the alternative
+        #is to fetch these embeddings from the database
         user_truth = df["input_label"].tolist()
         #Calls the classifier to generate the predicted labels
         predictedLabels, new_embeddings = self.random_forest_classifier(embeddings=embeddings_tensor, user_truth=user_truth)
         predLabels_df = pd.DataFrame(predictedLabels.tolist(), columns=["predicted_labels"])
         
-        
         x_and_y = self.dim_red(embeddings=new_embeddings, dim=dim) #generates coordinates x and y for plotting in frontend
 
         #Combines all of the dataframes together in order to form the final dataframe
-        combined_df = pd.concat([df["text"], x_and_y, df["coarse label"], df["id"] , df["input_label"], predLabels_df], axis=1)
+        combined_df = pd.concat([df["text"], x_and_y, df["truth"], df["id"] , df["input_label"], predLabels_df], axis=1)
         return combined_df
     

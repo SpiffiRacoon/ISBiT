@@ -1,2 +1,14 @@
-[pytest]
+[tool.pytest]
 pythonpath = "."
+
+[tool.pyright]
+reportUnusedImport = true
+reportDuplicateImport = true
+reportImportCycles = true
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+max-line-length = 120
+ignore = ["E266"]

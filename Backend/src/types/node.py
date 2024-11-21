@@ -10,9 +10,9 @@ class Node(BaseModel):
     text: str
     x: float
     y: float
-    truth: str | int | None = None
-    input_label: str | int | None = None
-    predicted_labels: str | int | None = None
+    truth: str | None = None
+    input_label: str | None = None
+    predicted_labels: str | None = None
 
     model_config = {
         "json_schema_extra": {

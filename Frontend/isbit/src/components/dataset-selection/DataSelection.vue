@@ -239,8 +239,6 @@ export default defineComponent({
 }
 
 .run-container {
-
-.run-container {
   display: flex;
   align-items: center;
 }

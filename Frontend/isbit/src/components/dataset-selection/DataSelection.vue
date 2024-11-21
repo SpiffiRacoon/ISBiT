@@ -63,6 +63,7 @@
   </div>
 </template>
 
+
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
@@ -86,8 +87,8 @@ export default defineComponent({
 
         combineData()
       } catch (err) {
-        error.value = 'Error fetching data'
-        console.error(err)
+        error.value = 'Error fetching data';
+        console.error(err);
       }
     }
 
@@ -177,9 +178,16 @@ export default defineComponent({
 })
 </script>
 
+
+
 <style scoped>
 .container {
   padding: 20px;
+}
+
+.header {
+  font-size: 2em;
+  margin-bottom: 20px;
 }
 
 .header {
@@ -229,6 +237,8 @@ export default defineComponent({
   display: flex;
   align-items: center;
 }
+
+.run-container {
 
 .run-container {
   display: flex;

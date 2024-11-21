@@ -1,4 +1,5 @@
 <script>
+import DataUpload from './components/dataset-selection/DataUpload.vue';
 import Navbar from './components/navbar/NavBar.vue'
 export default {
   components: {

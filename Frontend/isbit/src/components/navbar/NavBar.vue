@@ -2,6 +2,7 @@
   <nav>
     <RouterLink to="/" class="home-link">ISBiT</RouterLink>
     <RouterLink to="/data">Välj Data </RouterLink>
+    <RouterLink to="upload">Ladda upp data</RouterLink>
   </nav>
 </template>
 

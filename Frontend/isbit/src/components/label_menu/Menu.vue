@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import LabelBox from './LabelBox.vue'
+import TextBox from './TextBox.vue'
+import MultiplePointText from './MultiplePointText.vue'
 import ClusterPlot from './ClusterPlot.vue'
 </script>
 
@@ -7,33 +9,45 @@ import ClusterPlot from './ClusterPlot.vue'
   <div id="label-menu">
     <div class="block">
       <h2>Dataset: qaqc</h2>
-      <ClusterPlot @point-click="(point) => receivePoint(point)"/>
+      <ClusterPlot
+        @point-click="(point) => receivePoint(point)"
+        @points-marked="(points) => receivePoints(points)"
+      />
     </div>
     <div id="text-and-labels">
       <h2>Märk Upp Datapunkt</h2>
-      <LabelBox :text="activePoint.text" :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
+      <TextBox v-if="activePoint" :text="activePoint.text" />
+      <MultiplePointText v-else :points="activePoints" />
+
+
+      <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import axios from 'axios'
-import type {CustomPoint} from './ClusterPlot.vue'
+import type { CustomPoint } from './ClusterPlot.vue'
 export default defineComponent({
   props: {
     text: String
   },
   data() {
     return {
-      activePoint: {text: "Välj en punkt i plotten."} as CustomPoint,
+      apiData: { t: String },
+      activePoint: { text: 'Välj en punkt i plotten.' } as CustomPoint,
+      activePoints: [] as CustomPoint[],
     }
   },
   methods: {
     receivePoint(point: CustomPoint) {
-      this.activePoint=point
+      this.activePoint = point
+    },
+    receivePoints(points: CustomPoint[]) {
+      const pointsArray = points
+      this.activePoints = pointsArray
     }
-  },
+  }
 })
 </script>
 

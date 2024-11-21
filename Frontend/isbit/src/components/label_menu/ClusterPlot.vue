@@ -1,5 +1,10 @@
 <template>
-  <div class="chart-container" @mousedown="startSelecting" @mousemove="onMouseMove" @mouseup="endSelecting">
+  <div
+    class="chart-container"
+    @mousedown="startSelecting"
+    @mousemove="onMouseMove"
+    @mouseup="endSelecting"
+  >
     <ScatterChart
       ref="chartRef"
       :data="scatterData"
@@ -7,22 +12,40 @@
       @click="onClick"
     ></ScatterChart>
   </div>
-  <button @click="resetZoom" class="reset-zoom-btn">Återställ zoom</button>
-  <button @click="setZoomOption('pan')" class="reset-zoom-btn">Drag</button>
-  <button @click="setZoomOption('drag')" class="reset-zoom">Markera zoom</button>
-  <button @click="setZoomOption('')"> Markera område</button>
-</template>
 
+  <div class="zoom-controls">
+    <button
+      @click="setZoomOption('pan')"
+      :class="{ active: zoomOption === 'pan' }"
+      class="zoom-btn"
+    >
+      Drag
+    </button>
+
+    <button
+      @click="setZoomOption('drag')"
+      :class="{ active: zoomOption === 'drag' }"
+      class="zoom-btn"
+    >
+      Markera zoom
+    </button>
+
+    <button @click="setZoomOption('')" :class="{ active: zoomOption === '' }" class="zoom-btn">
+      Markera flera punkter
+    </button>
+  </div>
+
+  <button @click="resetZoom" class="reset-zoom-btn">Återställ zoom</button>
+</template>
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch } from 'vue'
 import type { Ref } from 'vue'
 import { Chart as ChartJS, registerables } from 'chart.js'
-import zoomPlugin from 'chartjs-plugin-zoom';
+import zoomPlugin from 'chartjs-plugin-zoom'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-export type {CustomPoint}
 
 ChartJS.register(...registerables)
 ChartJS.register(zoomPlugin)
@@ -34,25 +57,32 @@ interface CustomPoint {
   id: string
   truth: string
 }
+export type { CustomPoint }
 
 export default defineComponent({
-  emits: ['pointClick'],
   components: {
     ScatterChart: Scatter
   },
-  setup(props, context) {
+  setup(prop, context) {
     const route = useRoute()
     const dataset = route.query.dataset as string
     const chartRef: Ref<{ chart: ChartJS } | null> = ref(null)
     const error: Ref<string | null> = ref(null)
 
-    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<ChartData<'scatter', CustomPoint[]>>({
+    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<
+      ChartData<'scatter', CustomPoint[]>
+    >({
       datasets: []
     })
 
-    var zoomOption = ref('pan');
-    const selectionRect = ref<{ startX: number, startY: number, endX: number, endY: number } | null>(null);
-    const selectedPoints: Ref<CustomPoint[]> = ref([]);
+    var zoomOption = ref('pan')
+    const selectionRect = ref<{
+      startX: number
+      startY: number
+      endX: number
+      endY: number
+    } | null>(null)
+    const selectedPoints: Ref<CustomPoint[]> = ref([])
 
     async function fetchData() {
       try {
@@ -72,7 +102,7 @@ export default defineComponent({
           data: points,
           backgroundColor: 'black',
           showLine: false,
-          pointRadius: 5
+          pointRadius: 7
         }
 
         scatterData.value = {
@@ -135,7 +165,7 @@ export default defineComponent({
         zoom: {
           zoom: {
             wheel: {
-              enabled: true,
+              enabled: true
             },
             drag: {
               enabled: zoomOption.value === 'drag'
@@ -143,32 +173,31 @@ export default defineComponent({
             pinch: {
               enabled: true
             },
-            mode: 'xy',
+            mode: 'xy'
           },
           pan: {
             enabled: zoomOption.value === 'pan',
             mode: 'xy'
-          },
+          }
         }
       },
       backgroundColor: 'transparent'
     })
 
     watch(zoomOption, () => {
-      const chartInstance = chartRef.value?.chart;
+      const chartInstance = chartRef.value?.chart
 
       if (chartInstance && chartInstance.options?.plugins?.zoom) {
-        const zoomPlugin = chartInstance.options.plugins.zoom;
-
+        const zoomPlugin = chartInstance.options.plugins.zoom
 
         if (zoomPlugin.zoom && zoomPlugin.zoom.drag && zoomPlugin.pan) {
-          zoomPlugin.zoom.drag.enabled = zoomOption.value === 'drag';
-          zoomPlugin.pan.enabled = zoomOption.value === 'pan';
+          zoomPlugin.zoom.drag.enabled = zoomOption.value === 'drag'
+          zoomPlugin.pan.enabled = zoomOption.value === 'pan'
         }
 
-        chartInstance.update(); 
+        chartInstance.update()
       }
-    });
+    })
 
     const onClick = (event: MouseEvent) => {
       const chartInstance = chartRef.value?.chart
@@ -193,9 +222,10 @@ export default defineComponent({
             text: clickedPoint.text,
             truth: clickedPoint.truth
           })
-          context.emit('pointClick', clickedPoint); // tell parent the point was clicked
+          context.emit('point-click', clickedPoint)
         } else {
           console.log('No point clicked')
+          context.emit('point-click', null)
         }
       } else {
         console.error('Chart instance not found')
@@ -210,52 +240,60 @@ export default defineComponent({
     }
 
     const setZoomOption = (option: string) => {
-      zoomOption.value = option;
+      zoomOption.value = option
     }
 
     const startSelecting = (event: MouseEvent) => {
       const chartInstance = chartRef.value?.chart
       if (chartInstance) {
-        const { offsetX, offsetY } = event;
-        const chartArea = chartInstance.chartArea;
-        const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0;
-        const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0;
-        
-        selectionRect.value = { startX: chartX, startY: chartY, endX: chartX, endY: chartY };
+        const { offsetX, offsetY } = event
+        const chartArea = chartInstance.chartArea
+        const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0
+        const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0
+
+        selectionRect.value = { startX: chartX, startY: chartY, endX: chartX, endY: chartY }
       }
-    };
+    }
 
     const onMouseMove = (event: MouseEvent) => {
       if (selectionRect.value) {
         const chartInstance = chartRef.value?.chart
         if (chartInstance) {
-          const { offsetX, offsetY } = event;
-          const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0;
-          const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0;
+          const { offsetX, offsetY } = event
+          const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0
+          const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0
 
-          selectionRect.value.endX = chartX;
-          selectionRect.value.endY = chartY;
+          selectionRect.value.endX = chartX
+          selectionRect.value.endY = chartY
         }
       }
-    };
+    }
 
     const endSelecting = () => {
       if (selectionRect.value) {
-        const { startX, startY, endX, endY } = selectionRect.value;
-        const selectedPointsArray = scatterData.value.datasets[0].data.filter((point: CustomPoint) => {
-          return (
-            point.x >= Math.min(startX, endX) &&
-            point.x <= Math.max(startX, endX) &&
-            point.y >= Math.min(startY, endY) &&
-            point.y <= Math.max(startY, endY)
-          );
-        });
+        const { startX, startY, endX, endY } = selectionRect.value
+        const selectedPointsArray = scatterData.value.datasets[0].data.filter(
+          (point: CustomPoint) => {
+            return (
+              point.x >= Math.min(startX, endX) &&
+              point.x <= Math.max(startX, endX) &&
+              point.y >= Math.min(startY, endY) &&
+              point.y <= Math.max(startY, endY)
+            )
+          }
+        )
+
+        selectedPoints.value = selectedPointsArray
+        console.log('Selected points:', selectedPointsArray)
+        if (zoomOption.value === '')
+        { 
+          context.emit('points-marked', selectedPoints.value)
+        }
+
         
-        selectedPoints.value = selectedPointsArray;
-        console.log('Selected points:', selectedPointsArray);
-        selectionRect.value = null;
+        selectionRect.value = null
       }
-    };
+    }
 
     return {
       scatterData,
@@ -268,7 +306,8 @@ export default defineComponent({
       setZoomOption,
       startSelecting,
       onMouseMove,
-      endSelecting
+      endSelecting,
+      zoomOption
     }
   }
 })
@@ -282,5 +321,41 @@ export default defineComponent({
   width: 1000px;
   height: 500px;
   position: relative;
+}
+.zoom-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.zoom-btn {
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.zoom-btn.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.reset-zoom-btn {
+  padding: 10px 15px;
+  background-color: #ff6347;
+  border: 1px solid #e53e3e;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+}
+
+.reset-zoom-btn:hover {
+  background-color: #e53e3e;
 }
 </style>

@@ -35,7 +35,6 @@ class QaqcMainModel(IsbitClassifierModel):
         return embeddings
     
     def random_forest_classifier(self, embeddings: torch.Tensor, user_truth: list):
-        print("entered Randomforest")
         max_leaf = 4
         # Initialize the Random Forest Classifier
         clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=max_leaf)
@@ -45,7 +44,6 @@ class QaqcMainModel(IsbitClassifierModel):
 
         all_old_embeddings_lst = embeddings.tolist()
         if len(user_truth) != len(all_old_embeddings_lst):
-            print("user labeling is not equal to the number of embeddings")
             raise Exception("user labeling is not equal to the number of embeddings")
         
         embeddingsWithInputFromUser = []
@@ -130,7 +128,6 @@ class QaqcMainModel(IsbitClassifierModel):
 
     def latter_run(self,df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
         df = self.get_more_user_input(df)
-        print("got more user input")
 
         questions = df["text"].tolist()
         embeddings_tensor = self.get_embeddings(questions) #This is equal to the first embeddings(1.2 in our figure), the alternative

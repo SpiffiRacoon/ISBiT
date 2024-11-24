@@ -29,18 +29,6 @@ export default defineComponent({
     return {
       apiData: { t: String }
     }
-  },
-  methods: {
-    fetchData() {
-      axios
-        .get('http://localhost:8000/V1/data/?collection=swe_qaqc_lib_test')
-        .then((response) => (this.apiData.t = response.data[0].text))
-    }
-  },
-  mounted() {
-    axios
-      .get('http://localhost:8000/V1/data/?collection=swe_qaqc_lib_test')
-      .then((response) => (this.apiData.t = response.data[0].text))
   }
 })
 </script>

@@ -1,121 +1,282 @@
 <template>
   <div class="container">
-    <h1>Dataset Information</h1>
     <div v-if="error" class="error">{{ error }}</div>
-    <!-- Error handling -->
-    <div class="card" v-for="(item, index) in dataList" :key="index">
-      <div class="card-content">
-        <h2>{{ item.dataset }}</h2>
-        <div class="card-details">
-          <div class="label-group">
-            <p><strong>Uppgift:</strong> {{ item.assignment }}</p>
-            <p><strong>Typ av data:</strong> {{ item.datatype }}</p>
+
+    <div class="lists-container">
+      <div class="list-column">
+        <h2 class="list-title">Bearbetade Dataset</h2>
+        <div class="card" v-for="(item, index) in availableDatasets" :key="index">
+          <div class="card-content">
+            <h3 class="card-title">{{ item.dataset }}</h3>
+            <div class="card-details">
+              <div class="label-group">
+                <p class="label">
+                  <i class="icon assignment-icon"></i>
+                  <strong>Uppgift:</strong> {{ item.assignment }}
+                </p>
+                <p class="label">
+                  <i class="icon datatype-icon"></i>
+                  <strong>Typ av data:</strong> {{ item.datatype }}
+                </p>
+              </div>
+
+              <div class="button-container">
+                <button 
+                  @click="redirectToDetails(item.dataset)"
+                  class="btn primary-btn"
+                >
+                  Märk upp data
+                </button>
+                <button
+                  @click="removeDataset(item.dataset)"
+                  class="btn third-btn"
+                >
+                  Ta bort dataset
+                </button>
+              </div>
+            </div>
           </div>
-          <button @click="redirectToDetails(item.dataset)">Uppmärk Data</button>
+        </div>
+      </div>
+
+      <div class="list-column">
+        <h2 class="list-title">Tillgängliga Dataset</h2>
+        <div class="card" v-for="(item, index) in dataList" :key="index">
+          <div class="card-content">
+            <h3 class="card-title">{{ item.dataset }}</h3>
+            <div class="run-container">
+              <div class="select-label">  
+                <p>Välj modell:</p>
+                <select v-model="item.dimRedMethod">
+                  <option value="PCA">PCA</option>
+                  <option value="UMAP">UMAP</option>
+                  <option value="TSNE">TSNE</option>
+                  <option value="COMBO">COMBO</option>
+                </select>
+              </div>
+              <button
+                @click="runModel(item.dataset, index, item.dimRedMethod)"
+                class="btn secondary-btn">
+                Kör modell
+                <span v-if="item.loading" class="loading-indicator">
+                  <i class="loading-spinner"></i>
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
+
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
-import axios from 'axios'
+import { defineComponent, ref, onMounted } from 'vue';
+import axios from 'axios';
+
 export default defineComponent({
   name: 'DataDisplay',
   setup() {
-    const dataList = ref<any[]>([])
-    const error = ref<string | null>(null)
+    const dataList = ref<any[]>([]);
+    const availableDatasets = ref<any[]>([]);
+    const error = ref<string | null>(null);
+    const loading = ref<boolean>(false); 
+
     const fetchData = async () => {
       try {
-        //TODO: add base url to const file
-        const response = await axios.get('http://localhost:8000/V1/dataset')
-        console.log('Data fetched:', response.data)
-        dataList.value = response.data.dataList
+        const filesResponse = await axios.get('http://localhost:8000/V1/dataset/files');
+        dataList.value = filesResponse.data.dataList;
+
+        const availableDataResponse = await axios.get('http://localhost:8000/V1/dataset');
+        availableDatasets.value = availableDataResponse.data.dataList;
+
       } catch (err) {
-        error.value = 'Error fetching data'
-        console.error(err)
+        error.value = 'Error fetching data';
+        console.error(err);
       }
-    }
-    onMounted(fetchData)
+    };
+
     return {
       dataList,
-      error
-    }
+      availableDatasets,
+      error,
+      fetchData,
+      loading 
+    };
   },
   methods: {
     redirectToDetails(dataset: string) {
-      this.$router.push({ path: '/label', query: { dataset: dataset } })
+      this.$router.push({ path: '/label', query: { dataset: dataset } });
+    },
+    async runModel(file: string, index: number, dimRedMethod: string) {
+      try {
+        this.dataList[index].loading = true;
+        //TOOD: fix model name
+        await axios.post('http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=' + file + '&dim_red_method=' + dimRedMethod);
+        console.log(`Model run initiated for dataset ${file}`);
+        this.startPolling(file, index); 
+      } catch (err) {
+        this.error = 'Error running model';
+        console.error(err);
+      } 
+    },
+    async startPolling(file: string, index: number) {
+      const interval = setInterval(async () => {
+        const status = await this.getStatus(file);
+        if (status === "Not running") {
+          console.log('Model run completed');
+          this.dataList[index].loading = false; 
+
+          clearInterval(interval);
+          this.fetchData(); 
+        }
+      }, 500); 
+    },
+    async getStatus(file: string) {
+      try {
+        const response = await axios.get(`http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=${file}`);
+        return response.data.status;
+      } catch (err) {
+        console.error('Error fetching status', err);
+        return null; 
+      }
+    },
+    async removeDataset(dataset: string) {
+      try {
+        await axios.delete('http://localhost:8000/V1/dataset/?dataset=' + dataset);
+        console.log(`Dataset ${dataset} removed`);
+        this.fetchData();
+      } catch (err) {
+        this.error = 'Error removing dataset';
+        console.error(err);
+      }
     }
+  },
+  mounted() {
+    this.fetchData();
   }
-})
+});
 </script>
+
+
 
 <style scoped>
 .container {
-  font-family: Arial, sans-serif;
   padding: 20px;
-  max-width: 1100px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
 }
-h1 {
-  text-align: center;
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 30px;
+
+.header {
+  font-size: 2em;
+  margin-bottom: 20px;
 }
-.card {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 0;
-  margin: 20px 0;
-  padding: 25px 40px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-  width: 100%;
-}
-.card:hover {
-  transform: scale(1.02);
-}
-.card-content {
+
+.lists-container {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 30px;
+  gap: 40px;
+  align-items: flex-start; 
 }
-.card h2 {
-  margin: 0;
-  font-size: 22px;
-  color: #333;
-  flex-shrink: 0;
-}
-.card-details {
+
+.list-column {
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 0; 
 }
-.label-group {
+
+
+.card {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.3em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.run-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-.label-group p {
-  margin: 0;
-  font-size: 16px;
-  color: #666;
-  white-space: nowrap;
+
+.select-label {
+  margin-bottom: 10px;
 }
-@media (max-width: 768px) {
-  .card-content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .card-details {
-    flex-direction: column;
-  }
-  .card h2 {
-    font-size: 18px;
-  }
+
+.primary-btn,
+.secondary-btn,
+.third-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.secondary-btn {
+  background-color: #e67e22;
+  color: #fff;
+}
+
+.third-btn {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.loading-indicator {
+  margin-left: 5px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #3498db;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

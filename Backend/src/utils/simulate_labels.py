@@ -26,26 +26,3 @@ def simulate_user_input(dataset_name: str, fraction:float) -> pd.DataFrame:
     print("db_nodes after modification:", df)
 
     return df
-
-
-
-# newNodes = []
-# for item in db_nodes: 
-#     print("node item:", item)
-    
-#     if item.input_label == None and random.random() <= fraction:
-#         item.input_label = item.truth
-#         newNodes.append(item)
-#     else:
-#         newNodes.append(item)
-
-# print("oldNodes:", db_nodes)
-# print("newNodes:", newNodes)
-
-    # modifies the main DataFrame df with the new input_label already.
-    # df.loc it the thing that updates df directly and contains all nodes
-    # Convert modified DataFrame back to a list of Node objects
-    # updated_nodes = [Node(**row) for row in df.to_dict(orient="records")]
-
-    # Debugging step: Check the structure of the incoming data
-    # print("db_nodes sample:", db_nodes[:5])  # Print the first few nodes

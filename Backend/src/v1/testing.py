@@ -137,10 +137,8 @@ def simulate_labels_route(dataset_name: str, fraction: float = 0.1):
     try:
         # Simulate user input and get the updated DataFrame
         updated_df = simulate_user_input(dataset_name=dataset_name, fraction=fraction)
-        
         # Convert the updated DataFrame to a list of Node objects
         list_of_nodes = [Node(**one_node) for one_node in updated_df.to_dict("records")]
-        
         # Persist the updated nodes in the database
         add_versioned_nodes(nodes=list_of_nodes, dataset_name=dataset_name)
         

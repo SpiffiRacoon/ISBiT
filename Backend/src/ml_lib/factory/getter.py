@@ -1,14 +1,30 @@
 # own
 from ..shared import IsbitClassifierModel
-from ..sub_models import QaqcMainModel
+
+from importlib import import_module
+from inspect import getmembers, isclass
 
 
 def get_instance(model_name: str) -> IsbitClassifierModel:
     """
-    Factory to get a ML instance of the requested model.
+    Dynamic import to create a instance of a model class.
     """
-    match model_name:
-        case "qaqc_main":
-            return QaqcMainModel()
-        case _:
-            raise Exception("Model not found")
+
+    ModelClass = _get_class_instance(model_name)()
+
+    return ModelClass
+
+
+def _get_class_instance(class_name: str):
+    module_path = "src.ml_lib.sub_models"
+
+    module = import_module(module_path)
+
+    try:
+        return getattr(module, class_name)
+    except AttributeError:
+        for name, obj in getmembers(module, isclass):
+            if obj.__module__ == module_path and name == class_name:
+                return obj
+
+    raise AttributeError(f"Class '{class_name}' not found in module '{module_path}'")

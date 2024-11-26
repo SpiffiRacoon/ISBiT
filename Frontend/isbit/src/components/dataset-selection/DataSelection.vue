@@ -21,16 +21,10 @@
               </div>
 
               <div class="button-container">
-                <button 
-                  @click="redirectToDetails(item.dataset)"
-                  class="btn primary-btn"
-                >
+                <button @click="redirectToDetails(item.dataset)" class="btn primary-btn">
                   Märk upp data
                 </button>
-                <button
-                  @click="removeDataset(item.dataset)"
-                  class="btn third-btn"
-                >
+                <button @click="removeDataset(item.dataset)" class="btn third-btn">
                   Ta bort dataset
                 </button>
               </div>
@@ -45,7 +39,7 @@
           <div class="card-content">
             <h3 class="card-title">{{ item.dataset }}</h3>
             <div class="run-container">
-              <div class="select-label">  
+              <div class="select-label">
                 <p>Välj modell:</p>
                 <select v-model="item.dimRedMethod">
                   <option value="PCA">PCA</option>
@@ -56,7 +50,8 @@
               </div>
               <button
                 @click="runModel(item.dataset, index, item.dimRedMethod)"
-                class="btn secondary-btn">
+                class="btn secondary-btn"
+              >
                 Kör modell
                 <span v-if="item.loading" class="loading-indicator">
                   <i class="loading-spinner"></i>
@@ -70,96 +65,99 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
-import axios from 'axios';
+import { defineComponent, ref, onMounted } from 'vue'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'DataDisplay',
   setup() {
-    const dataList = ref<any[]>([]);
-    const availableDatasets = ref<any[]>([]);
-    const error = ref<string | null>(null);
-    const loading = ref<boolean>(false); 
+    const dataList = ref<any[]>([])
+    const availableDatasets = ref<any[]>([])
+    const error = ref<string | null>(null)
+    const loading = ref<boolean>(false)
 
     const fetchData = async () => {
       try {
-        const filesResponse = await axios.get('http://localhost:8000/V1/dataset/files');
-        dataList.value = filesResponse.data.dataList;
+        const filesResponse = await axios.get('http://localhost:8000/V1/dataset/files')
+        dataList.value = filesResponse.data.dataList
 
-        const availableDataResponse = await axios.get('http://localhost:8000/V1/dataset');
-        availableDatasets.value = availableDataResponse.data.dataList;
-
+        const availableDataResponse = await axios.get('http://localhost:8000/V1/dataset')
+        availableDatasets.value = availableDataResponse.data.dataList
       } catch (err) {
-        error.value = 'Error fetching data';
-        console.error(err);
+        error.value = 'Error fetching data'
+        console.error(err)
       }
-    };
+    }
 
     return {
       dataList,
       availableDatasets,
       error,
       fetchData,
-      loading 
-    };
+      loading
+    }
   },
   methods: {
     redirectToDetails(dataset: string) {
-      this.$router.push({ path: '/label', query: { dataset: dataset } });
+      this.$router.push({ path: '/label', query: { dataset: dataset } })
     },
     async runModel(file: string, index: number, dimRedMethod: string) {
       try {
-        this.dataList[index].loading = true;
+        this.dataList[index].loading = true
         //TOOD: fix model name
-        await axios.post('http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=' + file + '&dim_red_method=' + dimRedMethod);
-        console.log(`Model run initiated for dataset ${file}`);
-        this.startPolling(file, index); 
+        await axios.post(
+          'http://localhost:8000/V1/run_ml/?model_name=QaqcMainModel&file=' +
+            file +
+            '&dim_red_method=' +
+            dimRedMethod
+        )
+        console.log(`Model run initiated for dataset ${file}`)
+        this.startPolling(file, index)
       } catch (err) {
-        this.error = 'Error running model';
-        console.error(err);
-      } 
+        this.error = 'Error running model'
+        console.error(err)
+      }
     },
     async startPolling(file: string, index: number) {
       const interval = setInterval(async () => {
-        const status = await this.getStatus(file);
-        if (status === "Not running") {
-          console.log('Model run completed');
-          this.dataList[index].loading = false; 
+        const status = await this.getStatus(file)
+        if (status === 'Not running') {
+          console.log('Model run completed')
+          this.dataList[index].loading = false
 
-          clearInterval(interval);
-          this.fetchData(); 
+          clearInterval(interval)
+          this.fetchData()
         }
-      }, 500); 
+      }, 500)
     },
     async getStatus(file: string) {
       try {
-        const response = await axios.get(`http://localhost:8000/V1/run_ml/?model_name=qaqc_main&file=${file}`);
-        return response.data.status;
+        const response = await axios.get(
+          `http://localhost:8000/V1/run_ml/?model_name=QaqcMainModel&file=${file}`
+        )
+        return response.data.status
       } catch (err) {
-        console.error('Error fetching status', err);
-        return null; 
+        console.error('Error fetching status', err)
+        return null
       }
     },
     async removeDataset(dataset: string) {
       try {
-        await axios.delete('http://localhost:8000/V1/dataset/?dataset=' + dataset);
-        console.log(`Dataset ${dataset} removed`);
-        this.fetchData();
+        await axios.delete('http://localhost:8000/V1/dataset/?dataset=' + dataset)
+        console.log(`Dataset ${dataset} removed`)
+        this.fetchData()
       } catch (err) {
-        this.error = 'Error removing dataset';
-        console.error(err);
+        this.error = 'Error removing dataset'
+        console.error(err)
       }
     }
   },
   mounted() {
-    this.fetchData();
+    this.fetchData()
   }
-});
+})
 </script>
-
-
 
 <style scoped>
 .container {
@@ -175,7 +173,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   gap: 40px;
-  align-items: flex-start; 
+  align-items: flex-start;
 }
 
 .list-column {
@@ -184,9 +182,8 @@ export default defineComponent({
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 0; 
+  margin-top: 0;
 }
-
 
 .card {
   background: #fff;
@@ -276,7 +273,11 @@ export default defineComponent({
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

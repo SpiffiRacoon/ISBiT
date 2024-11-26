@@ -115,6 +115,8 @@ class QaqcMainModel(IsbitClassifierModel):
         combined_df = pd.concat([df, point_data_df], axis=1)
         return combined_df
 
+    #Until the user labeling is implemented, we will generate more input_label entries for the dataframe using this hard-coded function
+    #without an endpoint
     def get_more_user_input(self, df: pd.DataFrame):
         """
         Generates more input_label entries for the dataframe
@@ -122,7 +124,7 @@ class QaqcMainModel(IsbitClassifierModel):
         for i in range(len(df["input_label"])):
                     if random.randint(1,100) < 15:
                             if df["input_label"][i] == None:
-                                    df.loc[i,"input_label"] = df.loc[i,"truth"] 
+                                df.loc[i,"input_label"] = df.loc[i,"truth"] 
                     pass
         return df
 

@@ -9,7 +9,10 @@ from .dataset import upload_dataset, get_all_processed_datasets
 from .data import get_all_labels, get_all_nodes
 from .run_ml import run, get_status
 from ..utils import simulate_user_input  # import the function to simulate labels
-from ..db.setters import add_versioned_nodes
+from ..db import (
+    add_versioned_nodes,
+    get_nodes_from_latest_version
+    )
 from ..types import Node
 
 # pip
@@ -145,9 +148,10 @@ def simulate_labels_route(dataset_name: str, fraction: float = 0.1):
     """
     Simulate labels for a dataset and return the modified DataFrame as JSON.
     """
+    df = get_nodes_from_latest_version(dataset_name=dataset_name)
     try:
         # Simulate user input and get the updated DataFrame
-        updated_df = simulate_user_input(dataset_name=dataset_name, fraction=fraction)
+        updated_df = simulate_user_input(df, dataset_name=dataset_name, fraction=fraction)
         # Convert the updated DataFrame to a list of Node objects
         list_of_nodes = [Node(**one_node) for one_node in updated_df.to_dict("records")]
         # Persist the updated nodes in the database

@@ -1,10 +1,10 @@
 #own
-from ..db.getters import get_nodes_from_latest_version
+from ..db import get_nodes_from_latest_version
 from ..types import Node
 
 #pip
 import pandas as pd
-import random
+
 
 def simulate_user_input(dataset_name: str, fraction:float) -> pd.DataFrame:
     """

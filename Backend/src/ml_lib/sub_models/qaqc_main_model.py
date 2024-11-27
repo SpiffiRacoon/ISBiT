@@ -115,22 +115,9 @@ class QaqcMainModel(IsbitClassifierModel):
         combined_df = pd.concat([df, point_data_df], axis=1)
         return combined_df
 
-    #Until the user labeling is implemented, we will generate more input_label entries for the dataframe using this hard-coded function
-    #without an endpoint
-    def get_more_user_input(self, df: pd.DataFrame):
-        """
-        Generates more input_label entries for the dataframe
-        """
-        for i in range(len(df["input_label"])):
-                    if random.randint(1,100) < 15:
-                            if df["input_label"][i] == None:
-                                df.loc[i,"input_label"] = df.loc[i,"truth"] 
-                    pass
-        return df
 
     def latter_run(self,df: pd.DataFrame, dim: str | None) -> pd.DataFrame:
-        df = self.get_more_user_input(df)
-
+       
         questions = df["text"].tolist()
         embeddings_tensor = self.get_embeddings(questions) #This is equal to the first embeddings(1.2 in our figure), the alternative
 

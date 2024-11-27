@@ -1,5 +1,5 @@
 #own
-from Backend.src.db.getters import get_nodes_from_latest_version
+from ..db.getters import get_nodes_from_latest_version
 from ..types import Node
 
 #pip

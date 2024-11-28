@@ -1,0 +1,82 @@
+<template>
+  <div id="label-text">
+    <div class="column">
+      <h5>Omarkerade punkter</h5>
+      <div v-for="(point, index) in unmarkedPoints" :key="index" class="point-item">
+        <p>{{ point.text }}</p>
+        <button @click="removePoint(point.id)">Ta bort</button>
+      </div>
+    </div>
+    <div class="column">
+      <h5>Markerade Punkter</h5>
+      <div v-for="(point, index) in markedPoints" :key="index" class="point-item">
+        <p>{{ point.text }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, type PropType } from 'vue'
+import type { CustomPoint } from './ClusterPlot.vue'
+
+export default defineComponent({
+  props: {
+    points: {
+      type: Array as PropType<CustomPoint[]>,
+      required: true
+    }
+  },
+  computed: {
+    unmarkedPoints() {
+      return this.points.filter((point) => point.truth === 'Omarkerad')
+    },
+    markedPoints() {
+      return this.points.filter((point) => point.truth !== 'Omarkerad')
+    }
+  },
+  methods: {
+    removePoint(id: string) {
+      this.$emit('remove-point', id)
+    }
+  }
+})
+</script>
+
+<style scoped>
+#label-text {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+}
+
+.point-item {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+.point-item p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.point-item button {
+  margin-top: 5px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.point-item button:hover {
+  background-color: #c0392b;
+}
+</style>

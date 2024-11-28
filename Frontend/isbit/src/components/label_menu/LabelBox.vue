@@ -14,15 +14,13 @@
     <button type="button" id="save-data" class="isbit-button highlight-color" @click="save">
       Spara datapunkt
     </button>
-    <p>
-      {{ selectedItem }}
-    </p>
   </div>
 </template>
 
 <script lang="ts">
 import axios from 'axios'
 import { defineComponent, type PropType } from 'vue'
+
 export default defineComponent({
   props: {
     alternatives: Array as PropType<string[]>
@@ -55,16 +53,14 @@ export default defineComponent({
   border-style: solid;
   border-width: thin;
   display: block;
-  width: 90%;
+  width: 103%;
+  margin-bottom: 10px;
 }
 
 .label-box {
   display: block;
   flex-direction: column;
   align-items: center;
-  border: 2px solid #ccc; /* Set the border */
-  border-radius: 4px; /* Rounded corners */
-  background-color: white;
 }
 
 .outer-box {

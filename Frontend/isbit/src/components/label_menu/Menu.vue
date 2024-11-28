@@ -16,9 +16,12 @@ import ClusterPlot from './ClusterPlot.vue'
     </div>
     <div id="text-and-labels">
       <h2>Märk Upp Datapunkt</h2>
-      <TextBox v-if="activePoint" :text="activePoint.text" />
-      <MultiplePointText v-else :points="activePoints" />
-
+      <MultiplePointText
+        @remove-point="handleRemovePoint"
+        v-if="multipleMarking"
+        :points="activePoints"
+      />
+      <TextBox v-else :text="activePoint.text" />
 
       <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
     </div>
@@ -37,15 +40,27 @@ export default defineComponent({
       apiData: { t: String },
       activePoint: { text: 'Välj en punkt i plotten.' } as CustomPoint,
       activePoints: [] as CustomPoint[],
+      multipleMarking: false
     }
   },
   methods: {
     receivePoint(point: CustomPoint) {
+      if (point == null) {
+        return
+      }
       this.activePoint = point
+      this.multipleMarking = false
     },
     receivePoints(points: CustomPoint[]) {
       const pointsArray = points
-      this.activePoints = pointsArray
+      if (pointsArray.length >= 1) {
+        this.activePoints = points
+        this.multipleMarking = true
+      }
+    },
+    handleRemovePoint(id: string) {
+      console.log('remove point with id: ', id)
+      this.activePoints = this.activePoints.filter((point) => point.id !== id)
     }
   }
 })

@@ -46,6 +46,7 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+import { createIncrementalCompilerHost } from 'typescript'
 
 ChartJS.register(...registerables)
 ChartJS.register(zoomPlugin)
@@ -87,29 +88,65 @@ export default defineComponent({
     async function fetchData() {
       try {
         const response = await axios.get('http://localhost:8000/V1/data/?collection=' + dataset)
+        console.log('Response:', response.data)
         const incomingData = response.data
 
-        const points: CustomPoint[] = incomingData.map((item: any) => ({
-          x: item.x,
-          y: item.y,
-          text: item.text,
-          id: item.id,
-          truth: item.truth
-        }))
+        // simulating unlabeled data
+        incomingData[0].truth = ''
+        incomingData[1].truth = ''
+        incomingData[2].truth = ''
+        incomingData[3].truth = ''
+        incomingData[4].truth = ''
+        incomingData[5].truth = ''
+        incomingData[6].truth = ''
+        incomingData[7].truth = ''
 
-        const newDataset = {
-          label: 'Data Points',
-          data: points,
-          backgroundColor: 'black',
-          showLine: false,
-          pointRadius: 7
-        }
+        const categories: { [key: string]: CustomPoint[] } = {}
+        incomingData.forEach((item: any) => {
+          if (item.truth == '') {
+            item.truth = 'Omarkerad'
+          }
+          const point: CustomPoint = {
+            x: item.x,
+            y: item.y,
+            text: item.text,
+            id: item.id,
+            truth: item.truth
+          }
 
-        scatterData.value = {
-          datasets: [newDataset]
-        }
+          if (!categories[item.truth]) {
+            categories[item.truth] = []
+          }
+          categories[item.truth].push(point)
+        })
+
+        const newDatasets = Object.entries(categories).map(
+          ([clusterIndex, points], index: number) => {
+            let color: string
+
+            if (clusterIndex === 'Omarkerad') {
+              color = 'black'
+            } else {
+              const getDistinctColor = (index: number) => {
+                const hue = (index * 360) / (Object.entries(categories).length - 1)
+                return `hsl(${hue}, 70%, 50%)`
+              }
+              color = getDistinctColor(index)
+            }
+
+            return {
+              label: clusterIndex,
+              data: points,
+              backgroundColor: color,
+              showLine: false,
+              pointRadius: 8
+            }
+          }
+        )
+
+        scatterData.value = { datasets: newDatasets }
       } catch (err) {
-        console.error(err)
+        console.error('Error fetching data:', err)
       }
     }
 
@@ -157,7 +194,10 @@ export default defineComponent({
         tooltip: {
           callbacks: {
             label: (context) => {
-              const point = scatterData.value.datasets[0].data[context.dataIndex] as CustomPoint
+              const datasetIndex = context.datasetIndex
+              const dataIndex = context.dataIndex
+              const point = scatterData.value.datasets[datasetIndex].data[dataIndex] as CustomPoint
+
               return `Text: ${point.text}, Truth: ${point.truth}`
             }
           }
@@ -213,7 +253,10 @@ export default defineComponent({
         if (points && points.length) {
           const point = points[0]
           const dataIndex = point.index
-          const clickedPoint = scatterData.value.datasets[0].data[dataIndex] as CustomPoint
+          const datasetIndex = point.datasetIndex
+          const clickedPoint = scatterData.value.datasets[datasetIndex].data[
+            dataIndex
+          ] as CustomPoint
 
           console.log('Clicked point:', {
             id: clickedPoint.id,
@@ -272,25 +315,23 @@ export default defineComponent({
     const endSelecting = () => {
       if (selectionRect.value) {
         const { startX, startY, endX, endY } = selectionRect.value
-        const selectedPointsArray = scatterData.value.datasets[0].data.filter(
-          (point: CustomPoint) => {
+        const selectedPointsArray = scatterData.value.datasets.flatMap((dataset) =>
+          dataset.data.filter((point: CustomPoint) => {
             return (
               point.x >= Math.min(startX, endX) &&
               point.x <= Math.max(startX, endX) &&
               point.y >= Math.min(startY, endY) &&
               point.y <= Math.max(startY, endY)
             )
-          }
+          })
         )
 
         selectedPoints.value = selectedPointsArray
         console.log('Selected points:', selectedPointsArray)
-        if (zoomOption.value === '')
-        { 
+        if (zoomOption.value === '') {
           context.emit('points-marked', selectedPoints.value)
         }
 
-        
         selectionRect.value = null
       }
     }

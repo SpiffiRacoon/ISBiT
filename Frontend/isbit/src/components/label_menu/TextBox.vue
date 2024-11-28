@@ -16,16 +16,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  #label-text {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .point-item {
-    padding: 5px 10px;
-    border: 1px solid #ccc; 
-    border-radius: 4px;
-    background-color: #f9f9f9; 
-  }
+#label-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.point-item {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
 </style>

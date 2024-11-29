@@ -1,10 +1,10 @@
 import pandas as pd
 import re
 import os
-import torch
 import random
 import numpy as np
 
+from torch import Tensor
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 from sklearn.ensemble import RandomForestClassifier
@@ -26,7 +26,7 @@ class QaqcMainModel(IsbitClassifierModel):
 
         return df
 
-    def get_embeddings(self,text_lst: list) -> torch.Tensor:
+    def get_embeddings(self,text_lst: list) -> Tensor:
         """
         Function to get the embeddings from the sentences
         """
@@ -34,7 +34,7 @@ class QaqcMainModel(IsbitClassifierModel):
         embeddings = model.encode(text_lst, convert_to_tensor=True)
         return embeddings
     
-    def random_forest_classifier(self, embeddings: torch.Tensor, user_truth: list):
+    def random_forest_classifier(self, embeddings: Tensor, user_truth: list):
         max_leaf = 4
         # Initialize the Random Forest Classifier
         clf = RandomForestClassifier(n_estimators=384, random_state=42, max_leaf_nodes=max_leaf)
@@ -69,7 +69,7 @@ class QaqcMainModel(IsbitClassifierModel):
 
         return (label_pred, new_embeddings)
     
-    def dim_red(self, embeddings: torch.Tensor, dim: str | None) -> pd.DataFrame:
+    def dim_red(self, embeddings: Tensor, dim: str | None) -> pd.DataFrame:
         """
         Reduces embeddings to 2 dimensions using PCA, TSNE, or UMAP and
         returns a dataframe with the reduced embeddings.
@@ -129,7 +129,8 @@ class QaqcMainModel(IsbitClassifierModel):
             predictedLabels, new_embeddings = self.random_forest_classifier(embeddings_tensor, user_truth)
         except Exception as e:
             print(e)
-            #If something goes wrong while calling randomforest: print(e)
+            raise(e)
+           
         
         predLabels_df = pd.DataFrame(predictedLabels.tolist(), columns=["predicted_labels"])
         

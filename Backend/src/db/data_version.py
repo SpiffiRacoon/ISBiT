@@ -104,7 +104,6 @@ class DataVersion:
 
         instance = self
         if copy:
-            print("In copy")
             instance = self.copy()
 
         version_exponent = get_version_name_exponent()

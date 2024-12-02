@@ -79,7 +79,6 @@ def label_one_node(node_id: str, label: str, dataset_name: str, ConnectionClass=
     v_new_obj = v_obj.upgrade(label=True, copy=True)
 
     with ConnectionClass() as (_, db):
-        print("In connectionClass")
         if v_new_obj.version > v_obj.version:
             query = {"about.version": v_obj.version}
             dataset = db[v_obj.dataset_name].find_one(query)

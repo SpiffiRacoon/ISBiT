@@ -67,9 +67,7 @@ def add_versioned_nodes(nodes: list[Node], dataset_name: str, ConnectionClass=Mo
 
 
 @validate_endpoint_args
-def label_one_node(
-    node_id: str, label: str, dataset_name: str, version_name: VersionName, ConnectionClass=MongoConnection
-) -> None:
+def label_one_node(node_id: str, label: str, dataset_name: str, ConnectionClass=MongoConnection) -> None:
     """
     Label one node.
 
@@ -81,12 +79,21 @@ def label_one_node(
     v_new_obj = v_obj.upgrade(label=True, copy=True)
 
     with ConnectionClass() as (_, db):
-        if v_new_obj not in db.list_collection_names():
-            db[v_new_obj.collection_name] = db[v_obj.version_name].copy()
+        print("In connectionClass")
+        if v_new_obj.version > v_obj.version:
+            query = {"about.version": v_obj.version}
+            dataset = db[v_obj.dataset_name].find_one(query)
+            new_dataset = dict(dataset)
+            new_dataset["about"]["version"] = v_new_obj.version
+            new_dataset.pop("_id")
 
-        query = {"_id": node_id}
-        update = {"$set": {"data.input_label": label}}
-        db[v_new_obj.collection_name].update_one(query, update)
+            db[v_new_obj.dataset_name].insert_one(new_dataset)
+
+        db[v_new_obj.dataset_name].update_one(
+            {"about.version": v_new_obj.version},
+            {"$set": {"data.$[elem].input_label": label}},
+            array_filters=[{"elem.id": node_id}],
+        )
 
 
 @validate_endpoint_args

@@ -11,7 +11,8 @@ from .run_ml import run, get_status
 from ..utils import simulate_user_input  # import the function to simulate labels
 from ..db import (
     add_versioned_nodes,
-    get_nodes_from_latest_version
+    get_nodes_from_latest_version,
+    label_one_node
     )
 from ..types import Node
 
@@ -153,9 +154,12 @@ def simulate_labels_route(dataset_name: str, fraction: float = 0.1):
         # Simulate user input and get the updated DataFrame
         updated_df = simulate_user_input(df, dataset_name=dataset_name, fraction=fraction)
         # Convert the updated DataFrame to a list of Node objects
-        list_of_nodes = [Node(**one_node) for one_node in updated_df.to_dict("records")]
+        list_of_nodes: list[Node] = [Node(**one_node) for one_node in updated_df.to_dict("records")]
         # Persist the updated nodes in the database
-        add_versioned_nodes(nodes=list_of_nodes, dataset_name=dataset_name)
+        # add_versioned_nodes(nodes=list_of_nodes, dataset_name=dataset_name)
+        for node in list_of_nodes:
+            label_one_node(node_id=node.id)
+
 
         return {"message": "Labels simulated and updated in the database"}
     except Exception as e:

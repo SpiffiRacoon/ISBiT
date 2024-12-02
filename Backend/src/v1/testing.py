@@ -1,6 +1,6 @@
 # own
 from datetime import time
-from ..types import TestingResponse, DatasetsResponse
+from ..types import TestingResponse
 from ..utils import (
     download_qaqc_source_dataset as util_download_qaqc,
     get_qaqc_info_dict as util_get_info_dict,
@@ -9,12 +9,11 @@ from .dataset import upload_dataset, get_all_processed_datasets
 from .data import get_all_labels, get_all_nodes
 from .run_ml import run, get_status
 from ..utils import simulate_user_input  # import the function to simulate labels
-from ..db import add_versioned_nodes, get_nodes_from_latest_version, label_one_node
+from ..db import get_nodes_from_latest_version, label_one_node
 from ..types import Node
 
 # pip
 from fastapi import APIRouter, HTTPException, UploadFile
-from fastapi.testclient import TestClient
 
 import asyncio
 import time

@@ -37,19 +37,18 @@
 
   <button @click="resetZoom" class="reset-zoom-btn">Återställ zoom</button>
 </template>
+
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch } from 'vue'
-import type { Ref } from 'vue'
+import type { Ref, PropType } from 'vue'
 import { Chart as ChartJS, registerables } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import type { ChartData, ChartOptions } from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import { createIncrementalCompilerHost } from 'typescript'
 
-ChartJS.register(...registerables)
-ChartJS.register(zoomPlugin)
+ChartJS.register(...registerables, zoomPlugin)
 
 interface CustomPoint {
   x: number
@@ -57,105 +56,42 @@ interface CustomPoint {
   text: string
   id: string
   truth: string
+  borderColor?: string
+  borderWidth?: number
 }
-export type { CustomPoint }
 
 export default defineComponent({
   components: {
     ScatterChart: Scatter
   },
-  setup(prop, context) {
+  props: {
+    activePoint: {
+      type: Object as PropType<CustomPoint | null>,
+      default: null
+    },
+    activePoints: {
+      type: Array as PropType<CustomPoint[]>,
+      default: () => []
+    }
+  },
+  setup(props, { emit }) {
     const route = useRoute()
     const dataset = route.query.dataset as string
     const chartRef: Ref<{ chart: ChartJS } | null> = ref(null)
     const error: Ref<string | null> = ref(null)
 
-    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref<
-      ChartData<'scatter', CustomPoint[]>
-    >({
-      datasets: []
-    })
-
-    var zoomOption = ref('pan')
+    const zoomOption = ref('pan')
     const selectionRect = ref<{
       startX: number
       startY: number
       endX: number
       endY: number
     } | null>(null)
+
     const selectedPoints: Ref<CustomPoint[]> = ref([])
 
-    async function fetchData() {
-      try {
-        const response = await axios.get('http://localhost:8000/V1/data/?collection=' + dataset)
-        console.log('Response:', response.data)
-        const incomingData = response.data
-
-        // simulating unlabeled data
-        incomingData[0].truth = ''
-        incomingData[1].truth = ''
-        incomingData[2].truth = ''
-        incomingData[3].truth = ''
-        incomingData[4].truth = ''
-        incomingData[5].truth = ''
-        incomingData[6].truth = ''
-        incomingData[7].truth = ''
-
-        const categories: { [key: string]: CustomPoint[] } = {}
-        incomingData.forEach((item: any) => {
-          if (item.truth == '') {
-            item.truth = 'Omarkerad'
-          }
-          const point: CustomPoint = {
-            x: item.x,
-            y: item.y,
-            text: item.text,
-            id: item.id,
-            truth: item.truth
-          }
-
-          if (!categories[item.truth]) {
-            categories[item.truth] = []
-          }
-          categories[item.truth].push(point)
-        })
-
-        const newDatasets = Object.entries(categories).map(
-          ([clusterIndex, points], index: number) => {
-            let color: string
-
-            if (clusterIndex === 'Omarkerad') {
-              color = 'black'
-            } else {
-              const getDistinctColor = (index: number) => {
-                const hue = (index * 360) / (Object.entries(categories).length - 1)
-                return `hsl(${hue}, 70%, 50%)`
-              }
-              color = getDistinctColor(index)
-            }
-
-            return {
-              label: clusterIndex,
-              data: points,
-              backgroundColor: color,
-              showLine: false,
-              pointRadius: 8
-            }
-          }
-        )
-
-        scatterData.value = { datasets: newDatasets }
-      } catch (err) {
-        console.error('Error fetching data:', err)
-      }
-    }
-
-    onMounted(() => {
-      if (dataset) {
-        fetchData()
-      } else {
-        error.value = 'No dataset provided in the query'
-      }
+    const scatterData: Ref<ChartData<'scatter', CustomPoint[]>> = ref({
+      datasets: []
     })
 
     const chartOptions: Ref<ChartOptions<'scatter'>> = ref({
@@ -163,27 +99,15 @@ export default defineComponent({
         x: {
           type: 'linear',
           position: 'bottom',
-          grid: {
-            display: false
-          },
-          ticks: {
-            display: false
-          },
-          border: {
-            display: false
-          }
+          grid: { display: false },
+          ticks: { display: false },
+          border: { display: false }
         },
         y: {
           beginAtZero: true,
-          grid: {
-            display: false
-          },
-          ticks: {
-            display: false
-          },
-          border: {
-            display: false
-          }
+          grid: { display: false },
+          ticks: { display: false },
+          border: { display: false }
         }
       },
       interaction: {
@@ -204,15 +128,9 @@ export default defineComponent({
         },
         zoom: {
           zoom: {
-            wheel: {
-              enabled: true
-            },
-            drag: {
-              enabled: zoomOption.value === 'drag'
-            },
-            pinch: {
-              enabled: true
-            },
+            wheel: { enabled: true },
+            drag: { enabled: zoomOption.value === 'drag' },
+            pinch: { enabled: true },
             mode: 'xy'
           },
           pan: {
@@ -224,13 +142,90 @@ export default defineComponent({
       backgroundColor: 'transparent'
     })
 
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:8000/V1/data/?collection=${dataset}`)
+        const incomingData = response.data
+
+        // Simulating unlabeled data
+        incomingData.forEach((item: any, index: number) => {
+          if (index < 8) {
+            item.truth = ''
+          }
+        })
+
+        const categories: { [key: string]: CustomPoint[] } = {}
+
+        incomingData.forEach((item: any) => {
+          if (item.truth === '') {
+            item.truth = 'Omarkerad'
+          }
+          const point: CustomPoint = {
+            x: item.x,
+            y: item.y,
+            text: item.text,
+            id: item.id,
+            truth: item.truth
+          }
+
+          if (!categories[item.truth]) {
+            categories[item.truth] = []
+          }
+          categories[item.truth].push(point)
+        })
+
+        const newDatasets = Object.entries(categories).map(([clusterIndex, points], index) => {
+          let color: string
+
+          if (clusterIndex === 'Omarkerad') {
+            color = 'black'
+          } else {
+            const getDistinctColor = (index: number) => {
+              const hue = (index * 360) / (Object.entries(categories).length - 1)
+              return `hsl(${hue}, 70%, 50%)`
+            }
+            color = getDistinctColor(index)
+          }
+
+          return {
+            label: clusterIndex,
+            data: points,
+            backgroundColor: color,
+            showLine: false,
+            pointRadius: 8,
+            pointHoverRadius: 8,
+            pointBorderColor: (context: any) => {
+              const dataPoint = context.raw as CustomPoint
+              return dataPoint.borderColor || 'transparent'
+            },
+            pointBorderWidth: (context: any) => {
+              const dataPoint = context.raw as CustomPoint
+              return dataPoint.borderWidth || 0
+            }
+          }
+        })
+
+        scatterData.value = { datasets: newDatasets }
+      } catch (err) {
+        console.error('Error fetching data:', err)
+      }
+    }
+
+    onMounted(() => {
+      if (dataset) {
+        fetchData()
+      } else {
+        error.value = 'No dataset provided in the query'
+      }
+    })
+
     watch(zoomOption, () => {
       const chartInstance = chartRef.value?.chart
 
       if (chartInstance && chartInstance.options?.plugins?.zoom) {
         const zoomPlugin = chartInstance.options.plugins.zoom
 
-        if (zoomPlugin.zoom && zoomPlugin.zoom.drag && zoomPlugin.pan) {
+        if (zoomPlugin.zoom?.drag && zoomPlugin.pan) {
           zoomPlugin.zoom.drag.enabled = zoomOption.value === 'drag'
           zoomPlugin.pan.enabled = zoomOption.value === 'pan'
         }
@@ -238,6 +233,61 @@ export default defineComponent({
         chartInstance.update()
       }
     })
+
+    watch(
+      () => props.activePoint,
+      (newVal) => {
+        if (newVal) {
+          markPointInChart(newVal.id)
+        }
+      }
+    )
+
+    watch(
+      () => props.activePoints,
+      (newVal) => {
+        if (newVal.length > 0) {
+          markPointsInChart(newVal)
+        }
+      }
+    )
+
+    const markPointInChart = (pointId: string) => {
+      const chartInstance = chartRef.value?.chart
+      if (chartInstance) {
+        scatterData.value.datasets.forEach((dataset) => {
+          dataset.data.forEach((point: CustomPoint) => {
+            if (point.id === pointId) {
+              point.borderColor = 'green'
+              point.borderWidth = 3
+            } else {
+              point.borderColor = undefined
+              point.borderWidth = undefined
+            }
+          })
+        })
+        chartInstance.update()
+      }
+    }
+
+    const markPointsInChart = (points: CustomPoint[]) => {
+      const chartInstance = chartRef.value?.chart
+      if (chartInstance) {
+        const pointIds = points.map((p) => p.id)
+        scatterData.value.datasets.forEach((dataset) => {
+          dataset.data.forEach((point: CustomPoint) => {
+            if (pointIds.includes(point.id)) {
+              point.borderColor = 'green'
+              point.borderWidth = 3
+            } else {
+              point.borderColor = undefined
+              point.borderWidth = undefined
+            }
+          })
+        })
+        chartInstance.update()
+      }
+    }
 
     const onClick = (event: MouseEvent) => {
       const chartInstance = chartRef.value?.chart
@@ -250,7 +300,7 @@ export default defineComponent({
           true
         )
 
-        if (points && points.length) {
+        if (points.length) {
           const point = points[0]
           const dataIndex = point.index
           const datasetIndex = point.datasetIndex
@@ -258,17 +308,9 @@ export default defineComponent({
             dataIndex
           ] as CustomPoint
 
-          console.log('Clicked point:', {
-            id: clickedPoint.id,
-            x: clickedPoint.x,
-            y: clickedPoint.y,
-            text: clickedPoint.text,
-            truth: clickedPoint.truth
-          })
-          context.emit('point-click', clickedPoint)
+          emit('point-click', clickedPoint)
         } else {
-          console.log('No point clicked')
-          context.emit('point-click', null)
+          emit('point-click', null)
         }
       } else {
         console.error('Chart instance not found')
@@ -290,11 +332,15 @@ export default defineComponent({
       const chartInstance = chartRef.value?.chart
       if (chartInstance) {
         const { offsetX, offsetY } = event
-        const chartArea = chartInstance.chartArea
         const chartX = chartInstance.scales.x.getValueForPixel(offsetX) ?? 0
         const chartY = chartInstance.scales.y.getValueForPixel(offsetY) ?? 0
 
-        selectionRect.value = { startX: chartX, startY: chartY, endX: chartX, endY: chartY }
+        selectionRect.value = {
+          startX: chartX,
+          startY: chartY,
+          endX: chartX,
+          endY: chartY
+        }
       }
     }
 
@@ -327,9 +373,9 @@ export default defineComponent({
         )
 
         selectedPoints.value = selectedPointsArray
-        console.log('Selected points:', selectedPointsArray)
+
         if (zoomOption.value === '') {
-          context.emit('points-marked', selectedPoints.value)
+          emit('points-marked', selectedPoints.value)
         }
 
         selectionRect.value = null
@@ -363,6 +409,7 @@ export default defineComponent({
   height: 500px;
   position: relative;
 }
+
 .zoom-controls {
   display: flex;
   gap: 10px;

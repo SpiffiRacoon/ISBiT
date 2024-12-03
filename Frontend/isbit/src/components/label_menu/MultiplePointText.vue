@@ -8,9 +8,17 @@
       </div>
     </div>
     <div class="column">
-      <h5>Markerade Punkter</h5>
-      <div v-for="(point, index) in markedPoints" :key="index" class="point-item">
-        <p>{{ point.text }}</p>
+      <h5>
+        Markerade Punkter
+        <button @click="showMarkedPoints = !showMarkedPoints" class="dropdown-button">
+          {{ showMarkedPoints ? '-' : '+' }}
+        </button>
+      </h5>
+      <div v-if="showMarkedPoints">
+        <div v-for="(point, index) in markedPoints" :key="index" class="point-item">
+          <p>{{ point.text }}</p>
+          <b>Sanning: {{ point.truth }}</b>
+        </div>
       </div>
     </div>
   </div>
@@ -25,6 +33,11 @@ export default defineComponent({
     points: {
       type: Array as PropType<CustomPoint[]>,
       required: true
+    }
+  },
+  data() {
+    return {
+      showMarkedPoints: true
     }
   },
   computed: {
@@ -78,5 +91,16 @@ export default defineComponent({
 
 .point-item button:hover {
   background-color: #c0392b;
+}
+
+.dropdown-button {
+  border-radius: 3px;
+  float: right;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  font-size: 14px;
 }
 </style>

@@ -12,6 +12,9 @@ import ClusterPlot from './ClusterPlot.vue'
       <ClusterPlot
         @point-click="(point) => receivePoint(point)"
         @points-marked="(points) => receivePoints(points)"
+        :multiple-marking="multipleMarking"
+        :active-point="activePoint"
+        :active-points="activePoints"
       />
     </div>
     <div id="text-and-labels">

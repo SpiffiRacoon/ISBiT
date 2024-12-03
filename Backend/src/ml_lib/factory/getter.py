@@ -4,6 +4,9 @@ from ..shared import IsbitClassifierModel
 from importlib import import_module
 from inspect import getmembers, isclass
 
+import importlib
+import inspect
+
 
 def get_instance(model_name: str) -> IsbitClassifierModel:
     """

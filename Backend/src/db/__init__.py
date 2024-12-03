@@ -13,6 +13,7 @@ from .setters import (
     set_ml_status,
     add_dataset_to_db,
     add_versioned_nodes,
+    label_one_node
 )
 from .modifiers import delete_collection, delete_ml_status
 from .data_version import DataVersion
@@ -33,4 +34,5 @@ __all__ = [
     "set_ml_status",
     "get_ml_status",
     "DataVersion",
+    "label_one_node",
 ]

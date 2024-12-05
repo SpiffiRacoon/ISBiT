@@ -122,7 +122,7 @@ def delete_dataset(dataset: str) -> None:
 
     raise HTTPException(status_code=400, detail="dataset not found")
 
-@router.get("/", status_code=200)
+@router.get("/latest_version", status_code=200)
 def get_latest_dataset_version(dataset_name: str) -> int:
     """
     Get the latest version number of a dataset.

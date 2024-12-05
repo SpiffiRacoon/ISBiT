@@ -56,9 +56,12 @@ interface CustomPoint {
   text: string
   id: string
   truth: string
+  input_label: string
+  predicted_labels: string
   borderColor?: string
   borderWidth?: number
 }
+export type { CustomPoint }
 
 export default defineComponent({
   components: {
@@ -122,7 +125,7 @@ export default defineComponent({
               const dataIndex = context.dataIndex
               const point = scatterData.value.datasets[datasetIndex].data[dataIndex] as CustomPoint
 
-              return `Text: ${point.text}, Truth: ${point.truth}`
+              return `Text: ${point.text}, Sanning: ${point.input_label || 'Omarkerad'}`
             }
           }
         },
@@ -147,33 +150,26 @@ export default defineComponent({
         const response = await axios.get(`http://localhost:8000/V1/data/?collection=${dataset}`)
         const incomingData = response.data
 
-        // Simulating unlabeled data
-        incomingData.forEach((item: any, index: number) => {
-          if (index < 8) {
-            item.truth = ''
-          }
-        })
-
         const categories: { [key: string]: CustomPoint[] } = {}
 
         incomingData.forEach((item: any) => {
-          if (item.truth === '') {
-            item.truth = 'Omarkerad'
-          }
           const point: CustomPoint = {
             x: item.x,
             y: item.y,
             text: item.text,
             id: item.id,
-            truth: item.truth
+            truth: item.truth,
+            input_label: item.input_label,
+            predicted_labels: item.predicted_labels
           }
 
-          if (!categories[item.truth]) {
-            categories[item.truth] = []
+          const labelKey = item.input_label ?? 'Omarkerad'
+
+          if (!categories[labelKey]) {
+            categories[labelKey] = []
           }
-          categories[item.truth].push(point)
+          categories[labelKey].push(point)
         })
-
         const newDatasets = Object.entries(categories).map(([clusterIndex, points], index) => {
           let color: string
 

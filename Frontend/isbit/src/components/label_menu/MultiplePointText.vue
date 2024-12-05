@@ -42,10 +42,11 @@ export default defineComponent({
   },
   computed: {
     unmarkedPoints() {
-      return this.points.filter((point) => point.truth === 'Omarkerad')
+      console.log(this.points)
+      return this.points.filter((point) => point.input_label === null)
     },
     markedPoints() {
-      return this.points.filter((point) => point.truth !== 'Omarkerad')
+      return this.points.filter((point) => point.input_label !== null)
     }
   },
   methods: {

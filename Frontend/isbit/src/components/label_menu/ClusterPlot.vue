@@ -60,6 +60,8 @@ interface CustomPoint {
   predicted_labels: string
   borderColor?: string
   borderWidth?: number
+  opacity?: number
+  backgroundColor?: string
 }
 export type { CustomPoint }
 
@@ -145,6 +147,24 @@ export default defineComponent({
       backgroundColor: 'transparent'
     })
 
+    function adjustColorOpacity(color: string, opacity: number): string {
+      if (color.startsWith('hsl(')) {
+        return color.replace('hsl(', 'hsla(').replace(')', `, ${opacity})`)
+      } else if (color.startsWith('rgb(')) {
+        return color.replace('rgb(', 'rgba(').replace(')', `, ${opacity})`)
+      } else if (color.startsWith('#')) {
+        const hex = color.substring(1)
+        const bigint = parseInt(hex, 16)
+        const r = (bigint >> 16) & 255
+        const g = (bigint >> 8) & 255
+        const b = bigint & 255
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`
+      } else if (color === 'black') {
+        return `rgba(0, 0, 0, ${opacity})`
+      }
+      return color
+    }
+
     async function fetchData() {
       try {
         const response = await axios.get(`http://localhost:8000/V1/data/?collection=${dataset}`)
@@ -153,6 +173,12 @@ export default defineComponent({
         const categories: { [key: string]: CustomPoint[] } = {}
 
         incomingData.forEach((item: any) => {
+          const labelKey = item.input_label ?? 'Omarkerad'
+
+          if (!categories[labelKey]) {
+            categories[labelKey] = []
+          }
+
           const point: CustomPoint = {
             x: item.x,
             y: item.y,
@@ -160,28 +186,31 @@ export default defineComponent({
             id: item.id,
             truth: item.truth,
             input_label: item.input_label,
-            predicted_labels: item.predicted_labels
+            predicted_labels: item.predicted_labels,
+            opacity: 1 
           }
 
-          const labelKey = item.input_label ?? 'Omarkerad'
-
-          if (!categories[labelKey]) {
-            categories[labelKey] = []
-          }
           categories[labelKey].push(point)
         })
-        const newDatasets = Object.entries(categories).map(([clusterIndex, points], index) => {
+
+        const categoryEntries = Object.entries(categories)
+
+        const newDatasets = categoryEntries.map(([clusterIndex, points], index) => {
           let color: string
 
           if (clusterIndex === 'Omarkerad') {
             color = 'black'
           } else {
             const getDistinctColor = (index: number) => {
-              const hue = (index * 360) / (Object.entries(categories).length - 1)
+              const hue = (index * 360) / (categoryEntries.length - 1 || 1)
               return `hsl(${hue}, 70%, 50%)`
             }
             color = getDistinctColor(index)
           }
+
+          points.forEach((point) => {
+            point.backgroundColor = color
+          })
 
           return {
             label: clusterIndex,
@@ -197,6 +226,14 @@ export default defineComponent({
             pointBorderWidth: (context: any) => {
               const dataPoint = context.raw as CustomPoint
               return dataPoint.borderWidth || 0
+            },
+            pointBackgroundColor: (context: any) => {
+              const dataPoint = context.raw as CustomPoint
+              let bgColor = dataPoint.backgroundColor || color
+              if (dataPoint.opacity !== undefined) {
+                bgColor = adjustColorOpacity(bgColor, dataPoint.opacity)
+              }
+              return bgColor
             }
           }
         })
@@ -256,9 +293,11 @@ export default defineComponent({
             if (point.id === pointId) {
               point.borderColor = 'green'
               point.borderWidth = 3
+              point.opacity = 1
             } else {
               point.borderColor = undefined
               point.borderWidth = undefined
+              point.opacity = 0.5
             }
           })
         })
@@ -275,9 +314,11 @@ export default defineComponent({
             if (pointIds.includes(point.id)) {
               point.borderColor = 'green'
               point.borderWidth = 3
+              point.opacity = 1
             } else {
               point.borderColor = undefined
               point.borderWidth = undefined
+              point.opacity = 0.5
             }
           })
         })

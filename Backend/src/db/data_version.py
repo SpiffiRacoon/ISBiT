@@ -37,15 +37,15 @@ class DataVersion:
         0 000000 0 (Format of versions)
         0 - this is version as in the version_name
           000000 - this is the version number (The iteration of the classified or grouped..., max iterations is 999999)
-                 0 - this is a indicator if it is labeled or not
+                 0 - this is a indicator if it is labeled since last run
 
         Ex)
         0 - <filename> (datafile)
         10000000 - <filename>_grouped_0
         20000040 - <filename>_classified_4
-        20000041 - <filename>_classified_4_labeled
-        10000011 - <filename>_grouped_1_labeled
-        10001031 - <filename>_grouped_103_labeled
+        20000041 - <filename>_classified_4_labeledSinceRun
+        10000011 - <filename>_grouped_1_labeledSinceRun
+        10001031 - <filename>_grouped_103_labeledSinceRun
         """
         version_number = 0
         if version_name is VersionName.DATA_FILE:
@@ -115,6 +115,8 @@ class DataVersion:
                 instance.current_version = version_name_to_number(VersionName.LATTER_RUN)
             else:
                 instance.current_version += 10
+                if instance.current_version % 10 != 0:
+                    instance.current_version -= instance.current_version % 10
             return instance
 
         if (label is True) and (self.current_version % 2 == 0):
@@ -129,6 +131,8 @@ class DataVersion:
 
         if minor:
             instance.current_version += 10
+            if instance.current_version % 10 != 0:
+                instance.current_version -= instance.current_version % 10
 
         return instance
 

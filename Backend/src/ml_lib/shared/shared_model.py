@@ -1,5 +1,6 @@
 import hashlib
 import pandas as pd
+from torch import Tensor
 
 class IsbitClassifierModel:
 
@@ -41,6 +42,12 @@ class IsbitClassifierModel:
         """
         raise Exception("Not implemented.")
 
+    def dim_red(self, embeddings: Tensor, dim: str | None) -> pd.DataFrame:
+        """
+        Dimensionality reduction logic, overridden by child classes.
+        """
+        raise Exception("Not implemented.")
+    
     def _df_setter(self, df: pd.DataFrame) -> None:
         """
         Setter for the data frame attribute.

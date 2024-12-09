@@ -187,7 +187,7 @@ export default defineComponent({
             truth: item.truth,
             input_label: item.input_label,
             predicted_labels: item.predicted_labels,
-            opacity: 1 
+            opacity: 1
           }
 
           categories[labelKey].push(point)

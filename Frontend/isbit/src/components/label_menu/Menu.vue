@@ -3,12 +3,13 @@ import LabelBox from './LabelBox.vue'
 import TextBox from './TextBox.vue'
 import MultiplePointText from './MultiplePointText.vue'
 import ClusterPlot from './ClusterPlot.vue'
+import { useRoute } from 'vue-router'
 </script>
 
 <template>
   <div id="label-menu">
     <div class="block">
-      <h2>Dataset: qaqc</h2>
+      <h2>Dataset: {{ dataset }}</h2>
       <ClusterPlot
         @point-click="(point) => receivePoint(point)"
         @points-marked="(points) => receivePoints(points)"
@@ -18,7 +19,7 @@ import ClusterPlot from './ClusterPlot.vue'
       />
     </div>
     <div id="text-and-labels">
-      <h2>Märk Upp Datapunkt</h2>
+      <h4>Märk Upp Datapunkt</h4>
       <MultiplePointText
         @remove-point="handleRemovePoint"
         v-if="multipleMarking"
@@ -26,7 +27,10 @@ import ClusterPlot from './ClusterPlot.vue'
       />
       <TextBox v-else :text="activePoint.text" />
 
-      <LabelBox :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']" />
+      <LabelBox
+        :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']"
+        @mark-point="(category) => categorizeNode(category)"
+      />
     </div>
   </div>
 </template>
@@ -34,6 +38,8 @@ import ClusterPlot from './ClusterPlot.vue'
 <script lang="ts">
 import { defineComponent } from 'vue'
 import type { CustomPoint } from './ClusterPlot.vue'
+import axios from 'axios'
+
 export default defineComponent({
   props: {
     text: String
@@ -43,8 +49,13 @@ export default defineComponent({
       apiData: { t: String },
       activePoint: { text: 'Välj en punkt i plotten.' } as CustomPoint,
       activePoints: [] as CustomPoint[],
-      multipleMarking: false
+      multipleMarking: false,
+      dataset: ''
     }
+  },
+  created() {
+    const route = useRoute()
+    this.dataset = route.query.dataset as string
   },
   methods: {
     receivePoint(point: CustomPoint) {
@@ -64,6 +75,16 @@ export default defineComponent({
     handleRemovePoint(id: string) {
       console.log('remove point with id: ', id)
       this.activePoints = this.activePoints.filter((point) => point.id !== id)
+    },
+    categorizeNode(category: string) {
+      try {
+        axios.post(
+          `http://localhost:8000/V1/data/categorize?node_id=${this.activePoint.id}&category=${category}&dataset_name=${this.dataset}`
+        )
+        window.location.reload()
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 })

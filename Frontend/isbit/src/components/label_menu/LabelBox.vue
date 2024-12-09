@@ -41,6 +41,7 @@ export default defineComponent({
     },
     save() {
       console.log('selected: ', this.selectedItem)
+      this.$emit('mark-point', this.selectedItem)
     }
   }
 })

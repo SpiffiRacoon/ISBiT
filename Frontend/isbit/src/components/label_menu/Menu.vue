@@ -3,6 +3,7 @@ import LabelBox from './LabelBox.vue'
 import TextBox from './TextBox.vue'
 import MultiplePointText from './MultiplePointText.vue'
 import ClusterPlot from './ClusterPlot.vue'
+import StatusRun from './StatusRun.vue'
 import { useRoute } from 'vue-router'
 </script>
 
@@ -10,6 +11,7 @@ import { useRoute } from 'vue-router'
   <div id="label-menu">
     <div class="block">
       <h2>Dataset: {{ dataset }}</h2>
+
       <ClusterPlot
         @point-click="(point) => receivePoint(point)"
         @points-marked="(points) => receivePoints(points)"
@@ -31,7 +33,11 @@ import { useRoute } from 'vue-router'
         :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']"
         @mark-point="(category) => categorizeNode(category)"
       />
+      <div>
+        <StatusRun/>
+      </div>
     </div>
+
   </div>
 </template>
 

@@ -1,22 +1,27 @@
 <template>
-  <div id="label-text">
-    <p class="point-item">
-      {{ text }}
+  <div class="point-item">
+    <p class="">
+      {{ point.text }}
     </p>
+    <b v-if="point.predicted_labels"> Förslag: {{ point.predicted_labels }}</b>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
+import type { CustomPoint } from './ClusterPlot.vue'
 export default defineComponent({
-  props: {
-    text: String
-  }
+  props:{ 
+    point: {
+      type: Object as PropType<CustomPoint>,
+      required: true
+    }
+  },
 })
 </script>
 
 <style scoped>
-#label-text {
+.label-text {
   display: flex;
   flex-direction: column;
   gap: 10px;

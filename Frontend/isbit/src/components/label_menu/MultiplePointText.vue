@@ -1,10 +1,11 @@
 <template>
   <div id="label-text">
     <div class="column">
-      <h5>Omarkerade punkter</h5>
+      <h5>Omärkta punkter</h5>
       <div v-for="(point, index) in unmarkedPoints" :key="index" class="point-item">
         <p>{{ point.text }}</p>
-        <button @click="removePoint(point.id)">Ta bort</button>
+        <b v-if="point.predicted_labels">Förslag: {{ point.predicted_labels }}</b>
+        <button @click="removePoint(point.id)">avmarkera</button>
       </div>
     </div>
     <div class="column">

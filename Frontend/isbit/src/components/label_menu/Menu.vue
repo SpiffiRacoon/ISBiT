@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router'
 
 <template>
   <div id="label-menu">
+
     <div class="block">
       <h2>Dataset: {{ dataset }}</h2>
 
@@ -27,14 +28,14 @@ import { useRoute } from 'vue-router'
         v-if="multipleMarking"
         :points="activePoints"
       />
-      <TextBox v-else :text="activePoint.text" />
+      <TextBox v-else :point="activePoint" />
 
       <LabelBox
         :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']"
         @mark-point="(category) => categorizeNode(category)"
       />
-      <div>
-        <StatusRun/>
+      <div class="run-ml">
+        <StatusRun :file="dataset"/>
       </div>
     </div>
 
@@ -105,6 +106,10 @@ export default defineComponent({
   margin: 20px;
   display: block;
   width: 300px;
+}
+
+.run-ml {
+  margin: 50px;
 }
 
 .block {

@@ -127,7 +127,7 @@ export default defineComponent({
               const dataIndex = context.dataIndex
               const point = scatterData.value.datasets[datasetIndex].data[dataIndex] as CustomPoint
 
-              return `Text: ${point.text}, Sanning: ${point.input_label || 'Omarkerad'}`
+              return `Text: ${point.text}, Sanning: ${point.input_label || 'Omärkt'}`
             }
           }
         },
@@ -173,7 +173,7 @@ export default defineComponent({
         const categories: { [key: string]: CustomPoint[] } = {}
 
         incomingData.forEach((item: any) => {
-          const labelKey = item.input_label ?? 'Omarkerad'
+          const labelKey = item.input_label ?? 'Omärkt'
 
           if (!categories[labelKey]) {
             categories[labelKey] = []
@@ -198,7 +198,7 @@ export default defineComponent({
         const newDatasets = categoryEntries.map(([clusterIndex, points], index) => {
           let color: string
 
-          if (clusterIndex === 'Omarkerad') {
+          if (clusterIndex === 'Omärkt') {
             color = 'black'
           } else {
             const getDistinctColor = (index: number) => {

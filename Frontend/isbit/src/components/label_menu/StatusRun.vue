@@ -1,89 +1,107 @@
 <template>
-    <div
-    @click="runModel()" 
-    class="proc-data"
-    >
-        <button class="btn third-btn" >
-        Processa uppmärkta data punker: 
-        </button>
-    </div>
+  <div @click="runModel()" class="proc-data">
+    <button class="btn third-btn">
+      Kör modell
+      <span v-if="loading" class="loading-indicator">
+        <i class="loading-spinner"></i>
+      </span>
+    </button>
+  </div>
+</template>
 
-    
+<script lang="ts">
+import { defineComponent } from 'vue'
+import axios from 'axios'
 
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue'
-  import axios from 'axios'
-  
-  export default defineComponent({
-    name: 'DataDisplay',
-    setup() {
-      const dataList = ref<any[]>([])
-      const availableDatasets = ref<any[]>([])
-      const error = ref<string | null>(null)
-      const loading = ref<boolean>(false)
-  
-      const fetchData = async () => {
-        try {
-          const filesResponse = await axios.get('http://localhost:8000/V1/dataset/files')
-          dataList.value = filesResponse.data.dataList
-  
-          const availableDataResponse = await axios.get('http://localhost:8000/V1/dataset')
-          availableDatasets.value = availableDataResponse.data.dataList
-        } catch (err) {
-          error.value = 'Error fetching data'
-          console.error(err)
-        }
-      }
-  
-      return {
-        dataList,
-        availableDatasets,
-        error,
-        fetchData,
-        loading
-      }
-    },
-    methods: {
-      redirectToDetails(dataset: string) {
-        this.$router.push({ path: '/label', query: { dataset: dataset } })
-      },
-      async runModel() {
-        try {
-          //this.dataList[index].loading = true
-          //TOOD: fix model name
-          await axios.post(
-            'http://localhost:8000/V1/run_ml/?model_name=QaqcMainModel&file=j_test'
-              //file
-          )
-          console.log(`Model run initiated for dataset TESTJACKE`)
-          //this.startPolling(file, index)
-        } catch (err) {
-          this.error = 'Error running model'
-          console.error(err)
-        }
-      },
-    },
-    mounted() {
-      this.fetchData()
+export default defineComponent({
+  name: 'DataDisplay',
+  props: {
+    file: {
+      type: String,
+      required: true
     }
-  })
-  </script>
-  
-  <style scoped>
-  .proc-data {
-    margin: 10px;
-    padding: 5px 5px;
-    background-color: #f0f0f0;
-    border: 2px solid;
-    border-color: green;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition:
-        background-color 0.3s,
-        color 0.3s;
+  },
+  data() {
+    return {
+      loading: false,
+    }
+  },
+  methods: {
+    async runModel() {
+      this.loading = true
+      try {
+        await axios.post(
+          'http://localhost:8000/V1/run_ml/?model_name=QaqcMainModel&file=' + this.file
+        )
+        console.log(`Model run initiated for dataset ${this.file}`)
+        this.startPolling()
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    async startPolling() {
+      const interval = setInterval(async () => {
+        const status = await this.getStatus()
+        if (status === 'Not running') {
+          console.log('Model run completed')
+          clearInterval(interval)
+          this.loading = false
+          window.location.reload()
+
+        }
+      }, 500)
+    },
+    async getStatus() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/V1/run_ml/?model_name=QaqcMainModel&file=${this.file}`
+        )
+        return response.data.status
+      } catch (err) {
+        console.error('Error fetching status', err)
+        return null
+      }
+    },
+  },
+})
+</script>
+
+<style scoped>
+.proc-data {
+  margin: 10px;
+  padding: 5px 5px;
+  background-color: #f0f0f0;
+  border: 2px solid green;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.loading-indicator {
+  margin-left: 5px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #3498db;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  </style>
-  
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>

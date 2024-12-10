@@ -162,6 +162,8 @@ export default defineComponent({
 <style scoped>
 .container {
   padding: 20px;
+  min-height: 100vh; /* Ensure the container spans the full viewport height */
+  box-sizing: border-box; /* Includes padding in total height */
 }
 
 .header {
@@ -174,6 +176,7 @@ export default defineComponent({
   justify-content: space-between;
   gap: 40px;
   align-items: flex-start;
+  position:absolute;
 }
 
 .list-column {
@@ -182,7 +185,6 @@ export default defineComponent({
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 0;
 }
 
 .card {
@@ -218,8 +220,7 @@ export default defineComponent({
 
 .run-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
 }
 
 .select-label {

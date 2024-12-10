@@ -1,30 +1,36 @@
 <template>
-  <div id="label-text">
-    <p>
-      {{ text }}
+  <div class="point-item">
+    <p class="">
+      {{ point.text }}
     </p>
+    <b v-if="point.predicted_labels"> Förslag: {{ point.predicted_labels }}</b>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
+import type { CustomPoint } from './ClusterPlot.vue'
 export default defineComponent({
-  props: {
-    text: String
-  }
+  props:{ 
+    point: {
+      type: Object as PropType<CustomPoint>,
+      required: true
+    }
+  },
 })
 </script>
 
 <style scoped>
-#label-text {
+.label-text {
   display: flex;
-  padding: 12px 20px; /* Add padding */
-  margin: 8px 0; /* Add some margin */
-  box-sizing: border-box; /* Ensure padding and width are accounted for */
-  border: 2px solid #ccc; /* Set the border */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 16px; /* Increase font size */
-  transition: border-color 0.3s; /* Smooth transition for border color */
-  background-color: white;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.point-item {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
 </style>

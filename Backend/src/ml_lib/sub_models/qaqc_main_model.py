@@ -1,8 +1,4 @@
 import pandas as pd
-import re
-import os
-import random
-import numpy as np
 
 from torch import Tensor
 from sklearn.decomposition import PCA
@@ -110,6 +106,8 @@ class QaqcMainModel(IsbitClassifierModel):
         ids = [self.get_id(question) for question in questions]
         df["id"] = pd.Series(ids)
         embeddings = self.get_embeddings(questions)
+        df["id"] = pd.Series(ids)
+        embeddings = self.get_embeddings(questions)
 
         point_data_df = self.dim_red(embeddings=embeddings, dim=dim)
         combined_df = pd.concat([df, point_data_df], axis=1)
@@ -139,4 +137,3 @@ class QaqcMainModel(IsbitClassifierModel):
         #Combines all of the dataframes together in order to form the final dataframe
         combined_df = pd.concat([df["text"], x_and_y, df["truth"], df["id"] , df["input_label"], predLabels_df], axis=1)
         return combined_df
-    

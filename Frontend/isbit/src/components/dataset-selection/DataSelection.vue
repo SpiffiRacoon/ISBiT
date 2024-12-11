@@ -48,7 +48,8 @@
                   <option value="COMBO">COMBO</option>
                 </select>
               </div>
-              <button
+              <div class="button-container">
+                <button
                 @click="runModel(item.dataset, index, item.dimRedMethod)"
                 class="btn secondary-btn"
               >
@@ -57,6 +58,10 @@
                   <i class="loading-spinner"></i>
                 </span>
               </button>
+              <button @click="removeDataset(item.dataset)" class="btn third-btn">
+                  Ta bort dataset
+              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -181,11 +186,7 @@ export default defineComponent({
 }
 
 .list-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+
 }
 
 .card {
@@ -208,7 +209,6 @@ export default defineComponent({
 .card-title {
   font-size: 1.3em;
   color: #2c3e50;
-  margin-bottom: 10px;
 }
 
 .button-container {
@@ -216,7 +216,6 @@ export default defineComponent({
   flex-direction: column;
   align-items: stretch;
   margin-top: auto;
-  padding-top: 10px;
 }
 
 .run-container {
@@ -226,6 +225,7 @@ export default defineComponent({
 
 .select-label {
   margin-bottom: 10px;
+  padding: 10px;
 }
 
 .primary-btn,
@@ -235,6 +235,7 @@ export default defineComponent({
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin: 5px;
 }
 
 .primary-btn {

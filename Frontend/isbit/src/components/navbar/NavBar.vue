@@ -1,7 +1,8 @@
 <template>
   <nav>
     <RouterLink to="/" class="home-link">ISBiT</RouterLink>
-    <RouterLink to="/data">Välj Data </RouterLink>
+    <RouterLink to="/data">Välj Dataset</RouterLink>
+    <RouterLink to="/upload">Ladda upp dataset</RouterLink>
   </nav>
 </template>
 

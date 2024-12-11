@@ -68,6 +68,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
+import DataUpload from './DataUpload.vue';
 
 export default defineComponent({
   name: 'DataDisplay',

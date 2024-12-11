@@ -185,10 +185,6 @@ export default defineComponent({
   position:absolute;
 }
 
-.list-column {
-
-}
-
 .card {
   background: #fff;
   border-radius: 7px;

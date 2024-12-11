@@ -1,7 +1,8 @@
-#own
+# own
 from ..db import (
     get_all_labels_from as db_get_all_labels,
     get_nodes_from_latest_version as db_get_nodes_from_latest_version,
+    label_one_node as db_label_one_node,
 )
 from ..types import Node
 
@@ -19,7 +20,7 @@ def get_all_nodes(collection: str) -> list[Node]:
     """
     Get all nodes in one collection
     """
-    nodes = db_get_nodes_from_latest_version(dataset_name = collection)
+    nodes = db_get_nodes_from_latest_version(dataset_name=collection)
     nodes = [Node(**node) for node in nodes.to_dict(orient="records")]
     return nodes
 
@@ -35,10 +36,12 @@ def get_all_labels(
     return labels
 
 
-
 @router.post("/categorize", status_code=204)
-def categorize_node(node_id: str, category: str, collection: str) -> None:
+def categorize_node(node_id: str, category: str, dataset_name: str) -> None:
     """
     Categorize a node
     """
-    raise HTTPException(status_code=501, detail="Not implemented")
+    try:
+        db_label_one_node(node_id, category, dataset_name)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

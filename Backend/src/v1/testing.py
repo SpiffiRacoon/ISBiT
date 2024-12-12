@@ -133,7 +133,6 @@ async def manual_test_sequence(
 
     return response
 
-
 @router.post("/simulate_labels", status_code=200)
 def simulate_labels_route(dataset_name: str, fraction: float = 0.1):
     """

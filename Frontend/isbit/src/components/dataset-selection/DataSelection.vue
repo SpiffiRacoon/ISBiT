@@ -50,17 +50,17 @@
               </div>
               <div class="button-container">
                 <button
-                @click="runModel(item.dataset, index, item.dimRedMethod)"
-                class="btn secondary-btn"
-              >
-                Kör modell
-                <span v-if="item.loading" class="loading-indicator">
-                  <i class="loading-spinner"></i>
-                </span>
-              </button>
-              <button @click="removeDataset(item.dataset)" class="btn third-btn">
+                  @click="runModel(item.dataset, index, item.dimRedMethod)"
+                  class="btn secondary-btn"
+                >
+                  Kör modell
+                  <span v-if="item.loading" class="loading-indicator">
+                    <i class="loading-spinner"></i>
+                  </span>
+                </button>
+                <button @click="removeDataset(item.dataset)" class="btn third-btn">
                   Ta bort dataset
-              </button>
+                </button>
               </div>
             </div>
           </div>
@@ -73,7 +73,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
-import DataUpload from './DataUpload.vue';
+import DataUpload from './DataUpload.vue'
 
 export default defineComponent({
   name: 'DataDisplay',
@@ -182,7 +182,15 @@ export default defineComponent({
   justify-content: space-between;
   gap: 40px;
   align-items: flex-start;
-  position:absolute;
+  position: absolute;
+}
+
+.list-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .card {

@@ -29,11 +29,11 @@ const router = createRouter({
       path: '/label',
       name: 'label',
       component: ClusterView
-    }, 
+    },
     {
       path: '/upload',
       name: 'upload',
-      component: import('../views/UploadView.vue')
+      component: UploadView
     }
   ]
 })

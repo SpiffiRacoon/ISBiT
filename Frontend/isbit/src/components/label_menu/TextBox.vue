@@ -11,12 +11,12 @@
 import { defineComponent, type PropType } from 'vue'
 import type { CustomPoint } from './ClusterPlot.vue'
 export default defineComponent({
-  props:{ 
+  props: {
     point: {
       type: Object as PropType<CustomPoint>,
       required: true
     }
-  },
+  }
 })
 </script>
 

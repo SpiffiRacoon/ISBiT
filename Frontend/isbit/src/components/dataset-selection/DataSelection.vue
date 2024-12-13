@@ -48,15 +48,20 @@
                   <option value="COMBO">COMBO</option>
                 </select>
               </div>
-              <button
-                @click="runModel(item.dataset, index, item.dimRedMethod)"
-                class="btn secondary-btn"
-              >
-                Kör modell
-                <span v-if="item.loading" class="loading-indicator">
-                  <i class="loading-spinner"></i>
-                </span>
-              </button>
+              <div class="button-container">
+                <button
+                  @click="runModel(item.dataset, index, item.dimRedMethod)"
+                  class="btn secondary-btn"
+                >
+                  Kör modell
+                  <span v-if="item.loading" class="loading-indicator">
+                    <i class="loading-spinner"></i>
+                  </span>
+                </button>
+                <button @click="removeDataset(item.dataset)" class="btn third-btn">
+                  Ta bort dataset
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -68,6 +73,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue'
 import axios from 'axios'
+import DataUpload from './DataUpload.vue'
 
 export default defineComponent({
   name: 'DataDisplay',
@@ -176,7 +182,7 @@ export default defineComponent({
   justify-content: space-between;
   gap: 40px;
   align-items: flex-start;
-  position:absolute;
+  position: absolute;
 }
 
 .list-column {
@@ -207,7 +213,6 @@ export default defineComponent({
 .card-title {
   font-size: 1.3em;
   color: #2c3e50;
-  margin-bottom: 10px;
 }
 
 .button-container {
@@ -215,7 +220,6 @@ export default defineComponent({
   flex-direction: column;
   align-items: stretch;
   margin-top: auto;
-  padding-top: 10px;
 }
 
 .run-container {
@@ -225,6 +229,7 @@ export default defineComponent({
 
 .select-label {
   margin-bottom: 10px;
+  padding: 10px;
 }
 
 .primary-btn,
@@ -234,6 +239,7 @@ export default defineComponent({
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin: 5px;
 }
 
 .primary-btn {

@@ -112,8 +112,6 @@ class QaqcMainModel(IsbitClassifierModel):
         ids = [self.get_id(question) for question in questions]
         df["id"] = pd.Series(ids)
         embeddings = self.get_embeddings(questions)
-        df["id"] = pd.Series(ids)
-        embeddings = self.get_embeddings(questions)
 
         point_data_df = self.dim_red(embeddings=embeddings, dim=dim)
         combined_df = pd.concat([df, point_data_df], axis=1)

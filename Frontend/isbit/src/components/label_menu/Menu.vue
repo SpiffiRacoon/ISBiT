@@ -5,11 +5,11 @@ import MultiplePointText from './MultiplePointText.vue'
 import ClusterPlot from './ClusterPlot.vue'
 import StatusRun from './StatusRun.vue'
 import { useRoute } from 'vue-router'
+import 'axios'
 </script>
 
 <template>
   <div id="label-menu">
-
     <div class="block">
       <h2>Dataset: {{ dataset }}</h2>
 
@@ -30,15 +30,11 @@ import { useRoute } from 'vue-router'
       />
       <TextBox v-else :point="activePoint" />
 
-      <LabelBox
-        :alternatives="['LOC', 'HUM', 'DESC', 'ENTY', 'ABBR', 'NUM']"
-        @mark-point="(category) => categorizeNode(category)"
-      />
+      <LabelBox :alternatives="labels" @mark-point="(category) => categorizeNode(category)" />
       <div class="run-ml">
-        <StatusRun :file="dataset"/>
+        <StatusRun :file="dataset" />
       </div>
     </div>
-
   </div>
 </template>
 
@@ -57,12 +53,16 @@ export default defineComponent({
       activePoint: { text: 'Välj en punkt i plotten.' } as CustomPoint,
       activePoints: [] as CustomPoint[],
       multipleMarking: false,
-      dataset: ''
+      dataset: '',
+      labels: []
     }
   },
   created() {
     const route = useRoute()
     this.dataset = route.query.dataset as string
+  },
+  mounted() {
+    this.getAlternatives()
   },
   methods: {
     receivePoint(point: CustomPoint) {
@@ -92,6 +92,12 @@ export default defineComponent({
       } catch (err) {
         console.error(err)
       }
+    },
+    async getAlternatives() {
+      const result = await axios.get(
+        `http://localhost:8000/V1/data/labels?collection=${this.dataset}`
+      )
+      this.labels = result.data
     }
   }
 })

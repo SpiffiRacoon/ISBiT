@@ -23,7 +23,7 @@ export default defineComponent({
   },
   data() {
     return {
-      loading: false,
+      loading: false
     }
   },
   methods: {
@@ -47,7 +47,6 @@ export default defineComponent({
           clearInterval(interval)
           this.loading = false
           window.location.reload()
-
         }
       }, 500)
     },
@@ -61,8 +60,8 @@ export default defineComponent({
         console.error('Error fetching status', err)
         return null
       }
-    },
-  },
+    }
+  }
 })
 </script>
 
@@ -75,7 +74,9 @@ export default defineComponent({
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .loading-indicator {

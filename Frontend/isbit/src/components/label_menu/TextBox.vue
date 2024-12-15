@@ -32,5 +32,6 @@ export default defineComponent({
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
+  margin-bottom: 10px;
 }
 </style>

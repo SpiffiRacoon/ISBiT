@@ -454,6 +454,7 @@ export default defineComponent({
 }
 
 .zoom-btn {
+  margin-top: 10px;
   padding: 10px 15px;
   background-color: #f0f0f0;
   border: 1px solid #ddd;
@@ -463,11 +464,13 @@ export default defineComponent({
   transition:
     background-color 0.3s,
     color 0.3s;
+    border: 2px solid green;
 }
 
 .zoom-btn.active {
   background-color: #007bff;
   color: white;
+  border: 2px solid green;
 }
 
 .reset-zoom-btn {
@@ -478,6 +481,7 @@ export default defineComponent({
   cursor: pointer;
   font-size: 14px;
   color: white;
+
 }
 
 .reset-zoom-btn:hover {

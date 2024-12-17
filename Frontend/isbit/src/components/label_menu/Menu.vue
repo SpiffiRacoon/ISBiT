@@ -109,13 +109,13 @@ export default defineComponent({
 }
 
 #text-and-labels {
-  margin: 20px;
+  margin: 40px;
   display: block;
   width: 300px;
 }
 
 .run-ml {
-  margin: 50px;
+  margin-top: 70px;
 }
 
 .block {

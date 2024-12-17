@@ -5,7 +5,7 @@ from ..db import (
     get_dataset_names_with_processed_data,
     get_datafiles_not_processed,
     get_all_dataset_names as db_get_all_dataset_names,
-
+    get_latest_version_number,
 )
 from ..types import DatasetsResponse, DatasetFileResponse
 # pip
@@ -121,3 +121,14 @@ def delete_dataset(dataset: str) -> None:
             return
 
     raise HTTPException(status_code=400, detail="dataset not found")
+
+@router.get("/latest_version", status_code=200)
+def get_latest_dataset_version(dataset_name: str) -> int:
+    """
+    Get the latest version number of a dataset.
+    """
+    try:
+        latest = get_latest_version_number(dataset_name)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return latest

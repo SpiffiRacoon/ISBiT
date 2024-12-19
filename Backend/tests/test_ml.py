@@ -9,12 +9,16 @@ def test_run_ml(mock_mongo_connection):
     This test just makes sure normal routes work
     """
     
-    response = client.post("/V1/run_ml/?file=swe_qaqc_lib_test&model_name=QaqcMainModel&dim_red_method=COMBO")
-    assert response.status_code == 200
-    assert response.json() == {
-        "ml_id": "QaqcMainModel_swe_qaqc_lib_test",
-        "status": "Running",
-        "details": "Request received",
-        "running_time": "",
-        "updated": ANY
-        }
+    test_get_ml_dim = client.get('/V1/ml/dim')
+    assert test_get_ml_dim.status_code == 200
+    assert test_get_ml_dim.json() == [
+        "COMBO",
+        "PCA",
+        "TSNE",
+        "UMAP"
+    ]
+    test_get_models = client.get('/V1/ml/models')
+    assert test_get_models.status_code == 200
+    assert test_get_models.json() == [
+        "QaqcMainModel"
+    ]

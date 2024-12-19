@@ -1,0 +1,51 @@
+text,verbose label,coarse label,fine label
+"Hur utvecklades träldomen i Ryssland?",DESC:manner,2,4
+"Vilka filmer inkluderade karaktären Popeye Doyle?",ENTY:cremat,3,9
+"Hur kan jag hitta en lista över kändisars riktiga namn?",DESC:manner,2,4
+"Vilken fjäderfä fångar rampljuset efter det kinesiska apans år?",ENTY:animal,3,6
+"Vad är den fullständiga formen av .com?",ABBR:exp,4,1
+"Vilken föraktlig skurk stal korken från min lunch?",HUM:ind,1,30
+"Vilket lag blev basebollens St. Louis Browns?",HUM:gr,1,29
+"Vad är det äldsta yrket?",HUM:title,1,31
+"Vad är leverenzymer?",DESC:def,2,2
+"Namnge den ärriga prisjägaren i The Old West.",HUM:ind,1,30
+"När föddes Ozzy Osbourne?",NUM:date,5,39
+"Varför faller tyngre föremål snabbare nedåt?",DESC:reason,2,5
+"Vem var Yankees stolthet?",HUM:ind,1,30
+"Vem dödade Gandhi?",HUM:ind,1,30
+"Vad anses vara den dyraste katastrofen som försäkringsbranschen någonsin har stött på?",ENTY:event,3,12
+"Vilken utbredd amerikansk stat har flest flygplatser?",LOC:state,0,36
+"Vad behandlade den enda upphävda ändringen av USA:s konstitution?",DESC:desc,2,3
+"Hur många judar avrättades i koncentrationsläger under andra världskriget?",NUM:count,5,38
+"Vad är "Nine Inch Nails"?",DESC:def,2,2
+"Vad är en antecknad bibliografi?",DESC:def,2,2
+"Vad är datumet för Boxing Day?",NUM:date,5,39
+"Vilka klädesplagg är poletter i Monopol?",ENTY:other,3,17
+"Namnge 11 berömda martyrer.",HUM:ind,1,30
+"Vad är det olympiska mottot?",DESC:desc,2,3
+"Vad är ursprunget till namnet "Scarlett"?",DESC:desc,2,3
+"Vad är den näst mest använda vokalen i engelskan?",ENTY:letter,3,16
+"Vem var uppfinnaren av Silly Putty?",HUM:ind,1,30
+"Vad är det högsta vattenfallet i USA?",LOC:other,0,35
+"Namnge en golfbana i Myrtle Beach.",ENTY:other,3,17
+"Vilka två delstater omsluter Chesapeake Bay?",LOC:state,0,36
+"Vad står förkortningen AIDS för?",ABBR:exp,4,1
+"Vad samlar en spermolog ihop?",ENTY:other,3,17
+"Hur många poäng utgör en perfekt runda i bowling?",NUM:count,5,38
+"Vilket företag som tillverkar hårdvara för tv-spel säljer "super-systemet"?",HUM:gr,1,29
+"Hur många Community Chest-kort finns det i Monopol?",NUM:count,5,38
+"Vad tror mormoner?",DESC:desc,2,3
+"När levde neandertalmänniskan?",NUM:date,5,39
+"I vilken religion var Isis naturgudinnan?",ENTY:religion,3,20
+"Var äger äventyren av "The Swiss Family Robinson" rum?",LOC:other,0,35
+"Vilken släkting till tvättbjörnen kallas ibland kattbjörnen?",ENTY:animal,3,6
+"Hur kan jag registrera min webbplats gratis på Yahoo?",DESC:manner,2,4
+"Vad var översten Edwin L. Drake den första att borra efter?",ENTY:other,3,17
+"Hur många människor i världen talar franska?",NUM:count,5,38
+"Hur många tum över sex fot är Venus de Milo?",NUM:count,5,38
+"Hur hittar eller väljer de vittnen till en avrättning?",DESC:manner,2,4
+"Vilken cowboystjärna från 1920-talet red Tony the Wonder Horse?",HUM:ind,1,30
+"Vilken cocktail inspirerade John Doxat att skriva boken Stirred-Not Shaken?",ENTY:food,3,13
+"Vilka internetleverantörer finns i Karibien?",HUM:gr,1,29
+"Hur frågar man ut en främling på en dejt?",DESC:manner,2,4
+"Vilket vapen är den mytologiska karaktären Apollo mest skicklig med?",ENTY:other,3,17

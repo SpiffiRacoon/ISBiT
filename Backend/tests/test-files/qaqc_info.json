@@ -1,0 +1,4 @@
+{
+    "labels": ["LOC", "HUM", "DESC", "ENTY", "ABBR", "NUM"],
+    "description" : "labels for the IsBit classifiers operation on the QAQC dataset." 
+}

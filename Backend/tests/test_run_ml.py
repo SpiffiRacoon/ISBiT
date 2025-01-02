@@ -1,11 +1,11 @@
-import pytest
-import asyncio
+from pytest import mark, fail
+from asyncio import sleep
 from fastapi.testclient import TestClient
 from src.main import app
 
 client = TestClient(app)
 
-@pytest.mark.asyncio
+@mark.asyncio
 async def test_run_ml_with_polling(mock_mongo_connection):
     """
     Example test with polling mechanism to check ML run status
@@ -42,9 +42,9 @@ async def test_run_ml_with_polling(mock_mongo_connection):
             break
 
         # Wait before the next poll
-        await asyncio.sleep(interval)
+        await sleep(interval)
     else:
-        pytest.fail("ML run did not complete within the expected time.")
+        fail("ML run did not complete within the expected time.")
 
     # Step 4: Clean up
     flush_response = client.post('/V1/run_ml/flush?model_name=QaqcMainModel&file=swe_qaqc_lib_test')

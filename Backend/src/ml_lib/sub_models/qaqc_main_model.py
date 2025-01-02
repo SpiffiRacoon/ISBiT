@@ -70,6 +70,11 @@ class QaqcMainModel(IsbitClassifierModel):
         Reduces embeddings to 2 dimensions using PCA, TSNE, or UMAP and
         returns a dataframe with the reduced embeddings.
         """
+        
+        # Added after test exposed compatibility issues with mps device.
+        if embeddings.device.type == "mps":
+            embeddings = embeddings.cpu()
+        
         match dim:
             case "COMBO":
                 pca2 = PCA(n_components=50, whiten=False, random_state=42)
